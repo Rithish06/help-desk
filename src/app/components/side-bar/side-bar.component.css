@@ -1,0 +1,96 @@
+.logo_section{
+    width: 250px;
+    height: 100%;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 0;
+    cursor: pointer;
+}
+
+.logo_section img{
+    width: 40px;
+    height: 40px;
+}
+
+.company_name{
+    display: flex;
+    justify-content: center;
+    align-items: end;
+    flex-direction: column;
+}
+
+.support_text{
+    color: #2E2C34;
+    font-family: Montserrat;
+    font-size: 8px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    text-transform: uppercase;
+}
+
+.name{
+    color: #2E2C34;
+    font-family: Montserrat;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    text-transform: uppercase;
+}
+
+.nav_name{
+    color: #2E2C34;
+    font-family: Montserrat;
+    font-size: 8px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    text-transform: uppercase;
+}
+
+.menu{
+    width: 50px;
+    margin-top: 20px;
+}
+
+.navs{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    padding: 10px 0;
+    width: 250px;
+    cursor: pointer;
+}
+
+.icon img{
+    width: 30px;
+    height: 30px;
+    margin-left: 15px;
+}
+
+.nav_name {
+    font-family: "Montserrat";
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    transition: 0.3s;
+}
+
+.black{
+    color: #000;
+}
+
+.nav_active{
+    transition: 0.3s;
+    background-color: rgba(251, 156, 42, 0.10);    
+    color: #FB9C2A;
+}
+
+.nav_active_color{
+    transition: 0.3s;
+    color: #FB9C2A;
+}

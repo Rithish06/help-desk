@@ -1,0 +1,127 @@
+.root-container{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    padding: 10px;
+}   
+
+.title{
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #E7E7E7;
+}
+
+.container{
+    width: 100%;
+}
+
+.name{
+    color: var(--Secondary-500, #2E2A40);
+    font-family: Montserrat;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 150%; /* 27px */
+}
+
+.description{
+    color: #84818A;
+    font-family: Montserrat;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.fa-xmark{
+    position: relative;
+    bottom: 5px;
+    border: 2px solid #84818A;
+    color: #84818A;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center
+}
+
+.heading-container{
+    padding: 10px 0;
+}
+
+.input_fields{
+    display: flex;
+    flex-direction: column;
+}
+
+.input_fields .inputs{
+    display: flex;
+    width: 93%;
+    height: 50px;
+    padding: 0 10px;
+    align-items: center;
+    gap: 63px;
+    border-radius: 4px;
+    border: 1px solid #E7E7E7;   
+    font-family: Montserrat;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    letter-spacing: -0.28px;
+    margin-top: 10px;
+}
+
+.input_fields select{
+    width: 99%;
+    height: 50px;
+    border-radius: 4px;
+    border: 1px solid #E7E7E7;   
+    font-family: Montserrat;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    letter-spacing: -0.28px;
+    margin-top: 10px;
+}
+
+.inputs::placeholder{
+    color: #84818A;
+    font-family: Montserrat;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+    
+
+.input_fields label{
+    margin-top: 15px;
+}
+
+.textarea{
+    height: 100px;
+    padding: 10px;
+}
+
+form button{
+    width: 100%;
+    height: 50px;
+    border-radius: 4px;
+    background: #2C63BA;
+    color: #FFF;
+    text-align: center;
+    font-family: "Montserrat";
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 150%; /* 24px */
+    letter-spacing: -0.32px;
+    border: none;
+    outline: none;
+    margin-top: 30px;
+}

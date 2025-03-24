@@ -1,0 +1,35 @@
+<div class="root-container">
+    <!-- sideBar -->
+    <div class="sidebar">
+        <app-side-bar (sectionName)="importedSectionName($event)" />
+    </div>
+
+    <!-- components -->
+    <div class="components">
+        <!-- header -->
+        <div class="header">
+            <app-header-section />
+        </div>
+
+        <!-- section name -->
+        <div class="sectionName">
+            <div class="section_name">{{sectionName}}</div>
+        </div>
+
+        <!-- dynamic components -->
+
+        <div class="common-section-container">
+            <div class="sections" *ngIf="activateDashboard === true">
+                <app-dashboard-layout />
+            </div>
+
+            <div class="sections" *ngIf="activateTicket === true">
+                <app-ticket-layout />
+            </div>
+
+            <div class="sections" *ngIf="activateSettings === true">
+                <app-settings-layout />
+            </div>
+        </div>
+    </div>
+</div>

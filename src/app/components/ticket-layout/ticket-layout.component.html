@@ -1,0 +1,72 @@
+<div class="root-container">
+    <div class="title">
+        <div class="name">Create New Ticket</div>
+        <div class="description">Write and address new queries and issues</div>
+    </div>
+
+    <form action="">
+        <!-- row 1 -->
+        <div class="row row-1">
+            <!-- client name -->
+            <div class="inputField client_name">
+                <label for="">Client Name</label>
+                <input type="text">
+            </div>
+            <!-- Request Ticket Type -->
+            <div class="inputField ticket_type">
+                <label for="">Request Ticket Type</label>
+                <Select>
+
+                </Select>
+            </div>
+        </div>
+
+        <!-- row 2 -->
+        <div class="row row-2">
+            <!-- Priority Status -->
+            <div class="inputField workflow_status">
+                <label for="">Workflow Status</label>
+                <Select></Select>
+            </div>
+            <!-- Module -->
+            <div class="inputField module">
+                <label for="">Module</label>
+                <Select></Select>
+            </div>
+            <!--  -->
+            <div class="inputField menu_path">
+                <label for="">Menu Path</label>
+                <Select></Select>
+            </div>
+        </div>
+
+        <!-- row 3 -->
+         <div class="row row-3">
+            <!-- Ticket Body -->
+            <div class="inputField texy_body">
+                <label for="">Ticket Body</label>
+                <textarea class="textarea" id=""></textarea>
+            </div>
+         </div>
+
+         <!-- row 4 -->
+          <div class="row row-4">
+            <!-- Attachment -->
+             <div class="inputFile Attachment">
+                <label for="">Attachment</label>
+                <div class="flex">
+                    <div class="input_wrapper">
+                        <input type="file">
+                    </div>
+                    <button class="clear_button pointer scale trans">clear</button>
+                </div>
+             </div>
+          </div>
+
+          <div class="buttons">
+            <button class="send pointer scale trans">Send Ticket</button>
+            <button class="cancel pointer scale trans">Clear</button>
+          </div>
+    </form>
+</div>
+

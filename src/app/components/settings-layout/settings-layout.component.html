@@ -1,0 +1,124 @@
+<div class="root-container">
+
+    <div class="navButtons">
+        <div class="buttons pointer scale trans" (click)="setActiveSection('account')"
+            [ngClass]="{ 'active': activateSection === 'account' }">Account</div>
+        <div class="buttons pointer scale trans" (click)="setActiveSection('password')"
+            [ngClass]="{ 'active': activateSection === 'password' }">Reset Password</div>
+        <div class="buttons pointer scale trans" (click)="setActiveSection('about')"
+            [ngClass]="{ 'active': activateSection === 'about' }">About us</div>
+    </div>
+
+    <!-- account -->
+    <div class="containers" *ngIf="activateSection === 'account'">
+        <div class="contents">
+            <div class="grid">
+                <!-- profile -->
+                <div class="profile">
+                    <div class="name">Profile</div>
+                    <div class="des">Set your account details</div>
+                </div>
+
+                <!-- inputs -->
+                <div class="inputs">
+                    <div class="row-1">
+                        <div class="inputField">
+                            <label for="">Clint Name</label>
+                            <input type="text">
+                        </div>
+                        <div class="inputField">
+                            <label for="">Place Info</label>
+                            <input type="text">
+                        </div>
+                    </div>
+                    <div class="inputField marginTop">
+                        <label for="">Official Email Id</label>
+                        <input type="text">
+                    </div>
+                </div>
+
+                <!-- logo section -->
+                <div class="logo flex">
+                    <img src="../../../assets/logo.svg" class="clientLogo" alt="">
+                    <div class="buttonStyle editButton pointer scale trans">
+                        <img src="../../../assets/edit_button.svg" alt="">
+                        <span>Edit Profile</span>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="row-3">
+                <div class="loginButton buttonStyle pointer scale trans">
+                    <img src="../../../assets/logout_icon.svg" alt="">
+                    <span>Log Out</span>
+                </div>
+                <div class="deleteButton buttonStyle pointer scale trans">
+                    <img src="../../../assets/delete_icon.svg" alt="">
+                    <span>Delete Account</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- reset password -->
+    <div class="containers" *ngIf="activateSection === 'password'">
+        <div class="contents">
+            <div class="grid-2">
+
+                <div class="profile">
+                    <div class="name">Reset Password</div>
+                    <div class="des">Set your New Password</div>
+                </div>
+
+                <div class="inputs">
+                    <div class="row-1">
+                        <div class="inputField">
+                            <label for="">Clint Name</label>
+                            <input type="text">
+                        </div>
+                    </div>
+                    <div class="row-1" style="margin-top: 15px;">
+                        <div class="inputField">
+                            <label for="">New Password</label>
+                            <input [type]="newPasswordVisible ? 'text' : 'password'">
+                            <div class="eyeIcon">
+                              <img 
+                                [src]="newPasswordVisible ? '../../../assets/hide_password_icon.svg' : '../../../assets/show_password_icon.svg'" 
+                                alt="Toggle Password Visibility" 
+                                class="pointer trans scale" 
+                                (click)="toggleNewPasswordVisibility()"
+                              >
+                            </div>
+                          </div>
+                          <div class="inputField">
+                            <label for="">Confirm Password</label>
+                            <input [type]="confirmPasswordVisible ? 'text' : 'password'">
+                            <div class="eyeIcon">
+                              <img 
+                                [src]="confirmPasswordVisible ? '../../../assets/hide_password_icon.svg' : '../../../assets/show_password_icon.svg'" 
+                                alt="Toggle Password Visibility" 
+                                class="pointer trans scale" 
+                                (click)="toggleConfirmPasswordVisibility()"
+                              >
+                            </div>
+                          </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pw_button_container">
+                <div class="pw_buttons update trans scale pointer">Update</div>
+                <div class="pw_buttons clear trans scale pointer">Clear</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- About us -->
+
+    <div class="container" *ngIf="activateSection === 'about'">
+        <div class="contents">about section</div>
+    </div>
+
+</div>
