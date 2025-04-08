@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { NewTicketFormComponent } from './new-ticket-form.component';
+import { AdminLayoutComponent } from './admin-layout.component';
 
-describe('NewTicketFormComponent', () => {
-  let component: NewTicketFormComponent;
-  let fixture: ComponentFixture<NewTicketFormComponent>;
+describe('AdminLayoutComponent', () => {
+  let component: AdminLayoutComponent;
+  let fixture: ComponentFixture<AdminLayoutComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [NewTicketFormComponent]
+      declarations: [AdminLayoutComponent]
     })
     .compileComponents();
     
-    fixture = TestBed.createComponent(NewTicketFormComponent);
+    fixture = TestBed.createComponent(AdminLayoutComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

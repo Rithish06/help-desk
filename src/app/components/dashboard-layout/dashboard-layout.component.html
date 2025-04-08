@@ -5,12 +5,14 @@
             <!-- input -->
             <div class="input flex">
                 <img src="../../../assets/search.svg" alt="search icon">
-                <input type="text" placeholder="Search for ticket">
+                <!-- <input type="text" placeholder="Search for ticket" (change)="searchTickets($event)" /> -->
+                <input type="text" (input)="searchTickets($event)" placeholder="Search Ticket Number or Name">
+
             </div>
 
             <!-- right side -->
             <div class="right_side">
-                <input class="dateInput" type="date" [ngClass]="{inputWidth : isQuickForm,falseWidth : !isQuickForm}" />
+                <input class="dateInput" type="date" [ngClass]="{inputWidth : isQuickForm,falseWidth : !isQuickForm}" (input)="dateOnchange($event)" />
                 <!-- <select name="" id="" class="priority-selector">
                     <option class="dummy" value="all" disabled selected hidden>Select Priority</option>
                     <option value="">
@@ -41,22 +43,22 @@
             <!-- all tickets -->
             <div class="filter-option">
                 <img src="../../../assets/all-tickets.svg" alt="All Tickets">
-                <div class="filterName pointer scale trans" (click)="activateAllTicket()">All Tickets</div>
+                <div class="filterName pointer scale trans" (click)="activateByTab('all')">All Tickets</div>
             </div>
             <!-- new tickets -->
             <div class="filter-option">
                 <img src="../../../assets/new-ticket.svg" alt="All Tickets">
-                <div class="filterName pointer scale trans" (click)="activateNewTicket()">New</div>
+                <div class="filterName pointer scale trans" (click)="activateByTab('new')">New</div>
             </div>
             <!-- on going ticket -->
             <div class="filter-option">
                 <img src="../../../assets/going-on-ticket.svg" alt="All Tickets">
-                <div class="filterName pointer scale trans" (click)="activateOnGoingTicket()">On-Going</div>
+                <div class="filterName pointer scale trans" (click)="activateByTab('ongoing')">On-Going</div>
             </div>
             <!-- resolved tickets -->
             <div class="filter-option">
                 <img src="../../../assets/resolved-ticket.svg" alt="All Tickets">
-                <div class="filterName pointer scale trans" (click)="activateResolvedTicket()">Resolved</div>
+                <div class="filterName pointer scale trans" (click)="activateByTab('resolved')">Resolved</div>
             </div>
         </div>
 
@@ -73,17 +75,17 @@
                     <!-- ticket Header -->
                     <div class="ticket-header">
                         <div class="ticket-left-side">
-                            <div class="color" [style.backgroundColor]="ticket.color"></div>
-                            <div class="ticket-number">{{ticket.ticketNumber}}</div>
-                            <div class="ticket-priority">{{ticket.ticketPriority}}</div>
+                            <div class="color" [style.backgroundColor]="ticket.statusColor"></div>
+                            <div class="ticket-number">{{ticket.ticketId}}</div>
+                            <!-- <div class="ticket-priority">{{ticket.statusColor}}</div> -->
                         </div>
-                        <div class="ticket-time">Posted at {{ticket.ticketTime}}</div>
+                        <div class="ticket-time">Posted at {{ticket.createdAt}}</div>
                     </div>
 
                     <!-- ticket body -->
                     <div class="ticket-body">
-                        <div class="ticket-query">{{ticket.ticketQuery}}</div>
-                        <div class="ticket-description">{{ticket.ticketDescription}}</div>
+                        <div class="ticket-query">{{ticket.title}}</div>
+                        <div class="ticket-description">{{ticket.description}}</div>
                     </div>
 
                     <!-- underline -->
@@ -92,10 +94,10 @@
                     <!-- ticket footer -->
                     <div class="ticket-footer">
                         <div class="profile">
-                            <img [src]="ticket.profilePic" [alt]="ticket.profileName">
-                            <div class="profile_name">{{ticket.profileName}}</div>
+                            <img [src]="ticket.profileImage" [alt]="ticket.prifileImage">
+                            <div class="profile_name">{{ticket.clientName}}</div>
                         </div>
-                        <div class="open-ticket">Open Ticket</div>
+                        <div class="open-ticket pointer scale trans" (click)="sendSingleTicketData(ticket.ticketId)">Open Ticket</div>
                     </div>
                 </div>
             </div>
@@ -109,3 +111,9 @@
 
 </div>
 
+<div class="page_change">
+    <div class="prev_next prev pointer scale trans">Prevoius</div>
+    <div class="counts active pointer scale trans">1</div>
+    <div class="counts pointer scale trans">2</div>
+    <div class="prev_next next pointer scale trans">Next</div>
+</div>

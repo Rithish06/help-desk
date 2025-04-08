@@ -1,9 +1,10 @@
 .root-container{
-    padding: 20px;
     height: 100%;
     display: flex;
     flex-direction: column;
-    border: 2px solid #E7E7E7
+    border: 2px solid #E7E7E7;
+    width : 100%;
+    padding : 1%
 }
 
 .filter1 {
@@ -153,7 +154,7 @@
 /* content */
 
 .content {
-    height: 53vh;
+    height: 59vh;
     display: flex;
     width: 100%;
     flex-direction: column;
@@ -173,6 +174,7 @@
     border: 1px solid #E7E7E7;
     padding: 20px;
     margin-top: 20px;
+    width: 96%;
 }
 
 .ticket-header {
@@ -304,5 +306,38 @@
     width: 40%;
 }
 
+.page_change {
+    display: flex;
+    gap: 15px;
+    justify-content: end;
+    align-items: center;
+}
 
+.page_change{
+    margin-top: 20px;
+}
 
+.prev_next{
+    color: #B4B4B4;
+    text-align: center;
+    font-family: Montserrat;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    letter-spacing: -0.24px;
+}
+
+.counts{
+    border-radius: 4px;
+    background: transparent;
+    border: 1px solid #E7E7E7;
+    padding: 10px 20px;
+    font-family: Montserrat;
+    font-size: 12px;
+}
+
+.active{
+    background: #2C63BA;
+    color : #fff
+}

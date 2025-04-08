@@ -1,0 +1,223 @@
+.title{
+    margin: 20px 0;
+}
+
+/* .name{
+    color: #2E2A40;
+    font-family: Montserrat;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 0%; 
+}
+
+.description{
+    color: #84818A;
+    font-family: Montserrat;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    margin-top: 15px;
+} */
+
+.inputField label{
+    color: #2E2A40;
+    font-family: Montserrat;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.inputField{
+    display: flex;
+    flex-direction: column;
+    margin-top: 18px;
+    /* width: 100%; */
+}
+
+.inputField input, select{
+    border-radius: 4px;
+    border: 1px solid var(--Secondary-200, #E7E7E7);
+    display: flex;
+    height: 50px;
+    padding: 0 20px;
+    align-items: center;
+    flex-shrink: 0;
+    margin-top: 8px;
+}
+
+.client_name{
+    width: 60%;
+}
+
+.ticket_type{
+    width: 40%;
+}
+
+.workflow_status{
+    width: 33.3%;
+}
+
+.module{
+    width: 33.3%;
+}
+
+.menu_path{
+    width: 33.3%;
+}
+
+.flex{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+}   
+
+.inputFile{
+    display: flex;
+    flex-direction: column;
+    margin-top: 25px;
+    width: 100%;
+}
+
+.errorStyle{
+    color: red;
+    font-size: 12px;
+    margin-top: 10px;
+    margin-left: 3px;
+    font-family: Montserrat;
+}
+
+.ticketBodyStyle{
+    display: flex;
+    justify-content: end;
+    width: 100%;
+}
+
+.inputFile label{
+    color: #2E2A40;
+    font-family: Montserrat;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.row{
+    display: flex;
+    margin-top: 15px;
+    gap: 15px;
+}
+
+.row-1{
+    width: 90%;
+}
+
+.row-2{
+    width: 90%;
+}
+
+.row-3{
+    width: 95%;
+}
+
+.row-4{
+    width: 95%;
+    margin-top: 38px;
+}
+
+.texy_body{
+    width: 100%;
+    height: 180px;
+}
+
+.input_wrapper{
+    width: 80%;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 8px;
+    border-radius: 4px;
+    border: 1px solid #E7E7E7;
+    padding: 0 20px;
+    flex-shrink: 0;
+}
+
+.input_wrapper input{
+    width: 96%;
+    padding: 0 20px;
+}
+
+.textarea{
+    margin-top: 8px;
+    border-radius: 4px;
+    border: 1px solid #E7E7E7;
+    padding: 10px 20px;
+    flex-shrink: 0;
+    height: 180px;
+}
+
+.clear_button{
+    height: 50px;
+    margin-top: auto;
+    width: 20%;
+    border-radius: 4px;
+    border: 1px solid #E7E7E7;
+    background-color: transparent;
+    color: #757575;
+    font-family: Montserrat;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.buttons{
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    gap: 20px;
+    margin-top: 60px;
+    width: 95%;
+}
+
+.buttons button{
+    width: 157px;
+    height: 44px;
+    padding: 10px;
+    /* border: none; */
+    outline: none;
+    font-family: Montserrat;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    border-radius: 5px;
+}
+
+.send{
+    color: #FFF;
+    background-color: #2C63BA;
+    border: 2px solid #2C63BA;
+}
+
+.send:hover{
+    color: #2C63BA;
+    background-color: transparent;
+    border: 2px solid #2C63BA;
+}
+
+.cancel{
+    color: #2C63BA;
+    background-color: transparent;
+    border: 2px solid #2C63BA;
+}
+
+.cancel:hover{
+    color: #FFF;
+    background-color: #2C63BA;
+    border: 2px solid #2C63BA;
+}

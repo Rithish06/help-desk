@@ -56,6 +56,10 @@
     margin-top: 20px;
 }
 
+.navsTicket{
+    width: 250px;
+}
+
 .navs{
     display: flex;
     gap: 10px;
@@ -65,10 +69,40 @@
     cursor: pointer;
 }
 
+.ticketTypes{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow: hidden;
+    height: 0;
+}
+
+.pathNames{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-left: 10%;
+}
+
+.pathName{
+    color: #001345;
+    font-family: Montserrat;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
 .icon img{
     width: 30px;
     height: 30px;
     margin-left: 15px;
+}
+
+.activeTicket{
+    height: 112px;
+    padding-bottom: 15px;
+    /* transition: 1s ease-in; */
 }
 
 .nav_name {

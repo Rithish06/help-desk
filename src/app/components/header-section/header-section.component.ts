@@ -7,4 +7,11 @@ import { Component } from '@angular/core';
 })
 export class HeaderSectionComponent {
 
+  profilePic : any
+  userName : any
+
+  ngOnInit(){
+    this.profilePic = localStorage.getItem("profilePic")
+    this.userName = localStorage.getItem("name")
+  }
 }

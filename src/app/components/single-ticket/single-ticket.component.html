@@ -1,0 +1,40 @@
+<div class="root-container">
+    <div class="heading">Ticket</div>
+
+    <div class="ticketContent" *ngFor="let ticket of ticket">
+
+        <div class="tickerHeader">
+            <div class="lft-side">
+                <div class="color" [style.backgroundColor]="ticket.statusColor"></div>
+                <div class="ticketNo">{{ticket?.ticketId}}</div>
+            </div>
+            <div class="postedTime">{{ticket?.createdAt}} | {{ticket.createdDate}}</div>
+        </div>
+
+        <div class="ticketBody">
+            <div class="ticketTitle">{{ticket?.title}}</div>
+            <div class="ticketDescription">{{ticket?.description}}</div>
+        </div>
+
+        <div class="attatchments">
+            <img [src]="ticket?.attatchments" alt="image"/>
+        </div>
+    </div>
+
+    <div class="user">
+        <div class="commentSection" *ngFor="let ticket of ticket">
+            <div class="commentFrom">From Invention Minds Supporting Team :</div>
+
+            <div class="Commenttitle">{{ticket?.title}}</div>
+
+            <div class="ticketDescription">{{ticket?.description}}</div>
+
+            <div class="save buttons"></div>
+
+            <div class="postedTime updatedTime">Edited at {{ticket?.updatedAt}} | {{ticket.createdDate}}</div>
+        </div>
+    </div>
+
+
+
+</div>

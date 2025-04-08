@@ -1,6 +1,6 @@
 <div class="root-container">
     <!-- welcome text -->
-    <div class="welcome">Welcome! <b>Micheal Jackson</b></div>
+    <div class="welcome">Welcome! <b>{{userName}}</b></div>
     <div class="right_side">
         <!-- notification -->
         <div class="notification pointer scale">
@@ -10,8 +10,8 @@
 
         <!-- profile -->
         <div class="profile pointer">
-            <img class="scale trans" src="../../../assets/userprofile.avif" alt="">
-            <div class="client_name">Micheal Jackson</div>
+            <img class="scale trans" [src]="profilePic" alt="">
+            <div class="client_name">{{userName}}</div>
             <i class="fa-solid fa-angle-down scale"></i>
         </div>
     </div>

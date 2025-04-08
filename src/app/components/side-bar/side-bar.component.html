@@ -16,9 +16,17 @@
             <div class="nav_name" [ngClass]="dashboard === false ? 'black' : 'nav_active_color'">Dashboard</div>
          </div>
     
-         <div class="navs" [ngClass]="tickets === false ? 'black' : 'nav_active'" (click)="onClickTickets()">
-            <div class="icon"><img [src]="tickets === false ? '../../../assets/ticketstar.svg' : '../../../assets/activeTicketstar.svg'" alt="Dashboard"></div>
-            <div class="nav_name" [ngClass]="tickets === false ? 'black' : 'nav_active_color'">Tickets</div>
+         <div class="navsTicket" [ngClass]="tickets === false ? 'black' : 'nav_active'" (click)="onClickTickets()">
+            <div class="navs">
+               <div class="icon"><img [src]="tickets === false ? '../../../assets/ticketstar.svg' : '../../../assets/activeTicketstar.svg'" alt="Dashboard"></div>
+               <div class="nav_name" [ngClass]="tickets === false ? 'black' : 'nav_active_color'">Tickets</div>
+            </div>
+            <div class="ticketTypes trans" [ngClass]="tickets === false ? 'ticketTypes' : 'activeTicket'">
+               <div class="pathNames pointer scale trans" *ngFor="let path of pathNames" (click) = "changeTicketForm(path.formName, path.name)">
+                  <img src="../../../assets/ticketMenu.svg" alt=">">
+                  <div class="pathName">{{path.name}}</div>
+               </div>
+            </div>
          </div>
     
          <div class="navs" [ngClass]="settings === false ? 'black' : 'nav_active'" (click)="onClickSettings()">

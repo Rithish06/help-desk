@@ -39,7 +39,7 @@
     /* align-items: center;
     justify-content: center; */
     width: 100%;
-    gap: 10px;
+    gap: 20px;
 }
 
 .row-1 .inputField{
@@ -62,14 +62,16 @@
     display: flex;
     flex-direction: column;
     align-items: start;
-    gap: 8px;
+    gap: 20px;
 }
 
 .inputField input{
     width: 100%;
     height: 44px;
     border-radius: 4px;
+    font-size: 16px;
     border: 1px solid #CDCDCD;
+    padding: 0 5px;
 }
 
 .name{
@@ -175,7 +177,7 @@
     display: flex;
     align-items: center;
     position: relative;
-    margin-top: -53px;
+    margin-top: -65px;
     margin-left: 93%;
 }
 

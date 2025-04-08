@@ -1,0 +1,96 @@
+.heading {
+    color: #2E2C34;
+    font-family: Montserrat;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+}
+
+.tickerHeader{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.lft-side{
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.color{
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+}
+
+.ticketNo{
+    color: #2E2C34;
+    font-family: Montserrat;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 14px; /* 87.5% */
+    margin: 30px 0;
+}
+
+.ticketTitle{
+    color: #2E2C34;
+    font-family: Montserrat;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 14px; /* 77.778% */
+    margin-bottom: 20px;
+}
+
+.postedTime{
+    color: #84818A;
+    font-family: Montserrat;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 14px; /* 116.667% */
+}
+
+.ticketDescription{
+    color: #84818A;
+    font-family: Montserrat;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.commentSection{
+    border: 1px solid #E7E7E7;
+    border-radius: 5px;
+    padding: 1%;
+    margin-top: 50px;
+}
+
+.commentFrom{
+    color: var(--Secondary-500, #2E2A40);
+    font-family: Montserrat;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 150%;
+}
+
+.Commenttitle{
+    color: #2E2C34;
+    font-family: Montserrat;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 14px;
+    margin-top: 30px;
+    margin-bottom: 20px;
+}
+
+.updatedTime{
+    margin-top: 40px;
+    text-align: right;
+}
