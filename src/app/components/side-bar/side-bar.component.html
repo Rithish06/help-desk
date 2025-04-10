@@ -1,38 +1,57 @@
 <div class="root-container">
-   
-    <!-- div.logo section -->
-     <div class="logo_section" (click)="onclickLogo()">
-        <img src="../../../assets/logo.svg" alt="Invention Minds Logo">
-        <div class="company_name">
+
+   <div class="common">
+      <!-- div.logo section -->
+      <div class="logo_section" (click)="onclickLogo()">
+         <img src="../../../assets/logo.svg" alt="Invention Minds Logo">
+         <div class="company_name">
             <div class="name">Invention Minds</div>
             <div class="support_text">- Support ticket System</div>
-        </div>
-     </div>
+         </div>
+      </div>
 
-     <!-- navigations -->
+      <!-- navigations -->
       <div class="menu">
-         <div class="navs" [ngClass]="dashboard === false ? 'black' : 'nav_active'" (click)="onClickDashboard()">
-            <div class="icon"><img [src]="dashboard === false ? '../../../assets/Category.svg' : '../../../assets/activeCategory.svg'" alt="Dashboard"></div>
+         <div class="navs navMargin" [ngClass]="dashboard === false ? 'black' : 'nav_active'" (click)="onClickDashboard()">
+            <div class="icon"><img
+                  [src]="dashboard === false ? '../../../assets/Category.svg' : '../../../assets/activeCategory.svg'"
+                  alt="Dashboard"></div>
             <div class="nav_name" [ngClass]="dashboard === false ? 'black' : 'nav_active_color'">Dashboard</div>
          </div>
-    
-         <div class="navsTicket" [ngClass]="tickets === false ? 'black' : 'nav_active'" (click)="onClickTickets()" *ngIf="userType === 'user'">
-            <div class="navs">
-               <div class="icon"><img [src]="tickets === false ? '../../../assets/ticketstar.svg' : '../../../assets/activeTicketstar.svg'" alt="Dashboard"></div>
+
+         <div class="navsTicket" [ngClass]="tickets === false ? 'black' : 'nav_active'" (click)="onClickTickets()"
+            *ngIf="userType === 'user'">
+            <div class="navs navMargin">
+               <div class="icon"><img
+                     [src]="tickets === false ? '../../../assets/ticketstar.svg' : '../../../assets/activeTicketstar.svg'"
+                     alt="Dashboard"></div>
                <div class="nav_name" [ngClass]="tickets === false ? 'black' : 'nav_active_color'">Tickets</div>
             </div>
             <div class="ticketTypes trans" [ngClass]="tickets === false ? 'ticketTypes' : 'activeTicket'">
-               <div class="pathNames pointer scale trans" *ngFor="let path of pathNames" (click) = "changeTicketForm(path.formName, path.name)">
+               <div class="pathNames pointer scale trans" *ngFor="let path of pathNames"
+                  (click)="changeTicketForm(path.formName, path.name)">
                   <img src="../../../assets/ticketMenu.svg" alt=">">
                   <div class="pathName">{{path.name}}</div>
                </div>
             </div>
          </div>
-    
-         <div class="navs" [ngClass]="settings === false ? 'black' : 'nav_active'" (click)="onClickSettings()">
-            <div class="icon"><img [src]="settings === false ? '../../../assets/setting.svg' : '../../../assets/activateSettings.svg'" alt="Dashboard"></div>
+
+         <div class="navs navMargin" [ngClass]="settings === false ? 'black' : 'nav_active'" (click)="onClickSettings()">
+            <div class="icon"><img
+                  [src]="settings === false ? '../../../assets/setting.svg' : '../../../assets/activateSettings.svg'"
+                  alt="Dashboard"></div>
             <div class="nav_name" [ngClass]="settings === false ? 'black' : 'nav_active_color'">Settings</div>
-         </div>    
+         </div>
       </div>
+
+   </div>
+
+   <div class="buttonFlex">
+      <div class="loginButton buttonStyle pointer scale trans" (click)="logout()">
+         <img src="../../../assets/logout_icon.svg" alt="">
+         <span>Log Out</span>
+     </div>
+   </div>
+
 
 </div>

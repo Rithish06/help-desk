@@ -1,5 +1,6 @@
 import { Component, Output, EventEmitter } from '@angular/core';
 import { SidebarService } from '../../services/sidebar/sidebar.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-side-bar',
@@ -31,7 +32,7 @@ export class SideBarComponent {
     this.changeTicketForm('product', 'Product')
   }
 
-  constructor(private sidebar : SidebarService){}
+  constructor(private sidebar : SidebarService, private router:Router){}
 
   // pathNames : any[] = ['Product','Website','SEO','SMM','PPC']
   pathNames : any[] = [
@@ -91,6 +92,12 @@ export class SideBarComponent {
     this.formHeading.emit(name)
 
     console.log(name, "from sidebar")
+  }
+
+  logout(): void {
+    localStorage.removeItem('user'); // Remove user data from local storage
+    localStorage.removeItem('token'); // Remove authentication token
+    this.router.navigate(['/login']); // Redirect to login page
   }
 
 

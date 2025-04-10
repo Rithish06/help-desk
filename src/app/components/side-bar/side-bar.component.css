@@ -1,11 +1,18 @@
+.root-container{
+    display: flex;
+    flex-direction: column;
+    align-content: space-between;
+    /* height: 100%; */
+}
+
 .logo_section{
     width: 250px;
     height: 100%;
     display: flex;
-    gap: 15px;
+    gap: 4px;
     align-items: center;
     justify-content: center;
-    padding: 10px 0;
+    padding: 16px 0;
     cursor: pointer;
 }
 
@@ -64,10 +71,14 @@
     display: flex;
     gap: 10px;
     align-items: center;
-    padding: 10px 0;
+    padding: 14px 0;
     width: 250px;
     cursor: pointer;
 }
+
+/* .navMargin{
+    margin-top: 10px;
+} */
 
 .ticketTypes{
     display: flex;
@@ -92,11 +103,15 @@
     font-weight: 500;
     line-height: normal;
 }
+.icon{
+    display: flex;
+    align-items: center;
+}
 
 .icon img{
-    width: 30px;
-    height: 30px;
-    margin-left: 15px;
+    width: 24px;
+    height: 24px;
+    margin-left: 20px;
 }
 
 .activeTicket{
@@ -127,4 +142,39 @@
 .nav_active_color{
     transition: 0.3s;
     color: #FB9C2A;
+}
+
+.loginButton{
+    /* border: 1px solid #F00; */
+    color: #F00;
+    width: 180px;
+}
+
+.buttonStyle{
+    width: 157px;
+    height: 44px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    color: #F00;
+    text-align: center;
+    font-family: Montserrat;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    position: absolute;
+    bottom: 20px;
+}
+
+.buttomStyle img{
+    width: 22px;
+    height: 22px;
+}
+
+.buttonFlex{
+    display: flex;
+    justify-content: center;
 }

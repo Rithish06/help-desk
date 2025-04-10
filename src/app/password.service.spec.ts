@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { PasswordService } from './password.service';
+import { PasswordService } from './services/password/password.service';
 
 describe('PasswordService', () => {
   let service: PasswordService;

@@ -258,28 +258,34 @@ export class DashboardLayoutComponent implements AfterViewInit {
   // ]
 
   searchTickets(event: any): void {
-    const searchValue = event?.target?.value?.toLowerCase().trim(); // Ensure safe access
-
+    const searchValue = event?.target?.value?.toLowerCase().trim();
+  
+    // Reset to all tickets if search is empty
     if (!searchValue) {
-      this.tickets = [...this.allTickets]; // Reset to all tickets if search is empty
+      this.tickets = [...this.allTickets];
+      this.currentPage = 1; // Reset to first page
+      this.paginateTickets();
       return;
     }
-
-    this.activateByTab("all")
-
+  
+    this.activateByTab("all"); // Optional: force "all" tab when searching
+  
     this.tickets = this.allTickets.filter((entry: any) =>
-      entry.ticketId?.toLowerCase().includes(searchValue) ||  // Search by ticket number
-      entry.title?.toLowerCase().includes(searchValue) ||        // Search by title
-      entry.clientName?.toLowerCase().includes(searchValue)      // Search by client name (if applicable)
+      entry.ticketId?.toLowerCase().includes(searchValue) ||
+      entry.title?.toLowerCase().includes(searchValue) ||
+      entry.clientName?.toLowerCase().includes(searchValue)
     );
-
-    this.paginateTickets()
+  
+    this.currentPage = 1; // Reset to first page after search
+    this.paginateTickets();
   }
 
   dateOnchange(event: any): void {
-    this.selectedDate = event.target.value
-    console.log(event.target.value)
-    this.tickets = this.allTickets.filter((entry: any) => entry.createdDate === this.selectedDate)
+    this.selectedDate = event.target.value;
+    this.tickets = this.allTickets.filter(
+      (entry: any) => entry.createdDate === this.selectedDate
+    );
+    this.paginateTickets();
   }
 
   displayQuickForm(): void {
@@ -312,7 +318,7 @@ export class DashboardLayoutComponent implements AfterViewInit {
   }
 
   focusDateInput() {
-    this.dateInput.nativeElement.focus();
-    this.dateInput.nativeElement.showPicker?.(); // shows the calendar popup (only works in some browsers)
-  }
+  this.dateInput.nativeElement.focus();
+  this.dateInput.nativeElement.showPicker?.(); // shows the calendar popup (only works in some browsers)
+}
 }

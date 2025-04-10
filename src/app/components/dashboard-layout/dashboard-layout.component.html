@@ -1,5 +1,4 @@
 <div class="common_box">
-    
     <div class="root-container" [ngClass]="{rootWidth : isQuickForm}">
         <!-- filter 1 -->
         <div class="filter1">
@@ -8,16 +7,16 @@
                 <img src="../../../assets/search.svg" alt="search icon">
                 <!-- <input type="text" placeholder="Search for ticket" (change)="searchTickets($event)" /> -->
                 <input type="text" (input)="searchTickets($event)" placeholder="Search Ticket Number or Name">
+
             </div>
 
             <!-- right side -->
             <div class="right_side">
                 <div class="date-wrapper" (click)="focusDateInput()">
-                    <input #dateInput class="dateInput"
-                           type="date"
-                           [ngClass]="{inputWidth : isQuickForm, falseWidth : !isQuickForm}"
-                           (input)="dateOnchange($event)" />
-                  </div>
+                    <input #dateInput class="dateInput" type="date"
+                        [ngClass]="{inputWidth : isQuickForm, falseWidth : !isQuickForm}"
+                        (change)="dateOnchange($event)" />
+                </div>
                 <!-- <select name="" id="" class="priority-selector">
                     <option class="dummy" value="all" disabled selected hidden>Select Priority</option>
                     <option value="">
@@ -75,7 +74,7 @@
 
         <div class="common_box">
             <!-- content -->
-            <div class="content">
+            <div class="content" *ngIf="paginateTickets">
                 <div class="tickets" *ngFor="let ticket of paginatedTickets ">
                     <!-- ticket Header -->
                     <div class="ticket-header">
@@ -102,10 +101,16 @@
                             <img [src]="ticket.profileImage" [alt]="ticket.prifileImage">
                             <div class="profile_name">{{ticket.clientName}}</div>
                         </div>
-                        <div class="open-ticket pointer scale trans" (click)="sendSingleTicketData(ticket.ticketId)">Open Ticket</div>
+                        <div class="open-ticket pointer scale trans" (click)="sendSingleTicketData(ticket.ticketId)">
+                            Open Ticket</div>
                     </div>
                 </div>
+                
             </div>
+
+            <!-- no data -->
+
+            
         </div>
 
     </div>
@@ -117,25 +122,18 @@
 </div>
 
 <div class="page_change">
-    <div 
-      class="prev_next prev pointer scale trans"
-      [class.disabled]="currentPage === 1"
-      (click)="changePage(currentPage - 1)">
-      Previous
+    <div class="prev_next prev pointer scale trans" [class.disabled]="currentPage === 1"
+        (click)="changePage(currentPage - 1)">
+        Previous
     </div>
-  
-    <div
-      class="counts pointer scale trans"
-      *ngFor="let page of [].constructor(totalPages); let i = index"
-      [class.active]="currentPage === i + 1"
-      (click)="changePage(i + 1)">
-      {{ i + 1 }}
+
+    <div class="counts pointer scale trans" *ngFor="let page of [].constructor(totalPages); let i = index"
+        [class.active]="currentPage === i + 1" (click)="changePage(i + 1)">
+        {{ i + 1 }}
     </div>
-  
-    <div 
-      class="prev_next next pointer scale trans"
-      [class.disabled]="currentPage === totalPages"
-      (click)="changePage(currentPage + 1)">
-      Next
+
+    <div class="prev_next next pointer scale trans" [class.disabled]="currentPage === totalPages"
+        (click)="changePage(currentPage + 1)">
+        Next
     </div>
-  </div>
+</div>

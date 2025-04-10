@@ -23,7 +23,7 @@
                 <div class="inputs">
                     <div class="row-1">
                         <div class="inputField">
-                            <label for="">Clint Name</label>
+                            <label for="">Client Name</label>
                             <input type="text" [(ngModel)]="clientName" disabled>
                         </div>
                         <div class="inputField">
@@ -93,7 +93,7 @@
                 <div class="inputs">
                     <div class="row-1">
                         <div class="inputField">
-                            <label for="">Clint Name</label>
+                            <label for="">Client Name</label>
                             <input type="text" [(ngModel)]="clientName" disabled>
                         </div>
                     </div>
@@ -121,7 +121,7 @@
             </div>
             <div class="pw_button_container">
                 <div class="pw_buttons update trans scale pointer" (click)="resetPassword()">Update</div>
-                <div class="pw_buttons clear trans scale pointer">Clear</div>
+                <div class="pw_buttons clear trans scale pointer" (click)="clearPassword()">Clear</div>
             </div>
         </div>
     </div>

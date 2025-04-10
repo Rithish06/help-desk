@@ -98,4 +98,9 @@ export class SettingsLayoutComponent {
     }
   }
 
+  clearPassword():void{
+    this.newPassword = ''
+    this.confirmPassword = ''
+  }
+
 }
