@@ -26,6 +26,11 @@ export class DashboardLayoutComponent implements AfterViewInit {
 
   @Input() sectionName: any
 
+  currentPage: number = 1;
+  itemsPerPage: number = 5;
+  paginatedTickets: any[] = [];
+  totalPages: number = 1;
+
   constructor(private ticketService: TicketService, @Inject(PLATFORM_ID) private platformId: object) {}
 
   allTickets: any
@@ -37,53 +42,98 @@ export class DashboardLayoutComponent implements AfterViewInit {
 
     this.clientId = localStorage.getItem('clientId')
     console.log(localStorage.getItem('clientId'))
+    this.initFunction()
 
-    const token = localStorage.getItem('token')
-    this.headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
-    });
+  }
 
-    console.log(this.headers, "from tikets")
-    // api call
-    this.ticketService.getTicketsById(this.clientId).subscribe((data: any) => {
-      console.log(data, "data service")
-      this.allTickets = data.map((entry: any) => {
-        return {
-          ticketId: entry.ticketNumber,
-          title: entry.title,
-          description: entry.description,
-          createdAt: formaTime(entry.createdAt),
-          createdDate: formatDate(entry.createdAt),
-          menupath: entry.menuPath,
-          module: entry.module,
-          status: entry.status,
-          updatedAt: formaTime(entry.createdAt),
-          updatedDate : formatDate(entry.createdAt),
-          id: entry._id,
-          profileImage: entry.userDetails?.profilePic,
-          clientName: entry.userDetails?.name,
+  initFunction():void{
+    const role = localStorage.getItem("role")
 
-        }
+    if(role === 'user'){
+      console.log(this.headers, "from tikets")
+      // api call
+      this.ticketService.getTicketsById(this.clientId).subscribe((data: any) => {
+        console.log(data, "data service")
+        this.allTickets = data.map((entry: any) => {
+          return {
+            ticketId: entry.ticketNumber,
+            title: entry.title,
+            description: entry.description,
+            createdAt: formaTime(entry.createdAt),
+            createdDate: formatDate(entry.createdAt),
+            menupath: entry.menuPath,
+            module: entry.module,
+            status: entry.status,
+            updatedAt: formaTime(entry.createdAt),
+            updatedDate : formatDate(entry.createdAt),
+            id: entry._id,
+            profileImage: entry.userDetails?.profilePic,
+            clientName: entry.userDetails?.name,
+            attachment : entry?.attatchment,
+            comment : entry?.comment
+          }
+        })
+  
+        this.allTickets.forEach((user: any) => {
+          if (user.status === "raised") {
+            user.statusColor = "#3B8AFF"
+          }
+  
+          if (user.status === "on-going") {
+            user.statusColor = "#F8A53499"
+          }
+  
+          if (user.status === "resolved") {
+            user.statusColor = "#54C104"
+          }
+        })
+        console.log(this.allTickets)
+        this.activateByTab("all")
       })
-
-      this.allTickets.forEach((user: any) => {
-        if (user.status === "raised") {
-          user.statusColor = "red"
-        }
-
-        if (user.status === "on-going") {
-          user.statusColor = "yellow"
-        }
-
-        if (user.status === "resolved") {
-          user.statusColor = "black"
-        }
+    }
+    else{
+      console.log(this.headers, "from tikets")
+      // api call
+      this.ticketService.getAllTickets().subscribe((data: any) => {
+        console.log(data, "data service")
+        this.allTickets = data.map((entry: any) => {
+          return {
+            ticketId: entry.ticketNumber,
+            title: entry.title,
+            description: entry.description,
+            createdAt: formaTime(entry.createdAt),
+            createdDate: formatDate(entry.createdAt),
+            menupath: entry.menuPath,
+            module: entry.module,
+            status: entry.status,
+            updatedAt: formaTime(entry.createdAt),
+            updatedDate : formatDate(entry.createdAt),
+            id: entry._id,
+            profileImage: entry.userDetails?.profilePic,
+            clientName: entry.userDetails?.name,
+            attachment : entry?.attatchment,
+            comment : entry?.comment,
+            commentBy : entry?.commentedBy
+          }
+        })
+  
+        this.allTickets.forEach((user: any) => {
+          if (user.status === "raised") {
+            user.statusColor = "#3B8AFF"
+          }
+  
+          if (user.status === "on-going") {
+            user.statusColor = "#F8A53499"
+          }
+  
+          if (user.status === "resolved") {
+            user.statusColor = "#54C104"
+          }
+        })
+        console.log(this.allTickets)
+        this.activateByTab("all")
       })
-      console.log(this.allTickets)
-      this.activateByTab("all")
-    })
-
+    }
   }
 
   ngAfterViewInit() {
@@ -158,6 +208,8 @@ export class DashboardLayoutComponent implements AfterViewInit {
     else {
       console.log("invalid tab")
     }
+
+    this.paginateTickets()
   }
 
   // tickets: any = [
@@ -219,6 +271,8 @@ export class DashboardLayoutComponent implements AfterViewInit {
       entry.title?.toLowerCase().includes(searchValue) ||        // Search by title
       entry.clientName?.toLowerCase().includes(searchValue)      // Search by client name (if applicable)
     );
+
+    this.paginateTickets()
   }
 
   dateOnchange(event: any): void {
@@ -239,5 +293,20 @@ export class DashboardLayoutComponent implements AfterViewInit {
   sendSingleTicketData(e: any) {
     const choosenTicket = this.allTickets.filter((entry:any) => e === entry.ticketId)
     this.singleTicket.emit(choosenTicket)
+  }
+
+  paginateTickets(): void {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    const endIndex = startIndex + this.itemsPerPage;
+  
+    this.paginatedTickets = this.tickets.slice(startIndex, endIndex);
+    this.totalPages = Math.ceil(this.tickets.length / this.itemsPerPage);
+  }
+
+  changePage(page: number): void {
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
+      this.paginateTickets();
+    }
   }
 }

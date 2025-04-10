@@ -1,0 +1,40 @@
+<div class="root-container">
+    <!-- sideBar -->
+    <div class="sidebar">
+        <app-side-bar (sectionName)="importedSectionName($event)" (formName)="receiveTicketFormName($event)"  (formHeading)="receiveTicketHeading($event)"/>
+    </div>
+
+    <!-- components -->
+    <div class="components">
+        <!-- header -->
+        <div class="header">
+            <app-header-section />
+        </div>
+
+        <!-- section name -->
+        <!-- <div class="sectionName">
+            <div class="section_name">{{sectionName}}</div>
+        </div> -->
+
+        <!-- dynamic components -->
+
+        <div class="common-section-container">
+            <div class="sections" *ngIf="activateDashboard === true">
+                <app-dashboard-layout (singleTicket)="receiveTicketData($event)" />
+            </div>
+
+            <div class="sections tickekSection" *ngIf="activateTicket === true">
+                <app-ticket-layout [formName]="ticketFormName" [fromHeading]="ticketHeading"/>
+            </div>
+
+            <div class="sections" *ngIf="activateSettings === true">
+                <app-settings-layout />
+            </div>
+
+            <div class="sections" *ngIf="activateSingleTicket === true">
+                <app-single-ticket [ticket]="singleTicketName"/>
+            </div>
+        </div>
+            
+    </div>
+</div>

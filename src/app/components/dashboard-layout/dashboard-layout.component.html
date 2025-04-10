@@ -33,8 +33,8 @@
                 </select> -->
 
                 <!-- button -->
-                <button class="quick-form-button pointer trans scale" *ngIf="!isQuickForm" (click)="displayQuickForm()"><img
-                        src="../../../assets/message-edit.svg" alt=""><span>Quick Ticket</span></button>
+                <!-- <button class="quick-form-button pointer trans scale" *ngIf="!isQuickForm" (click)="displayQuickForm()"><img
+                        src="../../../assets/message-edit.svg" alt=""><span>Quick Ticket</span></button> -->
             </div>
         </div>
 
@@ -71,7 +71,7 @@
         <div class="common_box">
             <!-- content -->
             <div class="content">
-                <div class="tickets" *ngFor="let ticket of tickets">
+                <div class="tickets" *ngFor="let ticket of paginatedTickets ">
                     <!-- ticket Header -->
                     <div class="ticket-header">
                         <div class="ticket-left-side">
@@ -112,8 +112,25 @@
 </div>
 
 <div class="page_change">
-    <div class="prev_next prev pointer scale trans">Prevoius</div>
-    <div class="counts active pointer scale trans">1</div>
-    <div class="counts pointer scale trans">2</div>
-    <div class="prev_next next pointer scale trans">Next</div>
-</div>
+    <div 
+      class="prev_next prev pointer scale trans"
+      [class.disabled]="currentPage === 1"
+      (click)="changePage(currentPage - 1)">
+      Previous
+    </div>
+  
+    <div
+      class="counts pointer scale trans"
+      *ngFor="let page of [].constructor(totalPages); let i = index"
+      [class.active]="currentPage === i + 1"
+      (click)="changePage(i + 1)">
+      {{ i + 1 }}
+    </div>
+  
+    <div 
+      class="prev_next next pointer scale trans"
+      [class.disabled]="currentPage === totalPages"
+      (click)="changePage(currentPage + 1)">
+      Next
+    </div>
+  </div>

@@ -13,21 +13,30 @@
 
         <div class="ticketBody">
             <div class="ticketTitle">{{ticket?.title}}</div>
-            <div class="ticketDescription">{{ticket?.description}}</div>
+            <div class="ticketNo"><span><b>Menu Path</b></span> : <span>{{ticket?.menupath}} </span></div>
+            <div class="ticketNo" *ngIf="ticket?.module"><span><b>Menu Path</b></span> : <span>{{ticket?.module}} </span></div>
+            <div class="ticketDescriptionUser">{{ticket?.description}}</div>
         </div>
 
-        <div class="attatchments">
-            <img [src]="ticket?.attatchments" alt="image"/>
+        <div class="attatchments" *ngIf="ticket?.attachment">
+            <img [src]="ticket?.attachment" alt="image"/>
         </div>
     </div>
 
-    <div class="user">
+    <div class="user" *ngIf="userType === 'user' && newComment">
         <div class="commentSection" *ngFor="let ticket of ticket">
-            <div class="commentFrom">From Invention Minds Supporting Team :</div>
+            <div class="flexComment">
+                <span class="commentFrom">From Invention Minds Supporting Team :</span>
+
+                <!-- <div class="buttonStyle editButton pointer scale trans" *ngIf="!isInputDisabled" (click) = "postComment()">
+                    <img src="../../../assets/edit_button.svg" alt="">
+                    <span>Edit Comment</span>
+                </div> -->
+            </div>
 
             <div class="Commenttitle">{{ticket?.title}}</div>
 
-            <div class="ticketDescription">{{ticket?.description}}</div>
+            <div class="ticketDescriptionUser">{{ticket?.comment}}</div>
 
             <div class="save buttons"></div>
 
@@ -35,6 +44,31 @@
         </div>
     </div>
 
+    <div class="admin" *ngIf="userType === 'admin'">
+        <div class="commentSection" *ngFor="let ticket of ticket">
+            <div class="flexComment">
+                <span class="commentFrom">From Invention Minds Supporting Team :</span>
 
+                <div class="buttonStyle editButton pointer scale trans" *ngIf="!isInputDisabled" (click) = "onclickEditComment()">
+                    <img src="../../../assets/edit_button.svg" alt="">
+                    <span>Edit Comment</span>
+                </div>
+
+                <button class="buttonStyle editButton saveButton pointer scale trans" *ngIf="isSaveButton" (click) = "postComment(ticket.id)">
+                    <img src="../../../assets/edit_button.svg" alt="">
+                    <span>Save Comment</span>
+                </button>
+            </div>
+
+            <div class="Commenttitle">{{ticket?.title}}</div>
+
+            <!-- <div class="ticketDescription">{{ticket?.comment}}</div> -->
+            <textarea class="ticketDescription" [(ngModel)]="this.newComment" id="" [disabled]="!isInputDisabled" (input)="commentTextOnchange($event)"></textarea>
+
+            <div class="save buttons"></div>
+
+            <div class="postedTime updatedTime">Edited at {{ticket?.updatedAt}} | {{ticket.createdDate}}  by  &#64;{{ticket.commentBy}}</div>
+        </div>
+    </div>
 
 </div>

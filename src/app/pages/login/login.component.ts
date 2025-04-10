@@ -12,6 +12,7 @@ export class LoginComponent {
 
   email : string = ''
   password : string = ''
+  newPasswordVisible : any
 
   emailOnChange(event:any):any{
     this.email = event.target.value
@@ -54,6 +55,10 @@ export class LoginComponent {
   //   });
   // }
 
+  toggleNewPasswordVisibility(): void {
+    this.newPasswordVisible = !this.newPasswordVisible;
+  }
+
   login(event: Event) {
     event.preventDefault(); // Prevent form reload
 
@@ -81,7 +86,7 @@ export class LoginComponent {
           this.router.navigate(['/admin']); // Redirect to Adm in Dashboard
         } else {
           this.router.navigate(['/home']); // Redirect to User Dashboard
-        }
+        }        
       },
 
       

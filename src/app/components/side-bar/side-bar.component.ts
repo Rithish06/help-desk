@@ -22,7 +22,11 @@ export class SideBarComponent {
   ticketsIcon : string = '../../../assets/ticketstar.svg'
   settingsIcon : string = '../../../assets/setting.svg'
 
+  // usertype
+  userType : string | null = '' 
+
   ngOnInit(){
+    this.userType = localStorage.getItem('role')
     this.onClickDashboard()
     this.changeTicketForm('product', 'Product')
   }

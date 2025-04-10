@@ -16,7 +16,7 @@
             <div class="nav_name" [ngClass]="dashboard === false ? 'black' : 'nav_active_color'">Dashboard</div>
          </div>
     
-         <div class="navsTicket" [ngClass]="tickets === false ? 'black' : 'nav_active'" (click)="onClickTickets()">
+         <div class="navsTicket" [ngClass]="tickets === false ? 'black' : 'nav_active'" (click)="onClickTickets()" *ngIf="userType === 'user'">
             <div class="navs">
                <div class="icon"><img [src]="tickets === false ? '../../../assets/ticketstar.svg' : '../../../assets/activeTicketstar.svg'" alt="Dashboard"></div>
                <div class="nav_name" [ngClass]="tickets === false ? 'black' : 'nav_active_color'">Tickets</div>

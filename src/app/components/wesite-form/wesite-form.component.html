@@ -2,13 +2,15 @@
     <form [formGroup]="ticketForm" (ngSubmit)="onSubmit()">
       <!-- row 1 -->
       <div class="row row-1">
+
         <div class="inputField client_name">
-          <label for="">Client Name</label>
-          <input type="text" formControlName="clientName">
-          <div *ngIf="ticketForm.get('clientName')?.invalid && isSubmitted" class="error errorStyle">
-            <span *ngIf="ticketForm.get('clientName')?.errors?.['required']">Client Name is required</span>
+          <label for="">Title</label>
+          <input type="text" formControlName="title">
+          <div *ngIf="ticketForm.get('title')?.invalid && isSubmitted" class="error errorStyle">
+            <span *ngIf="ticketForm.get('title')?.errors?.['required']">title is required</span>
           </div>
         </div>
+
         <div class="inputField ticket_type">
           <label for="">Select Website Name</label>
           <select (change)="loadMenuPath()" formControlName="websiteName">
@@ -19,13 +21,14 @@
             <span *ngIf="ticketForm.get('websiteName')?.errors?.['required']">Website selection is required</span>
           </div>
         </div>
+
       </div>
   
       <!-- row 2 -->
       <div class="row row-2">
-        <div class="inputField workflow_status">
+        <div class="inputField workflow_status" >
           <label for="">Menu Path</label>
-          <select formControlName="menuPath">
+          <select formControlName="menuPath" (change)="onchoosingMenuPath($event)">
             <option value="" disabled>Select Menu Path</option>
             <option *ngFor="let path of pathName" [value]="path.id">{{path.name}}</option>
           </select>

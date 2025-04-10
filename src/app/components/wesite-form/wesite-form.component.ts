@@ -8,6 +8,7 @@ import { TicketService } from '../../services/ticket/ticket.service';
   templateUrl: './wesite-form.component.html',
   styleUrls: ['./wesite-form.component.css']
 })
+
 export class WesiteFormComponent {
   ticketForm: FormGroup;
   allProducts: any;
@@ -16,13 +17,21 @@ export class WesiteFormComponent {
   pathName: any;
   isSubmitted = false; // Track form submission
 
+  clientName : any
+  title : any
+  clientId : any
+  disabled : boolean = true
+
+  // this choosen path
+  choosenPath : any
+
   constructor(
     private fb: FormBuilder,
     private product: ProductsService,
     private ticket: TicketService
   ) {
     this.ticketForm = this.fb.group({
-      clientName: ['', Validators.required],
+      title: ['', Validators.required],
       websiteName: ['', Validators.required],
       menuPath: ['', Validators.required],
       ticketBody: ['', [Validators.required, Validators.minLength(10)]],
@@ -31,6 +40,8 @@ export class WesiteFormComponent {
   }
 
   ngOnInit() {
+    this.clientId = localStorage.getItem('clientId')
+    this.clientName = localStorage.getItem('name')
     this.getALlProducts();
   }
 
@@ -65,6 +76,12 @@ export class WesiteFormComponent {
     this.ticketForm.get('menuPath')?.reset();
   }
 
+  onchoosingMenuPath(event:any): void{
+      const pathName = this.pathName.filter((entry:any) => entry.id === event.target.value).map((entry:any) => entry.name)
+      this.choosenPath = pathName[0]
+      console.log(pathName)
+  }
+
   onChoosingFile(event: any): void {
     const file = event.target.files[0];
     if (file) {
@@ -77,10 +94,10 @@ export class WesiteFormComponent {
     if (this.ticketForm.valid) {
       const formData = new FormData();
       formData.append('clientId', localStorage.getItem('clientId') || '');
-      formData.append('title', this.ticketForm.get('clientName')?.value);
+      formData.append('title', this.ticketForm.get('title')?.value);
       formData.append('description', this.ticketForm.get('ticketBody')?.value);
-      formData.append('menuPath', this.ticketForm.get('menuPath')?.value);
-      formData.append('module', 'section 1');
+      formData.append('menuPath', this.choosenPath);
+      // formData.append('module', this.ticketForm.get(''));
       if (this.ticketForm.get('attachment')?.value) {
         formData.append('file', this.ticketForm.get('attachment')?.value);
       }

@@ -41,25 +41,25 @@ export class UserLayoutComponent {
       this.activateDashboard = false
       this.activateTicket = true
       this.activateSettings = false
-      // this.activateSingleTicket = false
+      this.activateSingleTicket = false
     }
     else if(this.sectionName === 'Settings'){
       this.activateDashboard = false
       this.activateTicket = false
       this.activateSettings = true
-      // this.activateSingleTicket = false
+      this.activateSingleTicket = false
     }
     else if(this.sectionName === 'singleTicket'){
       this.activateDashboard = false
       this.activateTicket = false
       this.activateSettings = false
-      // this.activateSingleTicket = true
+      this.activateSingleTicket = true
     }
     else {
       this.activateDashboard = true
       this.activateTicket = false
       this.activateSettings = false
-      // this.activateSingleTicket = false
+      this.activateSingleTicket = false
     }
   }
 

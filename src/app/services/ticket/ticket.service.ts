@@ -24,8 +24,17 @@ export class TicketService {
     return this.http.get(`${apiUrl}/tickets/${clientId}`,  { headers });
   }
 
+  getAllTickets():Observable<any>{
+    const headers = this.headers
+    return this.http.get(`${apiUrl}/tickets`, {headers})
+  }
+
   createTicket(data:any): Observable<any>{
     return this.http.post(`${apiUrl}/tickets-post`,data,  { withCredentials: true })
+  }
+
+  updateComment(comment:any, id:any):Observable<any>{
+    return this.http.put(`${apiUrl}/update-comment/${id}`, comment, { withCredentials: true })
   }
 
 }

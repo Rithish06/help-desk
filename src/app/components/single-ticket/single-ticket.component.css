@@ -61,6 +61,21 @@
     font-style: normal;
     font-weight: 500;
     line-height: normal;
+    width: 98%;
+    height: 300px;
+    padding: 10px;
+}
+
+.ticketDescriptionUser{
+    color: #84818A;
+    font-family: Montserrat;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    width: 98%;
+    height: auto;
+    padding: 10px;
 }
 
 .commentSection{
@@ -93,4 +108,58 @@
 .updatedTime{
     margin-top: 40px;
     text-align: right;
+}
+
+.attatchments{
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+    justify-content: center;
+}
+
+.attatchments img{
+    width: auto;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.editButton{
+    border: 1px solid #2C63BA;
+    color: #2C63BA;
+    margin-top: 15px;
+}
+
+.saveButton{
+    background-color: transparent;
+}
+
+.buttonStyle{
+    width: 157px;
+    height: 44px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    text-align: center;
+    font-family: Montserrat;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 600;
+}
+
+.buttonStyle img{
+    width: 18px;
+    height: 18px;
+}
+
+.flexComment{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.user, .admin{
+    margin-bottom: 50px;
 }

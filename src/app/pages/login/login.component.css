@@ -77,6 +77,7 @@
 .form-group svg{
     height: 25px;
     width: auto;
+    margin-left: 5px;
 }
 
 .form-group input{
@@ -105,4 +106,10 @@ form{
     font-style: normal;
     font-weight: 700;
     line-height: normal;
+}
+
+.eyeIcon{
+    width: 100%;
+    left: 38px;
+    position: relative;
 }
