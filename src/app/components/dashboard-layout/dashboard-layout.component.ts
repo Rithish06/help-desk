@@ -11,6 +11,7 @@ import { HttpHeaders } from '@angular/common/http'
 })
 export class DashboardLayoutComponent implements AfterViewInit {
   @ViewChild('navigatorRef') navigatorMargin!: ElementRef<HTMLElement>;
+  @ViewChild('dateInput') dateInput!: ElementRef;
 
   isAllTicket: boolean = false;
   isNewTicket: boolean = false;
@@ -308,5 +309,10 @@ export class DashboardLayoutComponent implements AfterViewInit {
       this.currentPage = page;
       this.paginateTickets();
     }
+  }
+
+  focusDateInput() {
+    this.dateInput.nativeElement.focus();
+    this.dateInput.nativeElement.showPicker?.(); // shows the calendar popup (only works in some browsers)
   }
 }

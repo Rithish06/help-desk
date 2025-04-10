@@ -24,33 +24,39 @@
                     <div class="row-1">
                         <div class="inputField">
                             <label for="">Clint Name</label>
-                            <input type="text" [(ngModel)] = "clientName" disabled>
+                            <input type="text" [(ngModel)]="clientName" disabled>
                         </div>
                         <div class="inputField">
                             <label for="">Place Info</label>
-                            <input type="text" [(ngModel)] = "place" disabled>
+                            <input type="text" [(ngModel)]="place" disabled>
                         </div>
                     </div>
                     <div class="inputField marginTop">
                         <label for="">Official Email Id</label>
-                        <input type="text" [(ngModel)] = "emailId" [disabled]="!isInputDisabled">
+                        <div>
+                            
+                        </div>
+                        <input type="text" [(ngModel)]="emailId" [disabled]="!isInputDisabled">
                     </div>
                 </div>
 
                 <!-- logo section -->
                 <div class="logo flex">
                     <img src="../../../assets/logo.svg" class="clientLogo" alt="">
-                    <div class="buttonStyle editButton pointer scale trans" *ngIf="!isInputDisabled" (click) = "editEmail()">
+                    <div class="buttonStyle editButton pointer scale trans" *ngIf="!isInputDisabled"
+                        (click)="editEmail()">
                         <img src="../../../assets/edit_button.svg" alt="">
                         <span>Edit Profile</span>
                     </div>
 
-                    <div class="buttonStyle editButton pointer scale trans" *ngIf="isInputDisabled" (click) = "updateEmail()">
+                    <div class="buttonStyle editButton pointer scale trans" *ngIf="isInputDisabled"
+                        (click)="updateEmail()">
                         <img src="../../../assets/edit_button.svg" alt="">
                         <span>Save</span>
                     </div>
 
-                    <div class="buttonStyle editButton pointer scale trans" *ngIf="isInputDisabled" (click) = "editEmail()">
+                    <div class="buttonStyle editButton pointer scale trans" *ngIf="isInputDisabled"
+                        (click)="cancelEmail()">
                         <img src="../../../assets/edit_button.svg" alt="">
                         <span>Cancel</span>
                     </div>
@@ -65,10 +71,10 @@
                     <img src="../../../assets/logout_icon.svg" alt="">
                     <span>Log Out</span>
                 </div>
-                <div class="deleteButton buttonStyle pointer scale trans">
+                <!-- <div class="deleteButton buttonStyle pointer scale trans">
                     <img src="../../../assets/delete_icon.svg" alt="">
                     <span>Delete Account</span>
-                </div>
+                </div> -->
             </div>
 
         </div>
@@ -88,34 +94,28 @@
                     <div class="row-1">
                         <div class="inputField">
                             <label for="">Clint Name</label>
-                            <input type="text" [(ngModel)] = "clientName" disabled>
+                            <input type="text" [(ngModel)]="clientName" disabled>
                         </div>
                     </div>
                     <div class="row-1" style="margin-top: 15px;">
                         <div class="inputField">
                             <label for="">New Password</label>
-                            <input [type]="newPasswordVisible ? 'text' : 'password'" [(ngModel)] = "newPassword">
+                            <input [type]="newPasswordVisible ? 'text' : 'password'" [(ngModel)]="newPassword">
                             <div class="eyeIcon">
-                              <img 
-                                [src]="newPasswordVisible ? '../../../assets/hide_password_icon.svg' : '../../../assets/show_password_icon.svg'" 
-                                alt="Toggle Password Visibility" 
-                                class="pointer trans scale" 
-                                (click)="toggleNewPasswordVisibility()"
-                              >
+                                <img [src]="newPasswordVisible ?  '../../../assets/show_password_icon.svg' :'../../../assets/hide_password_icon.svg'"
+                                    alt="Toggle Password Visibility" class="pointer trans scale"
+                                    (click)="toggleNewPasswordVisibility()">
                             </div>
-                          </div>
-                          <div class="inputField">
+                        </div>
+                        <div class="inputField">
                             <label for="">Confirm Password</label>
-                            <input [type]="confirmPasswordVisible ? 'text' : 'password'" [(ngModel)] = "confirmPassword">
+                            <input [type]="confirmPasswordVisible ? 'text' : 'password'" [(ngModel)]="confirmPassword">
                             <div class="eyeIcon">
-                              <img 
-                                [src]="confirmPasswordVisible ? '../../../assets/hide_password_icon.svg' : '../../../assets/show_password_icon.svg'" 
-                                alt="Toggle Password Visibility" 
-                                class="pointer trans scale" 
-                                (click)="toggleConfirmPasswordVisibility()"
-                              >
+                                <img [src]="newPasswordVisible ?  '../../../assets/show_password_icon.svg' :'../../../assets/hide_password_icon.svg'"
+                                    alt="Toggle Password Visibility" class="pointer trans scale"
+                                    (click)="toggleNewPasswordVisibility()">
                             </div>
-                          </div>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -82,10 +82,16 @@
 
 .form-group input{
     height: 25px;
-    width: auto;
+    width: 300px;
     outline: none;
     border: none;
-    background: rgba(240, 237, 255, 0.80)
+    background: rgba(240, 237, 255, 0.80);
+    color: #2E2A40;
+    font-family: Montserrat;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
 }
 
 form{

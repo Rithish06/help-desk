@@ -1,4 +1,5 @@
 <div class="common_box">
+    
     <div class="root-container" [ngClass]="{rootWidth : isQuickForm}">
         <!-- filter 1 -->
         <div class="filter1">
@@ -7,12 +8,16 @@
                 <img src="../../../assets/search.svg" alt="search icon">
                 <!-- <input type="text" placeholder="Search for ticket" (change)="searchTickets($event)" /> -->
                 <input type="text" (input)="searchTickets($event)" placeholder="Search Ticket Number or Name">
-
             </div>
 
             <!-- right side -->
             <div class="right_side">
-                <input class="dateInput" type="date" [ngClass]="{inputWidth : isQuickForm,falseWidth : !isQuickForm}" (input)="dateOnchange($event)" />
+                <div class="date-wrapper" (click)="focusDateInput()">
+                    <input #dateInput class="dateInput"
+                           type="date"
+                           [ngClass]="{inputWidth : isQuickForm, falseWidth : !isQuickForm}"
+                           (input)="dateOnchange($event)" />
+                  </div>
                 <!-- <select name="" id="" class="priority-selector">
                     <option class="dummy" value="all" disabled selected hidden>Select Priority</option>
                     <option value="">
