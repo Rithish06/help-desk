@@ -1,0 +1,8 @@
+{
+  "routes": [
+    "/admin",
+    "/home",
+    "/login",
+    "/maintenance"
+  ]
+}

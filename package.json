@@ -27,6 +27,8 @@
     "ng": "^0.0.0",
     "ng-multiselect-dropdown": "^1.0.0",
     "ngx-toastr": "^19.0.0",
+    "primeicons": "^7.0.0",
+    "primeng": "^16.7.1",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.3"

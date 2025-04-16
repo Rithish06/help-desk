@@ -39,6 +39,8 @@ import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { SeoFormComponent } from './components/seo-form/seo-form.component';
 import { SmmFormComponent } from './components/smm-form/smm-form.component';
 import { PpcFormComponent } from './components/ppc-form/ppc-form.component';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
 
 
 
@@ -80,6 +82,7 @@ import { PpcFormComponent } from './components/ppc-form/ppc-form.component';
     MatCardModule,
     MatTooltipModule,
     MatSnackBarModule,
+    ToastModule,
     ToastrModule.forRoot(
       {
         timeOut: 3000,
@@ -91,6 +94,7 @@ import { PpcFormComponent } from './components/ppc-form/ppc-form.component';
   ],
   providers: [
     provideClientHydration(),
+    MessageService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
