@@ -34,7 +34,41 @@ export class TicketService {
   }
 
   updateComment(comment:any, id:any):Observable<any>{
-    return this.http.put(`${apiUrl}/update-comment/${id}`, comment, { withCredentials: true })
+    return this.http.post(`${this.apiUrl}/${id}/comments`, comment, { withCredentials: true })
   }
 
+  // updateTicketStatus(ticketId: string, payload: any) {
+  //   return this.http.put(`${this.apiUrl}/ticket/${ticketId}/update-fields`, payload);
+  // }
+
+  updateClientPriority(ticketNumber: string, clientPriority: string): Observable<any> {
+    return this.http.put(`${this.apiUrl}/update-client-priority/${ticketNumber}`, {
+      clientPriority,
+    });
+  }
+
+  updateStatus(ticketNumber: string, status: string): Observable<any> {
+    return this.http.put(`${this.apiUrl}/update-status/${ticketNumber}`, {
+      status,
+    });
+  }
+
+  updateAdminStatus(ticketNumber: string, adminStatus: string): Observable<any> {
+    return this.http.put(`${this.apiUrl}/update-admin-status/${ticketNumber}`, {
+      adminStatus,
+    });
+  }
+
+  addComment(ticketId: string, commentData: FormData): Observable<any> {
+    console.log(ticketId, "from service");
+    return this.http.post(`${apiUrl}/tickets/${ticketId}/comments`, commentData, { withCredentials: true });
+  }
+
+  updateClientNotification(ticketId:any): Observable<any>{
+    return this.http.put(`${apiUrl}/update-clientNotification/ticket/${ticketId}`, { withCredentials: true })
+  }
+
+  updateAdminNotification(ticketId:any): Observable<any>{
+    return this.http.put(`${apiUrl}/update-adminNotification/ticket/${ticketId}`, { withCredentials: true })
+  }
 }

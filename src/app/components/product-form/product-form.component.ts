@@ -2,10 +2,11 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ProductsService } from '../../services/products/products.service';
 import { TicketService } from '../../services/ticket/ticket.service';
+
 @Component({
   selector: 'app-product-form',
   templateUrl: './product-form.component.html',
-  styleUrl: './product-form.component.css'
+  styleUrls: ['./product-form.component.css']
 })
 export class ProductFormComponent {
   ticketForm: FormGroup;
@@ -15,11 +16,23 @@ export class ProductFormComponent {
   pathName: any;
   isSubmitted = false; // Track form submission
 
-  clientName: any
-  clientId: any
-  disabled: boolean = true
-  choosenModule: any
-  menupaths: any
+  clientName: any;
+  title: any;
+  clientId: any;
+  disabled: boolean = true;
+
+  // this choosen path
+  choosenPath: any;
+  productname: any;
+  inputDisable: boolean = false;
+  ticketFor: any;
+
+  choosenModule: any;
+  menupaths: any;
+
+  selectedMenupath: any; // Keep as any for compatibility, will be adjusted
+
+  isLoading : boolean = false
 
   constructor(
     private fb: FormBuilder,
@@ -37,27 +50,26 @@ export class ProductFormComponent {
   }
 
   ngOnInit() {
-    this.clientId = localStorage.getItem('clientId')
-    this.clientName = localStorage.getItem('name')
+    this.clientId = localStorage.getItem('clientId');
+    this.clientName = localStorage.getItem('name');
+    this.inputDisable = true;
+    this.ticketFor = 'product';
     this.getALlProducts();
   }
 
   getALlProducts(): void {
     this.product.getAllProducts().subscribe((data: any) => {
       this.allProducts = data;
-      // console.log(this.allProducts)
       this.loadProductName();
     });
   }
 
   loadProductName(): void {
-    const products = localStorage.getItem("products");
+    const products = localStorage.getItem('products');
     if (this.allProducts) {
       this.filteredProducts = this.allProducts.filter(
         (entry: any) => products?.includes(entry.productId) && entry.productType === 'product'
       );
-
-      console.log(this.filteredProducts, "filtered products")
       this.formProductName = this.filteredProducts.map((entry: any) => ({
         name: entry.name,
         id: entry._id
@@ -65,7 +77,10 @@ export class ProductFormComponent {
     }
   }
 
-  loadMenuPath(): void {
+  loadMenuPath(e: any): void {
+    this.productname = this.formProductName.filter((entry: any) => entry.id === e.target.value).map((entry: any) => entry.name)[0];
+    console.log(this.productname, 'productName');
+
     this.pathName = this.filteredProducts.flatMap((entry: any) => {
       const paths = entry.models?.[0]?.modules?.[0]?.path || [];
       return paths.map((p: any) => ({
@@ -79,14 +94,11 @@ export class ProductFormComponent {
   onchoosingMenuPath(event: any): void {
     const selectedId = event.target.value;
 
-    const pathName = this.pathName.filter((entry: any) => entry.id === event.target.value).map((entry: any) => entry.name)
-    console.log(pathName)
+    const pathName = this.pathName.filter((entry: any) => entry.id === event.target.value).map((entry: any) => entry.name);
+    console.log(pathName);
 
     this.choosenModule = pathName[0];
-    console.log(this.choosenModule)
-
-    // Get all sections from the selected path
-    // this.menupaths = this.filteredProducts[0]?.models[0].modules[0].path.filter((entry:any) => entry.id === event.target.value).map((entry:any) => entry.section)
+    console.log(this.choosenModule);
 
     this.menupaths = this.filteredProducts[0]?.models[0]?.modules[0]?.path
       .filter((entry: any) => entry._id === event.target.value)
@@ -96,16 +108,8 @@ export class ProductFormComponent {
           sectionName: s.sectionName
         }))
       );
-
-
-    console.log(this.menupaths, "menupaths");
+    console.log(this.menupaths, 'menupaths');
   }
-
-
-  loadSection(): void {
-  }
-
-
 
   onChoosingFile(event: any): void {
     const file = event.target.files[0];
@@ -114,30 +118,46 @@ export class ProductFormComponent {
     }
   }
 
+  onSelectingMenupath(e: any): void {
+    this.selectedMenupath = [{ name: e.target.value }]; // Change to array of objects
+  }
+
   onSubmit(): void {
     this.isSubmitted = true; // Mark form as submitted
     if (this.ticketForm.valid) {
+      this.isLoading = true
       const formData = new FormData();
+      formData.append('clientName', this.clientName);
+      formData.append('ticketFor', this.ticketFor);
       formData.append('clientId', localStorage.getItem('clientId') || '');
       formData.append('title', this.ticketForm.get('title')?.value);
       formData.append('description', this.ticketForm.get('ticketBody')?.value);
-      formData.append('menuPath', this.ticketForm.get('module')?.value);
       formData.append('module', this.choosenModule);
+      formData.append('menuPath', JSON.stringify(this.selectedMenupath)); // Stringify the array
+      formData.append('productName', this.productname);
+      formData.append('prefix', localStorage.getItem('ticketPrefix') || '');
       if (this.ticketForm.get('attachment')?.value) {
         formData.append('file', this.ticketForm.get('attachment')?.value);
       }
+
+      console.log('FormData:', formData);
 
       this.ticket.createTicket(formData).subscribe({
         next: (response) => {
           console.log('Ticket sent successfully:', response);
           this.ticketForm.reset();
           this.isSubmitted = false; // Reset submission state
+          this.isLoading = false
         },
         error: (error) => {
           console.error('Error sending ticket:', error);
+          this.isLoading = false
         }
       });
     }
+
+    this.isLoading = false
+
   }
 
   onClear(): void {

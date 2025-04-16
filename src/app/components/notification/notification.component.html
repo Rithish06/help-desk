@@ -1,0 +1,12 @@
+<div class="root-container">
+    <div class="notifications pointer trans" *ngFor="let notification of notificationTickets" (click)="openTickets(notification.id)">
+        <div class="noti-head">{{notification.title}}</div>
+        <div class="clientName" [innerHTML]="notification.description"></div>
+        <div class="time">{{notification.time}}</div>
+    </div>
+
+    <div class="noNoti" *ngIf = "notificationTickets.length === 0">
+        <span>No Notifications</span>
+    </div>
+</div>
+

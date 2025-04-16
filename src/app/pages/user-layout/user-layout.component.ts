@@ -21,6 +21,10 @@ export class UserLayoutComponent {
   activateSingleTicket : boolean = false
   token : any
 
+  isCancelLogout : boolean = true
+
+  notificationBar : boolean = false
+
   constructor(private router : Router){}
 
   ngOnInit(){
@@ -75,10 +79,28 @@ export class UserLayoutComponent {
 
   receiveTicketData(e:any):void{
     this.singleTicketName = e
+    this.notificationBar = false
     this.activateDashboard = false
     this.activateTicket = false
     this.activateSettings = false
     this.activateSingleTicket =true
   }
+
+  // logOut
+
+  cancelLogout(e:any):void{
+    this.isCancelLogout = e
+  }
+
+  popUplogOut(e:any):void{
+    this.isCancelLogout = e
+  }
+
+  // notificationBar
+
+  activateNoticationBar(e:any){
+    this.notificationBar = e
+  }
+
 
 }

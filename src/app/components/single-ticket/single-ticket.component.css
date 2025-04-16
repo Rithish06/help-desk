@@ -7,54 +7,122 @@
     line-height: normal;
 }
 
-.tickerHeader{
+.tickerHeader {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.lft-side{
+.lft-side {
     display: flex;
     gap: 8px;
     align-items: center;
 }
 
-.color{
+.color {
     width: 15px;
     height: 15px;
     border-radius: 50%;
 }
 
-.ticketNo{
+.ticketNo {
     color: #2E2C34;
     font-family: Montserrat;
     font-size: 16px;
     font-style: normal;
     font-weight: 600;
-    line-height: 14px; /* 87.5% */
+    line-height: 14px;
+    /* 87.5% */
     margin: 30px 0;
 }
 
-.ticketTitle{
+.txt-for {
+    margin-left: 30px;
+}
+
+.ticketTitle {
     color: #2E2C34;
     font-family: Montserrat;
     font-size: 18px;
     font-style: normal;
     font-weight: 600;
-    line-height: 14px; /* 77.778% */
+    line-height: 14px;
+    /* 77.778% */
     margin-bottom: 20px;
 }
 
-.postedTime{
+.postedTime {
     color: #84818A;
     font-family: Montserrat;
     font-size: 12px;
     font-style: normal;
     font-weight: 500;
-    line-height: 14px; /* 116.667% */
+    line-height: 14px;
+    /* 116.667% */
 }
 
-.ticketDescription{
+.row-1,
+.row-2 {
+    display: flex;
+    gap: 40px;
+    width: 95%;
+}
+
+.row-2 {
+    margin-top: 30px;
+}
+
+.inputField {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.inputField label {
+    color: #2E2A40;
+    font-family: Montserrat;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.inputField input {
+    width: 100%;
+    color: #757575;
+    font-family: Montserrat;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    letter-spacing: -0.28px;
+    height: 50px;
+    border-radius: 4px;
+    border: 1px solid #E7E7E7;
+    padding: 0 10px;
+}
+
+.name {
+    width: 63%;
+}
+
+.productName {
+    width: 34%;
+}
+
+.module {
+    width: 32%;
+}
+
+.menupath {
+    width: 32%;
+}
+
+.tkt-titleDes {
+    margin-top: 30px;
+}
+
+.ticketDescription {
     color: #84818A;
     font-family: Montserrat;
     font-size: 14px;
@@ -66,7 +134,7 @@
     padding: 10px;
 }
 
-.ticketDescriptionUser{
+.ticketDescriptionUser {
     color: #84818A;
     font-family: Montserrat;
     font-size: 14px;
@@ -75,17 +143,17 @@
     line-height: normal;
     width: 98%;
     height: auto;
-    padding: 10px;
+    /* padding: 10px; */
 }
 
-.commentSection{
+.commentSection {
     border: 1px solid #E7E7E7;
     border-radius: 5px;
     padding: 1%;
     margin-top: 50px;
 }
 
-.commentFrom{
+.commentFrom {
     color: var(--Secondary-500, #2E2A40);
     font-family: Montserrat;
     font-size: 18px;
@@ -94,7 +162,7 @@
     line-height: 150%;
 }
 
-.Commenttitle{
+.Commenttitle {
     color: #2E2C34;
     font-family: Montserrat;
     font-size: 16px;
@@ -105,36 +173,36 @@
     margin-bottom: 20px;
 }
 
-.updatedTime{
+.updatedTime {
     margin-top: 40px;
     text-align: right;
 }
 
-.attatchments{
+.attatchments {
     display: flex;
     align-items: center;
     margin-top: 20px;
     justify-content: center;
 }
 
-.attatchments img{
+.attatchments img {
     width: auto;
     height: 300px;
     object-fit: cover;
     border-radius: 10px;
 }
 
-.editButton{
+.editButton {
     border: 1px solid #2C63BA;
     color: #2C63BA;
     margin-top: 15px;
 }
 
-.saveButton{
+.saveButton {
     background-color: transparent;
 }
 
-.buttonStyle{
+.buttonStyle {
     width: 157px;
     height: 44px;
     border-radius: 4px;
@@ -149,17 +217,131 @@
     font-weight: 600;
 }
 
-.buttonStyle img{
+.buttonStyle img {
     width: 18px;
     height: 18px;
 }
 
-.flexComment{
+.flexComment {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.user, .admin{
+.user,
+.admin {
     margin-bottom: 50px;
+}
+
+/* commet wrapper */
+
+.commentSection {
+    width: 97%;
+    height: auto;
+    border: 1px solid #e7e7e7;
+    padding: 15px;
+    border-radius: 10px;
+    height: auto;
+    margin-top: 40px;
+    background-color: #ffffff;
+    margin-bottom: 60px;
+}
+
+.comments-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.comments {
+    background-color: #F9F9FB;
+    padding: 10px;
+    border: 1px solid #e7e7e7;
+}
+
+.commentsHeading {
+    color: #2E2A40;
+    font-family: Montserrat;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 150%;
+    /* 27px */
+    margin-bottom: 20px;
+}
+
+.comments {
+    color: #84818A;
+    font-family: Montserrat;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
+.commentTimeAndBy {
+    color: #84818A;
+    font-family: Montserrat;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 14px;
+    /* 116.667% */
+    display: flex;
+    justify-content: end;
+    margin-top: 30px;
+}
+
+.images {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 40px;
+}
+
+.attachments img {
+    width: 400px;
+    height: auto;
+    border-radius: 10px;
+}
+
+.attachmentTitle {
+    color: #2E2A40;
+    font-family: Montserrat;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 150%;
+    /* 27px */
+    margin: 35px 0 20px 0;
+}
+
+.ticketFor {
+    color: #3B8AFF;
+    border-color: #2C63BA1A;
+    background-color: #2C63BA1A;
+    padding: 2px 10px;
+    border-radius: 5px;
+    margin-left: 15px;
+}
+
+.lists {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.listItems{
+    padding: 10px;
+    color: #757575;
+    font-family: Montserrat;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    letter-spacing: -0.28px;
+    list-style: none;
+    background-color: rgba(156, 156, 156, 0.064);
+    border-radius: 8px;
 }

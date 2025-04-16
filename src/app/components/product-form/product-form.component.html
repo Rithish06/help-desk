@@ -1,83 +1,96 @@
 <div class="root-container">
-    <form [formGroup]="ticketForm" (ngSubmit)="onSubmit()">
-      <!-- row 1 -->
-      <div class="row row-1">
+  <form [formGroup]="ticketForm" (ngSubmit)="onSubmit()">
+    <!-- row 1 -->
+    <div class="row row-1">
 
-        <div class="inputField client_name">
-          <label for="">Title</label>
-          <input type="text" formControlName="title">
-          <div *ngIf="ticketForm.get('title')?.invalid && isSubmitted" class="error errorStyle">
-            <span *ngIf="ticketForm.get('title')?.errors?.['required']">title is required</span>
-          </div>
-        </div>
-
-        <div class="inputField ticket_type">
-          <label for="">Select Product</label>
-          <select (change)="loadMenuPath()" formControlName="websiteName">
-            <option value="" disabled>Select Product</option>
-            <option *ngFor="let name of formProductName" [value]="name.id">{{name.name}}</option>
-          </select>
-          <div *ngIf="ticketForm.get('websiteName')?.invalid && isSubmitted" class="error errorStyle">
-            <span *ngIf="ticketForm.get('websiteName')?.errors?.['required']">Website selection is required</span>
-          </div>
-        </div>
-
-      </div>
-  
-      <!-- row 2 -->
-      <div class="row row-2">
-
-        <div class="inputField workflow_status">
-            <label for="">Module</label>
-            <select formControlName="module" (change)="onchoosingMenuPath($event)">
-              <option value="" disabled>Select Module</option>
-              <option *ngFor="let path of pathName" [value]="path.id">{{path.name}}</option>
-            </select>
-            <div *ngIf="ticketForm.get('module')?.invalid && isSubmitted" class="error errorStyle">
-              <span *ngIf="ticketForm.get('module')?.errors?.['required']">Module is required</span>
-            </div>
-          </div>
-
-        <div class="inputField workflow_status">
-          <label for="">Menu Path</label>
-          <select formControlName="menuPath">
-            <option value="" disabled>Select Menu Path</option>
-            <option *ngFor="let path of menupaths" [value]="path.id">{{path.sectionName}}</option>
-          </select>
-          <div *ngIf="ticketForm.get('menuPath')?.invalid && isSubmitted" class="error errorStyle">
-            <span *ngIf="ticketForm.get('menuPath')?.errors?.['required']">Menu Path is required</span>
-          </div>
+      <div class="inputField client_name">
+        <label for="">Name</label>
+        <input type="text" [(ngModel)]="clientName" [disabled]="inputDisable" [ngModelOptions]="{standalone: true}" />
+        <div *ngIf="ticketForm.get('title')?.invalid && isSubmitted" class="error errorStyle">
+          <span *ngIf="ticketForm.get('title')?.errors?.['required']">clientName is required</span>
         </div>
       </div>
-  
-      <!-- row 3 -->
-      <div class="row row-3">
-        <div class="inputField texy_body">
-          <label for="">Ticket Body</label>
-          <textarea class="textarea" formControlName="ticketBody"></textarea>
-          <div *ngIf="ticketForm.get('ticketBody')?.invalid && isSubmitted" class="error errorStyle ticketBodyStyle">
-            <span *ngIf="ticketForm.get('ticketBody')?.errors?.['required']">Ticket Body is required</span>
-            <span *ngIf="ticketForm.get('ticketBody')?.errors?.['minlength']">Must be at least 10 characters</span>
-          </div>
+
+      <div class="inputField ticket_type">
+        <label for="">Select Product Name</label>
+        <select (change)="loadMenuPath($event)" formControlName="websiteName">
+          <option value="" disabled>Select Product</option>
+          <option *ngFor="let name of formProductName" [value]="name.id">{{name.name}}</option>
+        </select>
+        <div *ngIf="ticketForm.get('websiteName')?.invalid && isSubmitted" class="error errorStyle">
+          <span *ngIf="ticketForm.get('websiteName')?.errors?.['required']">Product is required</span>
         </div>
       </div>
-  
-      <!-- row 4 -->
-      <div class="row row-4">
-        <div class="inputFile Attachment">
-          <label for="">Attachment</label>
-          <div class="flex">
-            <div class="input_wrapper">
-              <input type="file" (change)="onChoosingFile($event)" formControlName="attachment"/>
-            </div>
-            <button type="button" class="clear_button pointer scale trans" (click)="ticketForm.get('attachment')?.reset()">clear</button>
-          </div>
+
+    </div>
+
+    <!-- row 2 -->
+    <div class="row row-2">
+      <div class="inputField workflow_status">
+        <label for="">Module</label>
+        <select formControlName="module" (change)="onchoosingMenuPath($event)">
+          <option value="" disabled>Select Module</option>
+          <option *ngFor="let path of pathName" [value]="path.id">{{path.name}}</option>
+        </select>
+        <div *ngIf="ticketForm.get('module')?.invalid && isSubmitted" class="error errorStyle">
+          <span *ngIf="ticketForm.get('modele')?.errors?.['required']">Module is required</span>
         </div>
       </div>
-  
-      <div class="buttons">
-        <button type="submit" class="send pointer scale trans" [disabled]="ticketForm.invalid && isSubmitted">Send Ticket</button>
-        <button type="button" class="cancel pointer scale trans" (click)="onClear()">Clear</button>
+
+      <div class="inputField workflow_status">
+        <label for="">Menu Path</label>
+        <select formControlName="menuPath" (change)="onSelectingMenupath($event)">
+          <option value="" disabled>Select Menu Path</option>
+          <option *ngFor="let path of menupaths" [value]="path.sectionName">{{path.sectionName}}</option>
+        </select>
+        <div *ngIf="ticketForm.get('menuPath')?.invalid && isSubmitted" class="error errorStyle">
+          <span *ngIf="ticketForm.get('menuPath')?.errors?.['required']">Menu Path is required</span>
+        </div>
       </div>
-    </form>
-  </div>
+    </div>
+
+    <!-- row 4 -->
+    <div class="row row-1">
+      <div class="inputField client_name">
+        <label for="">Title</label>
+        <input type="text" formControlName="title" placeholder="Enter a short title ">
+        <div *ngIf="ticketForm.get('title')?.invalid && isSubmitted" class="error errorStyle">
+          <span *ngIf="ticketForm.get('title')?.errors?.['required']">title is required</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- row 3 -->
+    <div class="row row-3">
+      <div class="inputField texy_body">
+        <label for="">Ticket Body</label>
+        <textarea class="textarea" formControlName="ticketBody" placeholder="Describe the issue or requirement in detail..."></textarea>
+        <div *ngIf="ticketForm.get('ticketBody')?.invalid && isSubmitted" class="error errorStyle ticketBodyStyle">
+          <span *ngIf="ticketForm.get('ticketBody')?.errors?.['required']">Ticket Body is required</span>
+          <span *ngIf="ticketForm.get('ticketBody')?.errors?.['minlength']">Must be at least 10 characters</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- row 4 -->
+    <div class="row row-4">
+      <div class="inputFile Attachment">
+        <label for="">Attachment</label>
+        <div class="flex">
+          <div class="input_wrapper">
+            <input type="file" (change)="onChoosingFile($event)" formControlName="attachment" />
+          </div>
+          <button type="button" class="clear_button pointer"
+            (click)="ticketForm.get('attachment')?.reset()">clear</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="buttons">
+      <button type="submit" class="send pointer" [disabled]="isLoading">
+        <span>{{ isLoading ? 'Sending...' : 'Send Ticket' }}</span>
+      </button>
+      <button type="button" class="cancel pointer" (click)="onClear()">Clear</button>
+    </div>
+  </form>
+</div>

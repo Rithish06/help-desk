@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import {AuthService} from '../../services/auth/auth.service'
 import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-login',
@@ -8,7 +9,7 @@ import { Router } from '@angular/router';
   styleUrl: './login.component.css'
 })
 export class LoginComponent {
-  constructor(private authService : AuthService, private router: Router){}
+  constructor(private authService : AuthService, private router: Router, private snackBar: MatSnackBar){}
 
   email : string = ''
   password : string = ''
@@ -78,9 +79,17 @@ export class LoginComponent {
         localStorage.setItem('name', response.user.name);
         localStorage.setItem('id', response.user._id)
         localStorage.setItem('place', response.user.place)
+        localStorage.setItem('ticketPrefix', response.user.ticketPrifix)
         localStorage.setItem('loginTime', currDate.toString())
-        console.log('Login successful:', response);
+        // console.log('Login successful:', response);
         console.log(response.user.role)
+
+        this.snackBar.open('Login successfully!', 'Close', {
+          duration: 3000,
+          verticalPosition: 'top',    // 'bottom' also possible
+          horizontalPosition: 'right', // 'center', 'left' also valid
+          panelClass: ['custom-snackbar','success-snackbar']
+        });
 
         if (response.user.role === 'admin') {
           this.router.navigate(['/admin']); // Redirect to Adm in Dashboard
@@ -92,7 +101,12 @@ export class LoginComponent {
       
       error: (err) => {
         console.error('Login failed:', err);
-        alert("wrong password")
+        this.snackBar.open('Login Failed. Invalid Credentials', 'Close', {
+          duration: 3000,
+          verticalPosition: 'top',    // 'bottom' also possible
+          horizontalPosition: 'right', // 'center', 'left' also valid
+          panelClass: ['custom-snackbar','error-snackbar']
+        });
       }
     });
   }

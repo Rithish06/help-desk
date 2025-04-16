@@ -1,38 +1,39 @@
 /* You can add global styles to this file, and also import other style files */
-*{
+* {
     padding: 0;
     margin: 0;
 }
 
+/* @import '@angular/material/prebuilt-themes/indigo-pink.css'; */
 
-::-webkit-scrollbar{
-    display : none
+::-webkit-scrollbar {
+    display: none
 }
 
-body{
+body {
     overflow-x: hidden;
 }
 
 
 /* colors */
 :root {
-    --purple-color : #7F56D8;
-    --active-orange : #FB9C2A;
-    --active-bg-orange : rgba(251, 156, 42, 0.10);
-    --blue-color : #2C63BA;
-    --gray-color : #84818A;
-    --high-priority : #F00;
-    --mid-priority : #FB9C2A;
-    --low-priority : #FFD722;
-    --dark : #2E2C34;
-    --border : #E7E7E7;
+    --purple-color: #7F56D8;
+    --active-orange: #FB9C2A;
+    --active-bg-orange: rgba(251, 156, 42, 0.10);
+    --blue-color: #2C63BA;
+    --gray-color: #84818A;
+    --high-priority: #F00;
+    --mid-priority: #FB9C2A;
+    --low-priority: #FFD722;
+    --dark: #2E2C34;
+    --border: #E7E7E7;
 }
 
-.pointer{
+.pointer {
     cursor: pointer;
 }
 
-.scale:hover{
+.scale:hover {
     transform: scale(1.1);
 }
 
@@ -51,3 +52,90 @@ body{
     line-height: 14px;
 }
 
+/* ::ng-deep .mat-snack-bar-container .mat-button {
+    background-color: transparent !important;
+    color: #fff !important;
+    box-shadow: none !important;
+}
+
+::ng-deep .mat-snack-bar-container .mat-button:hover {
+    background-color: transparent !important;
+    color: #fff !important;
+}
+
+::ng-deep .mat-snack-bar-container .mat-button .mat-ripple-element {
+    display: none !important;
+} */
+
+.mat-tooltip {
+    background-color: #4caf50 !important;  /* Green background */
+    color: #fff !important;                /* White text */
+    font-size: 14px !important;
+    border-radius: 6px !important;
+    padding: 10px 16px !important;
+    max-width: 250px !important;
+    text-align: center !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25) !important;
+}
+
+::ng-deep .mat-tooltip {
+    background-color: #673ab7 !important; /* Purple */
+    color: #fff !important;               /* White text */
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 8px;
+    padding: 8px 12px;
+  }
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.loading{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.spinner{
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    animation: 0.3s spinner infinite;
+}
+
+@keyframes spinner{
+    0%{
+        transform: rotate(0deg);
+    }
+    100%{
+        transform: rotate(360deg);
+    }
+}
+
+::ng-deep .mat-snack-bar-container .success-snackbar {
+    color: #4caf50 !important;
+}
+
+/* Error - Red */
+.error-snackbar {
+    background-color: #f44336 !important;
+    color: #fff !important;
+}
+
+/* Optional: Info or Warning */
+.info-snackbar {
+    background-color: #2196f3 !important;
+}
+
+.warning-snackbar {
+    background-color: #ff9800 !important;
+}

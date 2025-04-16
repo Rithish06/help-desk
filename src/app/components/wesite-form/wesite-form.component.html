@@ -4,16 +4,16 @@
       <div class="row row-1">
 
         <div class="inputField client_name">
-          <label for="">Title</label>
-          <input type="text" formControlName="title">
+          <label for="">Name</label>
+          <input type="text" [(ngModel)]="clientName" [disabled]="inputDisable" [ngModelOptions]="{standalone: true}" />
           <div *ngIf="ticketForm.get('title')?.invalid && isSubmitted" class="error errorStyle">
-            <span *ngIf="ticketForm.get('title')?.errors?.['required']">title is required</span>
+            <span *ngIf="ticketForm.get('title')?.errors?.['required']">clientName is required</span>
           </div>
         </div>
 
         <div class="inputField ticket_type">
           <label for="">Select Website Name</label>
-          <select (change)="loadMenuPath()" formControlName="websiteName">
+          <select (change)="loadMenuPath($event)" formControlName="websiteName">
             <option value="" disabled>Select Website</option>
             <option *ngFor="let name of formProductName" [value]="name.id">{{name.name}}</option>
           </select>
@@ -21,7 +21,7 @@
             <span *ngIf="ticketForm.get('websiteName')?.errors?.['required']">Website selection is required</span>
           </div>
         </div>
-
+        
       </div>
   
       <!-- row 2 -->
@@ -37,12 +37,23 @@
           </div>
         </div>
       </div>
+
+      <!-- row 4 -->
+       <div class="row row-1">
+        <div class="inputField client_name">
+          <label for="">Title</label>
+          <input type="text" formControlName="title" placeholder="Enter a short title ">
+          <div *ngIf="ticketForm.get('title')?.invalid && isSubmitted" class="error errorStyle">
+            <span *ngIf="ticketForm.get('title')?.errors?.['required']">title is required</span>
+          </div>
+        </div>
+       </div>
   
       <!-- row 3 -->
       <div class="row row-3">
         <div class="inputField texy_body">
           <label for="">Ticket Body</label>
-          <textarea class="textarea" formControlName="ticketBody"></textarea>
+          <textarea class="textarea" formControlName="ticketBody" placeholder="Describe the issue or requirement in detail..."></textarea>
           <div *ngIf="ticketForm.get('ticketBody')?.invalid && isSubmitted" class="error errorStyle ticketBodyStyle">
             <span *ngIf="ticketForm.get('ticketBody')?.errors?.['required']">Ticket Body is required</span>
             <span *ngIf="ticketForm.get('ticketBody')?.errors?.['minlength']">Must be at least 10 characters</span>
@@ -58,14 +69,16 @@
             <div class="input_wrapper">
               <input type="file" (change)="onChoosingFile($event)" formControlName="attachment"/>
             </div>
-            <button type="button" class="clear_button pointer scale trans" (click)="ticketForm.get('attachment')?.reset()">clear</button>
+            <button type="button" class="clear_button pointer" (click)="ticketForm.get('attachment')?.reset()">clear</button>
           </div>
         </div>
       </div>
   
       <div class="buttons">
-        <button type="submit" class="send pointer scale trans" [disabled]="ticketForm.invalid && isSubmitted">Send Ticket</button>
-        <button type="button" class="cancel pointer scale trans" (click)="onClear()">Clear</button>
+        <button type="submit" class="send pointer" [disabled]="isLoading">
+          <span>{{ isLoading ? 'Sending...' : 'Send Ticket' }}</span>
+        </button>
+        <button type="button" class="cancel pointer" (click)="onClear()">Clear</button>
       </div>
     </form>
   </div>

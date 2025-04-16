@@ -10,20 +10,25 @@ import { TicketService } from '../../services/ticket/ticket.service';
 })
 
 export class WesiteFormComponent {
-  ticketForm: FormGroup;
+  ticketForm: FormGroup; 
   allProducts: any;
   filteredProducts: any;
   formProductName: any;
   pathName: any;
   isSubmitted = false; // Track form submission
 
-  clientName : any
-  title : any
-  clientId : any
-  disabled : boolean = true
+  clientName: any;
+  title: any;
+  clientId: any;
+  disabled: boolean = true;
 
   // this choosen path
-  choosenPath : any
+  choosenPath: any;
+  productname: any;
+  inputDisable: boolean = false;
+  ticketFor: any;
+
+  isLoading : boolean = false
 
   constructor(
     private fb: FormBuilder,
@@ -40,8 +45,10 @@ export class WesiteFormComponent {
   }
 
   ngOnInit() {
-    this.clientId = localStorage.getItem('clientId')
-    this.clientName = localStorage.getItem('name')
+    this.clientId = localStorage.getItem('clientId');
+    this.clientName = localStorage.getItem('name');
+    this.inputDisable = true;
+    this.ticketFor = 'website';
     this.getALlProducts();
   }
 
@@ -53,7 +60,7 @@ export class WesiteFormComponent {
   }
 
   loadProductName(): void {
-    const products = localStorage.getItem("products");
+    const products = localStorage.getItem('products');
     if (this.allProducts) {
       this.filteredProducts = this.allProducts.filter(
         (entry: any) => products?.includes(entry.productId) && entry.productType === 'website'
@@ -65,7 +72,10 @@ export class WesiteFormComponent {
     }
   }
 
-  loadMenuPath(): void {
+  loadMenuPath(e: any): void {
+    this.productname = this.formProductName.filter((entry: any) => entry.id === e.target.value).map((entry: any) => entry.name)[0];
+    console.log(this.productname, 'productName');
+
     this.pathName = this.filteredProducts.flatMap((entry: any) => {
       const paths = entry.models?.[0]?.modules?.[0]?.path || [];
       return paths.map((p: any) => ({
@@ -76,10 +86,10 @@ export class WesiteFormComponent {
     this.ticketForm.get('menuPath')?.reset();
   }
 
-  onchoosingMenuPath(event:any): void{
-      const pathName = this.pathName.filter((entry:any) => entry.id === event.target.value).map((entry:any) => entry.name)
-      this.choosenPath = pathName[0]
-      console.log(pathName)
+  onchoosingMenuPath(event: any): void {
+    const pathName = this.pathName.filter((entry: any) => entry.id === event.target.value).map((entry: any) => entry.name);
+    this.choosenPath = [{ name: pathName[0] }]; // Set as array of objects with name property
+    console.log(pathName);
   }
 
   onChoosingFile(event: any): void {
@@ -91,28 +101,37 @@ export class WesiteFormComponent {
 
   onSubmit(): void {
     this.isSubmitted = true; // Mark form as submitted
+    this.isLoading = true
     if (this.ticketForm.valid) {
       const formData = new FormData();
+      formData.append('clientName', this.clientName);
+      formData.append('ticketFor', this.ticketFor);
       formData.append('clientId', localStorage.getItem('clientId') || '');
       formData.append('title', this.ticketForm.get('title')?.value);
       formData.append('description', this.ticketForm.get('ticketBody')?.value);
-      formData.append('menuPath', this.choosenPath);
-      // formData.append('module', this.ticketForm.get(''));
+      formData.append('menuPath', JSON.stringify(this.choosenPath)); // Stringify the array
+      formData.append('productName', this.productname);
+      formData.append('prefix', localStorage.getItem('ticketPrefix') || '');
       if (this.ticketForm.get('attachment')?.value) {
         formData.append('file', this.ticketForm.get('attachment')?.value);
       }
+
+      console.log('FormData:', formData);
 
       this.ticket.createTicket(formData).subscribe({
         next: (response) => {
           console.log('Ticket sent successfully:', response);
           this.ticketForm.reset();
           this.isSubmitted = false; // Reset submission state
+          this.isLoading = false
         },
         error: (error) => {
           console.error('Error sending ticket:', error);
+          this.isLoading = false
         }
       });
     }
+    // this.isLoading = false
   }
 
   onClear(): void {

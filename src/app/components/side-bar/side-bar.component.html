@@ -28,7 +28,7 @@
                <div class="nav_name" [ngClass]="tickets === false ? 'black' : 'nav_active_color'">Tickets</div>
             </div>
             <div class="ticketTypes trans" [ngClass]="tickets === false ? 'ticketTypes' : 'activeTicket'">
-               <div class="pathNames pointer scale trans" *ngFor="let path of pathNames"
+               <div class="pathNames pointer" *ngFor="let path of pathNames"
                   (click)="changeTicketForm(path.formName, path.name)">
                   <img src="../../../assets/ticketMenu.svg" alt=">">
                   <div class="pathName">{{path.name}}</div>
@@ -47,7 +47,7 @@
    </div>
 
    <div class="buttonFlex">
-      <div class="loginButton buttonStyle pointer scale trans" (click)="logout()">
+      <div class="loginButton buttonStyle pointer" (click)="logout()">
          <img src="../../../assets/logout_icon.svg" alt="">
          <span>Log Out</span>
      </div>

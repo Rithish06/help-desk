@@ -40,7 +40,7 @@ export class AuthService {
   }
 
   startAutoLogout(): void {
-    const expirationTime = 60 * 60 * 1000; // 1 hour in milliseconds
+    const expirationTime = 12 * 60 * 60 * 1000; // 1 hour in milliseconds
 
     if (this.timeoutRef) {
       clearTimeout(this.timeoutRef); // Clear any previous timeouts
@@ -58,7 +58,7 @@ export class AuthService {
       if (loginTime) {
         const currentTime = new Date().getTime();
         const timeElapsed = currentTime - JSON.parse(loginTime);
-        const expirationTime = 60 * 60 * 1000; // 1 hour
+        const expirationTime = 12 * 60 * 60 * 1000; // 1 hour
   
         if (timeElapsed >= expirationTime) {
           this.logout();

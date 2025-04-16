@@ -1,0 +1,59 @@
+.root-container{
+    width: 502px;
+    height: 633px;
+    padding: 10px;
+    border-radius: 20px;
+    box-shadow: 3px 4px 24px 0px rgba(0, 0, 0, 0.30);
+    background: #F7F7F9;
+    overflow-y: auto;
+}
+
+.notifications{
+    border-bottom: 2px solid #000;
+    padding: 10px;
+    /* padding: 5px; */
+}
+
+.notifications:hover{
+    background-color: rgba(148, 147, 147, 0.327);
+    border-radius: 20px;
+}
+
+.noti-head{
+    color: #001345;
+    font-family: Montserrat;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.clientName, .time{
+    color: #001345;
+    font-family: Montserrat;
+    font-size: 11px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    margin-top: 10px;
+}
+
+.time {
+    display: flex;
+    justify-content: end;
+}
+
+.hide{
+    display: none;
+}
+
+.noNoti{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    font-size: 30px;
+    font-weight: 600;
+    color: rgba(154, 154, 154, 0.37);
+}

@@ -3,8 +3,8 @@
     <div class="heading">New Ticket Form ({{fromHeading}})</div>
 
     <div class="title">
-        <div class="name">Create New Ticket</div>
-        <div class="description">Write and address new queries and issues</div>
+        <div class="name">Facing an Issue? </div>
+        <div class="description">Type it out. We’ll sort it out.</div>
     </div>
 
     <div class="webiste-Form">
@@ -13,6 +13,18 @@
 
     <div class="product-form" *ngIf = "formName==='product'">
         <app-product-form />
+    </div>
+
+    <div class="product-form" *ngIf = "formName==='seo'">
+        <app-seo-form />
+    </div>
+
+    <div class="product-form" *ngIf = "formName==='smm'">
+        <app-smm-form />
+    </div>
+
+    <div class="product-form" *ngIf = "formName==='ppc'">
+        <app-ppc-form />
     </div>
 </div>
 

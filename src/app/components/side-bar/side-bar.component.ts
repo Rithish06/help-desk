@@ -17,6 +17,8 @@ export class SideBarComponent {
   @Output() sectionName : any = new EventEmitter<any>()
   @Output() formName : any = new EventEmitter<any>()
   @Output() formHeading : any = new EventEmitter<any>()
+  @Output() isCancelLogOut = new EventEmitter<boolean>()
+
 
   // icons
   dashboardIcon :string = '../../../assets/Category.svg'
@@ -46,15 +48,15 @@ export class SideBarComponent {
     },
     {
       name : 'SEO',
-      formName : "website"
+      formName : "seo"
     },
     {
       name : 'SMM',
-      formName : "website"
+      formName : "smm"
     },
     {
       name : 'PPC',
-      formName : "website"
+      formName : "ppc"
     },
   ]
 
@@ -95,11 +97,10 @@ export class SideBarComponent {
   }
 
   logout(): void {
-    localStorage.removeItem('user'); // Remove user data from local storage
-    localStorage.removeItem('token'); // Remove authentication token
-    this.router.navigate(['/login']); // Redirect to login page
+    // localStorage.removeItem('user'); // Remove user data from local storage
+    // localStorage.removeItem('token'); // Remove authentication token
+    // this.router.navigate(['/login']); // Redirect to login page
+    this.isCancelLogOut.emit(false)
   }
-
-
 
 }

@@ -3,13 +3,22 @@
         <!-- filter 1 -->
         <div class="filter1">
             <!-- input -->
-            <div class="input flex">
-                <img src="../../../assets/search.svg" alt="search icon">
-                <!-- <input type="text" placeholder="Search for ticket" (change)="searchTickets($event)" /> -->
-                <input type="text" (input)="searchTickets($event)" placeholder="Search Ticket Number or Name">
-
+            <div class="filters">
+                <div class="input flex">
+                    <img src="../../../assets/search.svg" alt="search icon">
+                    <!-- <input type="text" placeholder="Search for ticket" (change)="searchTickets($event)" /> -->
+                    <input type="text" (input)="searchTickets($event)" placeholder="Search Ticket Number or Name">
+                </div>
+                <select class="input" name="" id="" (change)="onSelectingTicketType($event)">
+                    <option value="all">All</option>
+                    <option value="Website">Website</option>
+                    <option value="Product">Product</option>
+                    <option value="SEO">SEO</option>
+                    <option value="SMM">SMM</option>
+                    <option value="PPC">PPC</option>
+                </select>
             </div>
-
+            
             <!-- right side -->
             <div class="right_side">
                 <div class="date-wrapper" (click)="focusDateInput()">
@@ -45,24 +54,24 @@
         <!-- filter 2 -->
         <div class="filter2">
             <!-- all tickets -->
-            <div class="filter-option">
-                <img src="../../../assets/all-tickets.svg" alt="All Tickets">
-                <div class="filterName pointer scale trans" (click)="activateByTab('all')">All Tickets</div>
+            <div class="filter-option pointer" (click)="activateByTab('all')">
+                <img [src]="isAllTicket === false ? ticketFilterImages.all : activateTicketFilterImages.all" alt="All Tickets">
+                <div class="filterName pointer scale trans">All Tickets</div>
             </div>
             <!-- new tickets -->
-            <div class="filter-option">
-                <img src="../../../assets/new-ticket.svg" alt="All Tickets">
-                <div class="filterName pointer scale trans" (click)="activateByTab('new')">New</div>
+            <div class="filter-option pointer" (click)="activateByTab('new')">
+                <img [src]="isNewTicket === false ? ticketFilterImages.new : activateTicketFilterImages.new" alt="All Tickets">
+                <div class="filterName pointer scale trans">New</div>
             </div>
             <!-- on going ticket -->
-            <div class="filter-option">
-                <img src="../../../assets/going-on-ticket.svg" alt="All Tickets">
-                <div class="filterName pointer scale trans" (click)="activateByTab('ongoing')">On-Going</div>
+            <div class="filter-option pointer" (click)="activateByTab('on-going')">
+                <img [src]="isOnGoingTicket === false ? ticketFilterImages.ongoing : activateTicketFilterImages.ongoing" alt="All Tickets">
+                <div class="filterName pointer scale trans">On-Going</div>
             </div>
             <!-- resolved tickets -->
-            <div class="filter-option">
-                <img src="../../../assets/resolved-ticket.svg" alt="All Tickets">
-                <div class="filterName pointer scale trans" (click)="activateByTab('resolved')">Resolved</div>
+            <div class="filter-option pointer" (click)="activateByTab('resolved')">
+                <img [src]="isResolved === false ? ticketFilterImages.resolved : activateTicketFilterImages.resolved" alt="All Tickets">
+                <div class="filterName pointer scale trans">Resolved</div>
             </div>
         </div>
 
@@ -74,16 +83,21 @@
 
         <div class="common_box">
             <!-- content -->
-            <div class="content" *ngIf="paginateTickets">
+            <div class="content" *ngIf="paginatedTickets.length !== 0">
                 <div class="tickets" *ngFor="let ticket of paginatedTickets ">
                     <!-- ticket Header -->
                     <div class="ticket-header">
                         <div class="ticket-left-side">
                             <div class="color" [style.backgroundColor]="ticket.statusColor"></div>
                             <div class="ticket-number">{{ticket.ticketId}}</div>
-                            <!-- <div class="ticket-priority">{{ticket.statusColor}}</div> -->
+                            <div class="ticket-priority" *ngIf="role === 'user'" [style.backgroundColor]="ticket.bgColor" [style.color]="ticket.textColor">{{ticket.clientStatus}}</div>
+                            <div class="prior-wrapper" *ngIf="role === 'admin'">
+                                <div class="ticket-priority" [style.backgroundColor]="ticket.priorBgColor" [style.color]="ticket.priorTextColor" *ngIf="ticket.priorText">{{ticket.priorText}}</div>
+                                <div class="ticket-priority" [style.backgroundColor]="ticket.adminStatusBgColor" [style.color]="ticket.adminStatusColor" *ngIf="ticket.adminStatusText">{{ticket.adminStatusText}}</div>
+                                <div class="ticket-priority ticketFor" *ngIf="ticket.ticketFor">{{ticket.ticketFor}}</div>
+                            </div>
                         </div>
-                        <div class="ticket-time">Posted at {{ticket.createdAt}}</div>
+                        <div class="ticket-time">Create at {{ticket.createdAt}} on {{ticket.createdDate | date: 'dd-MM-yyyy' }}</div>
                     </div>
 
                     <!-- ticket body -->
@@ -102,26 +116,38 @@
                             <div class="profile_name">{{ticket.clientName}}</div>
                         </div>
                         <div class="open-ticket pointer scale trans" (click)="sendSingleTicketData(ticket.ticketId)">
-                            Open Ticket</div>
+                            View Ticket</div>
                     </div>
                 </div>
                 
             </div>
 
+            <div class="notFound" *ngIf="paginatedTickets.length === 0 && !isLoading">
+                No tickets yet – your queue is clear!
+            </div>
+
+            <div class="loading" *ngIf="isLoading">
+                <app-loading />
+            </div>
+
             <!-- no data -->
+
+            <!-- <div class="notFound" *ngIf="tickets.length < 0">
+                No tickets yet – your queue is clear!
+            </div> -->
 
             
         </div>
 
     </div>
 
-    <div class="form_container" [ngClass]="{formWidth : isQuickForm}" *ngIf="isQuickForm">
+    <!-- <div class="form_container" [ngClass]="{formWidth : isQuickForm}" *ngIf="isQuickForm">
         <app-quick-ticket-form (closeForm)="closeQuickForm($event)" />
-    </div>
+    </div> -->
 
 </div>
 
-<div class="page_change">
+<!-- <div class="page_change">
     <div class="prev_next prev pointer scale trans" [class.disabled]="currentPage === 1"
         (click)="changePage(currentPage - 1)">
         Previous
@@ -136,4 +162,35 @@
         (click)="changePage(currentPage + 1)">
         Next
     </div>
-</div>
+</div> -->
+
+<!-- <div class="counts pointer scale trans" *ngFor="let page of getVisiblePages()"
+     [class.active]="currentPage === page"
+     (click)="changePage(page)">
+  {{ page }}
+</div> -->
+
+<div class="page_change">
+    <!-- Previous -->
+    <div class="prev_next prev pointer scale trans"
+         [class.disabled]="currentPage === 1"
+         (click)="changePage(currentPage - 1)">
+         Prev 
+    </div>
+  
+    <!-- Page numbers -->
+    <div class="counts pointer scale trans"
+         *ngFor="let page of getVisiblePages()"
+         [class.active]="currentPage === page"
+         (click)="changePage(page)">
+      {{ page }}
+    </div>
+  
+    <!-- Next -->
+    <div class="prev_next next pointer scale trans"
+         [class.disabled]="currentPage === totalPages"
+         (click)="changePage(currentPage + 1)">
+      Next
+    </div>
+  </div>
+  

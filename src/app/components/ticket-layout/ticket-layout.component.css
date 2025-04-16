@@ -64,11 +64,11 @@
     align-items: center;
     flex-shrink: 0;
     margin-top: 8px;
-    color: #2E2A40;
+    color: #757575;
     font-family: Montserrat;
     font-size: 14px;
     font-style: normal;
-    font-weight: 600;
+    font-weight: 500;
     line-height: normal;
 }
 
@@ -214,11 +214,11 @@
     border: 2px solid #2C63BA;
 }
 
-.send:hover{
+/* .send:hover{
     color: #2C63BA;
     background-color: transparent;
     border: 2px solid #2C63BA;
-}
+} */
 
 .cancel{
     color: #2C63BA;
@@ -226,8 +226,8 @@
     border: 2px solid #2C63BA;
 }
 
-.cancel:hover{
+/* .cancel:hover{
     color: #FFF;
     background-color: #2C63BA;
     border: 2px solid #2C63BA;
-}
+} */

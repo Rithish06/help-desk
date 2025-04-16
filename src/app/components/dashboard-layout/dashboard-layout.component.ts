@@ -1,8 +1,9 @@
 import { Component, ViewChild, ElementRef, AfterViewInit, Input, Output, EventEmitter } from '@angular/core';
 import { TicketService } from '../../services/ticket/ticket.service';
-import { formaTime, formatDate } from '../../utils.fun'
+import { formatTime, formatDate, capitalizeFirstLetter, sortTicketsByDate } from '../../utils.fun'
 import { PLATFORM_ID, Inject } from '@angular/core'
 import { HttpHeaders } from '@angular/common/http'
+import { error } from 'console';
 
 @Component({
   selector: 'app-dashboard-layout',
@@ -21,7 +22,8 @@ export class DashboardLayoutComponent implements AfterViewInit {
   clientId: any
 
   searchText: String = ''
-  selectedDate: any
+  selectedDate: any = ''
+  selectedProductType : any = 'all'
 
   @Output() singleTicket: any = new EventEmitter<any>()
 
@@ -32,67 +34,105 @@ export class DashboardLayoutComponent implements AfterViewInit {
   paginatedTickets: any[] = [];
   totalPages: number = 1;
 
-  constructor(private ticketService: TicketService, @Inject(PLATFORM_ID) private platformId: object) {}
+  constructor(private ticketService: TicketService, @Inject(PLATFORM_ID) private platformId: object) { }
 
   allTickets: any
   tickets: any
+  role: any
+
+  isLoading: boolean = false
 
   @Input() headers: any
 
-  ngOnInit() {
+  ticketFilterImages = {
+    all : '../../../assets/all-tickets.svg',
+    new : '../../../assets/new-ticket.svg',
+    ongoing : '../../../assets/going-on-ticket.svg',
+    resolved : '../../../assets/resolved-ticket.svg'
+  }
 
+  activateTicketFilterImages = {
+    all : '../../../assets/activate-all-tickets.svg',
+    new : '../../../assets/activate-new-ticket.svg',
+    ongoing : '../../../assets/activate-on-going-ticket.svg',
+    resolved : '../../../assets/activate-resolved-ticket.svg'
+  }
+
+  ngOnInit() {
+    this.role = localStorage.getItem('role')
     this.clientId = localStorage.getItem('clientId')
     console.log(localStorage.getItem('clientId'))
     this.initFunction()
-
   }
 
-  initFunction():void{
+  initFunction(): void {
     const role = localStorage.getItem("role")
 
-    if(role === 'user'){
+    if (role === 'user') {
       console.log(this.headers, "from tikets")
       // api call
-      this.ticketService.getTicketsById(this.clientId).subscribe((data: any) => {
-        console.log(data, "data service")
-        this.allTickets = data.map((entry: any) => {
-          return {
-            ticketId: entry.ticketNumber,
-            title: entry.title,
-            description: entry.description,
-            createdAt: formaTime(entry.createdAt),
-            createdDate: formatDate(entry.createdAt),
-            menupath: entry.menuPath,
-            module: entry.module,
-            status: entry.status,
-            updatedAt: formaTime(entry.createdAt),
-            updatedDate : formatDate(entry.createdAt),
-            id: entry._id,
-            profileImage: entry.userDetails?.profilePic,
-            clientName: entry.userDetails?.name,
-            attachment : entry?.attatchment,
-            comment : entry?.comment
-          }
-        })
-  
-        this.allTickets.forEach((user: any) => {
-          if (user.status === "raised") {
-            user.statusColor = "#3B8AFF"
-          }
-  
-          if (user.status === "on-going") {
-            user.statusColor = "#F8A53499"
-          }
-  
-          if (user.status === "resolved") {
-            user.statusColor = "#54C104"
-          }
-        })
-        console.log(this.allTickets)
-        this.activateByTab("all")
+      this.ticketService.getTicketsById(this.clientId).subscribe({
+        next: (data: any) => {
+          this.isLoading = true
+          console.log(data, "data service")
+          this.allTickets = data.map((entry: any) => {
+            return {
+              ticketId: entry.ticketNumber,
+              title: entry.title,
+              description: entry.description,
+              createdAt: formatTime(entry.createdAt),
+              createdDate: formatDate(entry.createdAt),
+              menupath: entry.menuPath,
+              module: entry.module,
+              status: entry.status,
+              updatedAt: formatTime(entry.createdAt),
+              updatedDate: formatDate(entry.createdAt),
+              id: entry._id,
+              profileImage: entry.userDetails?.profilePic,
+              clientName: entry.userDetails?.name,
+              attachment: entry?.attatchment,
+              comment: entry?.comments,
+              ticketCreatedTime: entry.createdAt,
+              ticketFor: capitalizeFirstLetter(entry?.ticketFor),
+              productName: entry.productName
+            }
+          })
+
+          this.allTickets.forEach((user: any) => {
+            if (user.status === "raised") {
+              user.statusColor = "#3B8AFF"
+              user.textColor = '#7F56D8'
+              user.bgColor = '#2C63BA1A'
+              user.clientStatus = "New Ticket"
+            }
+
+            if (user.status === "on-going") {
+              user.statusColor = "#F8A53499"
+              user.textColor = "#FAC885"
+              user.bgColor = "#FAC8851A"
+              user.clientStatus = "On-Going Tickets"
+            }
+
+            if (user.status === "resolved") {
+              user.statusColor = "#54C104"
+              user.textColor = "#54C104"
+              user.bgColor = "#54C1041A"
+              user.clientStatus = "Resolved Tickets"
+            }
+          })
+          console.log(this.allTickets)
+          this.activateByTab("all")
+        },
+        error: (error) => {
+          console.log(error)
+        },
+        complete: () => {
+          this.isLoading = false
+        }
+
       })
     }
-    else{
+    else {
       console.log(this.headers, "from tikets")
       // api call
       this.ticketService.getAllTickets().subscribe((data: any) => {
@@ -102,33 +142,101 @@ export class DashboardLayoutComponent implements AfterViewInit {
             ticketId: entry.ticketNumber,
             title: entry.title,
             description: entry.description,
-            createdAt: formaTime(entry.createdAt),
+            createdAt: formatTime(entry.createdAt),
             createdDate: formatDate(entry.createdAt),
             menupath: entry.menuPath,
             module: entry.module,
             status: entry.status,
-            updatedAt: formaTime(entry.createdAt),
-            updatedDate : formatDate(entry.createdAt),
+            updatedAt: formatTime(entry.createdAt),
+            updatedDate: formatDate(entry.createdAt),
             id: entry._id,
             profileImage: entry.userDetails?.profilePic,
             clientName: entry.userDetails?.name,
-            attachment : entry?.attatchment,
-            comment : entry?.comment,
-            commentBy : entry?.commentedBy
+            attachment: entry?.attatchment,
+            comment: entry?.comments,
+            commentBy: entry?.commentedBy,
+            adminPriority: entry?.clientPriority,
+            adminStatus: entry?.adminStatus,
+            ticketFor: capitalizeFirstLetter(entry?.ticketFor),
+            ticketCreatedTime: entry.createdAt,
+            productName: entry.productName
           }
         })
-  
+
         this.allTickets.forEach((user: any) => {
           if (user.status === "raised") {
             user.statusColor = "#3B8AFF"
+            user.textColor = '#7F56D8'
+            user.bgColor = '#2C63BA1A'
+            user.clientStatus = "New Ticket"
           }
-  
+
           if (user.status === "on-going") {
             user.statusColor = "#F8A53499"
+            user.textColor = "#FAC885"
+            user.bgColor = "#FAC8851A"
+            user.clientStatus = "On-Going Tickets"
           }
-  
+
           if (user.status === "resolved") {
             user.statusColor = "#54C104"
+            user.textColor = "#54C104"
+            user.bgColor = "#54C1041A"
+            user.clientStatus = "Resolved Tickets"
+          }
+
+          if (user.adminPriority === "low") {
+            user.priorTextColor = '#FFD722'
+            user.priorBgColor = '#FFFBE9'
+            user.priorText = 'Low Priority'
+          }
+
+          if (user.adminPriority === "medium") {
+            user.priorTextColor = '#FB9C2A'
+            user.priorBgColor = '#FFF6EA'
+            user.priorText = 'Mid Priority'
+          }
+
+          if (user.adminPriority === "high") {
+            user.priorTextColor = '#FF0000'
+            user.priorBgColor = '#FEF1F3'
+            user.priorText = 'High Priority'
+          }
+
+          if (user.adminStatus === 'In dev') {
+            user.adminStatusColor = '#5C211B'
+            user.adminStatusBgColor = '#5C211B33'
+            user.adminStatusText = 'In Dev'
+          }
+
+          if (user.adminStatus === 'Dev done') {
+            user.adminStatusColor = '#EB6327'
+            user.adminStatusBgColor = '#EB632733'
+            user.adminStatusText = 'Dev done'
+          }
+
+          if (user.adminStatus === 'In QA') {
+            user.adminStatusColor = '#DABD47'
+            user.adminStatusBgColor = '#DABD4733'
+            user.adminStatusText = 'In QA'
+          }
+
+          if (user.adminStatus === 'QA Done') {
+            user.adminStatusColor = '#FFAD00'
+            user.adminStatusBgColor = '#FFAD0033'
+            user.adminStatusText = 'QA Done'
+          }
+
+          if (user.adminStatus === 'Deployed') {
+            user.adminStatusColor = '#344E73'
+            user.adminStatusBgColor = '#344E7333'
+            user.adminStatusText = 'Deployed'
+          }
+
+          if (user.adminStatus === 'Resolved') {
+            user.adminStatusColor = '#45A200'
+            user.adminStatusBgColor = '#45A20033'
+            user.adminStatusText = 'Resolved'
           }
         })
         console.log(this.allTickets)
@@ -157,9 +265,8 @@ export class DashboardLayoutComponent implements AfterViewInit {
 
       // data
       if (this.allTickets) {
-        this.tickets = this.allTickets
+        this.tickets = sortTicketsByDate(this.allTickets)
       }
-
     }
     else if (tab === "new") {
       this.isAllTicket = false;
@@ -173,10 +280,10 @@ export class DashboardLayoutComponent implements AfterViewInit {
 
       // data
       if (this.allTickets) {
-        this.tickets = this.allTickets.filter((entry: any) => entry.status === 'raised')
+        sortTicketsByDate(this.tickets = this.allTickets.filter((entry: any) => entry.status === 'raised'))
       }
     }
-    else if (tab === "ongoing") {
+    else if (tab === "on-going") {
       this.isAllTicket = false;
       this.isNewTicket = false;
       this.isOnGoingTicket = true;
@@ -188,7 +295,7 @@ export class DashboardLayoutComponent implements AfterViewInit {
 
       // data
       if (this.allTickets) {
-        this.tickets = this.allTickets.filter((entry: any) => entry.status === 'on-going')
+        sortTicketsByDate(this.tickets = this.allTickets.filter((entry: any) => entry.status === 'on-going'))
       }
     }
     else if (tab === "resolved") {
@@ -203,7 +310,7 @@ export class DashboardLayoutComponent implements AfterViewInit {
 
       // data
       if (this.allTickets) {
-        this.tickets = this.allTickets.filter((entry: any) => entry.status === 'resolved')
+        sortTicketsByDate(this.tickets = this.allTickets.filter((entry: any) => entry.status === 'resolved'))
       }
     }
     else {
@@ -259,7 +366,7 @@ export class DashboardLayoutComponent implements AfterViewInit {
 
   searchTickets(event: any): void {
     const searchValue = event?.target?.value?.toLowerCase().trim();
-  
+
     // Reset to all tickets if search is empty
     if (!searchValue) {
       this.tickets = [...this.allTickets];
@@ -267,15 +374,15 @@ export class DashboardLayoutComponent implements AfterViewInit {
       this.paginateTickets();
       return;
     }
-  
+
     this.activateByTab("all"); // Optional: force "all" tab when searching
-  
+
     this.tickets = this.allTickets.filter((entry: any) =>
       entry.ticketId?.toLowerCase().includes(searchValue) ||
       entry.title?.toLowerCase().includes(searchValue) ||
       entry.clientName?.toLowerCase().includes(searchValue)
     );
-  
+
     this.currentPage = 1; // Reset to first page after search
     this.paginateTickets();
   }
@@ -283,7 +390,7 @@ export class DashboardLayoutComponent implements AfterViewInit {
   dateOnchange(event: any): void {
     this.selectedDate = event.target.value;
     this.tickets = this.allTickets.filter(
-      (entry: any) => entry.createdDate === this.selectedDate
+      (entry: any) => entry.createdDate === this.selectedDate && this.selectedProductType === 'all' ? true : this.selectedProductType === entry.ticketFor
     );
     this.paginateTickets();
   }
@@ -298,14 +405,14 @@ export class DashboardLayoutComponent implements AfterViewInit {
   }
 
   sendSingleTicketData(e: any) {
-    const choosenTicket = this.allTickets.filter((entry:any) => e === entry.ticketId)
+    const choosenTicket = this.allTickets.filter((entry: any) => e === entry.ticketId)
     this.singleTicket.emit(choosenTicket)
   }
 
   paginateTickets(): void {
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;
     const endIndex = startIndex + this.itemsPerPage;
-  
+
     this.paginatedTickets = this.tickets.slice(startIndex, endIndex);
     this.totalPages = Math.ceil(this.tickets.length / this.itemsPerPage);
   }
@@ -318,7 +425,35 @@ export class DashboardLayoutComponent implements AfterViewInit {
   }
 
   focusDateInput() {
-  this.dateInput.nativeElement.focus();
-  this.dateInput.nativeElement.showPicker?.(); // shows the calendar popup (only works in some browsers)
-}
+    this.dateInput.nativeElement.focus();
+    this.dateInput.nativeElement.showPicker?.(); // shows the calendar popup (only works in some browsers)
+  }
+
+  getVisiblePages(): number[] {
+    const pages: number[] = [];
+
+    // Previous page
+    if (this.currentPage > 1) {
+      pages.push(this.currentPage - 1);
+    }
+
+    // Current page
+    pages.push(this.currentPage);
+
+    // Next page
+    if (this.currentPage < this.totalPages) {
+      pages.push(this.currentPage + 1);
+    }
+
+    return pages;
+  }
+
+  onSelectingTicketType(e: any): void {
+    console.log(e.target.value)
+    this.selectedProductType = e.target.value
+    this.tickets = this.allTickets.filter((entry:any) => e.target.value === 'all' ? true : entry.ticketFor === e.target.value)
+    console.log(this.tickets, "tickets")
+    this.paginateTickets()
+  }
+
 }

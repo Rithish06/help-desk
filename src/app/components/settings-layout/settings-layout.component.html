@@ -2,25 +2,28 @@
 
     <div class="navButtons">
         <div class="buttons pointer scale trans" (click)="setActiveSection('account')"
-            [ngClass]="{ 'active': activateSection === 'account' }">Account</div>
+            [ngClass]="{ 'active': activateSection === 'account' }">Profile Settings</div>
         <div class="buttons pointer scale trans" (click)="setActiveSection('password')"
             [ngClass]="{ 'active': activateSection === 'password' }">Reset Password</div>
         <!-- <div class="buttons pointer scale trans" (click)="setActiveSection('about')"
             [ngClass]="{ 'active': activateSection === 'about' }">About us</div> -->
     </div>
 
-    <!-- account -->
+    <!-- account -->    
     <div class="containers" *ngIf="activateSection === 'account'">
+        <app-reset-password (isCancelLogOut)="logoutPopup($event)" />
+    </div>
+    <!-- <div class="containers" *ngIf="activateSection === 'account'">
         <div class="contents">
-            <div class="grid">
+            <div class="grid"> -->
                 <!-- profile -->
-                <div class="profile">
+                <!-- <div class="profile">
                     <div class="name">Profile</div>
                     <div class="des">Set your account details</div>
-                </div>
+                </div> -->
 
                 <!-- inputs -->
-                <div class="inputs">
+                <!-- <div class="inputs">
                     <div class="row-1">
                         <div class="inputField">
                             <label for="">Client Name</label>
@@ -38,10 +41,10 @@
                         </div>
                         <input type="text" [(ngModel)]="emailId" [disabled]="!isInputDisabled">
                     </div>
-                </div>
+                </div> -->
 
                 <!-- logo section -->
-                <div class="logo flex">
+                <!-- <div class="logo flex">
                     <img src="../../../assets/logo.svg" class="clientLogo" alt="">
                     <div class="buttonStyle editButton pointer scale trans" *ngIf="!isInputDisabled"
                         (click)="editEmail()">
@@ -70,15 +73,15 @@
                 <div class="loginButton buttonStyle pointer scale trans" (click)="logout()">
                     <img src="../../../assets/logout_icon.svg" alt="">
                     <span>Log Out</span>
-                </div>
+                </div> -->
                 <!-- <div class="deleteButton buttonStyle pointer scale trans">
                     <img src="../../../assets/delete_icon.svg" alt="">
                     <span>Delete Account</span>
                 </div> -->
-            </div>
+            <!-- </div>
 
         </div>
-    </div>
+    </div> -->
 
     <!-- reset password -->
     <div class="containers" *ngIf="activateSection === 'password'">
@@ -111,9 +114,9 @@
                             <label for="">Confirm Password</label>
                             <input [type]="confirmPasswordVisible ? 'text' : 'password'" [(ngModel)]="confirmPassword">
                             <div class="eyeIcon">
-                                <img [src]="newPasswordVisible ?  '../../../assets/show_password_icon.svg' :'../../../assets/hide_password_icon.svg'"
+                                <img [src]="confirmPasswordVisible ?  '../../../assets/show_password_icon.svg' :'../../../assets/hide_password_icon.svg'"
                                     alt="Toggle Password Visibility" class="pointer trans scale"
-                                    (click)="toggleNewPasswordVisibility()">
+                                    (click)="toggleConfirmPasswordVisibility()">
                             </div>
                         </div>
                     </div>
@@ -125,6 +128,7 @@
             </div>
         </div>
     </div>
+
 
     <!-- About us -->
 

@@ -1,12 +1,12 @@
 <div class="root-container">
     <!-- welcome text -->
-    <div class="welcome"><img src="../../../assets/wavingHandEmoji.svg" alt="">Welcome! <b>{{userName}}</b></div>
+    <div class="welcome"><img src="../../../assets/wavingHandEmoji.svg" alt=""><span>Welcome! <b>{{userName}}</b></span></div>
     <div class="right_side">
         <!-- notification -->
-        <!-- <div class="notification pointer scale">
+        <div class="notification pointer scale" (click)="activateNamebar()">
             <img src="../../../assets/notification.svg" alt="">
             <div class="indicator"></div>
-        </div> -->
+        </div>
 
         <!-- profile -->
         <div class="profile pointer">

@@ -21,6 +21,25 @@ import { MaintenanceComponent } from './maintenance/maintenance.component';
 import { WesiteFormComponent } from './components/wesite-form/wesite-form.component';
 import { ProductFormComponent } from './components/product-form/product-form.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { AdminTicketComponentComponent } from './components/admin-ticket-component/admin-ticket-component.component';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatButtonModule } from '@angular/material/button';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatIconModule } from '@angular/material/icon';
+import { MatCardModule } from '@angular/material/card';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { ToastrModule } from 'ngx-toastr';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { LogoutPopupComponent } from './components/logout-popup/logout-popup.component';
+import { NotificationComponent } from './components/notification/notification.component';
+import { LoadingComponent } from './components/loading/loading.component';
+import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+import { SeoFormComponent } from './components/seo-form/seo-form.component';
+import { SmmFormComponent } from './components/smm-form/smm-form.component';
+import { PpcFormComponent } from './components/ppc-form/ppc-form.component';
+
 
 
 @NgModule({
@@ -39,14 +58,36 @@ import { ReactiveFormsModule } from '@angular/forms';
     MaintenanceComponent,
     WesiteFormComponent,
     ProductFormComponent,
+    AdminTicketComponentComponent,
+    ResetPasswordComponent,
+    LogoutPopupComponent,
+    NotificationComponent,
+    LoadingComponent,
+    SeoFormComponent,
+    SmmFormComponent,
+    PpcFormComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
-    ReactiveFormsModule
-
+    ReactiveFormsModule,
+    BrowserAnimationsModule,
+    MatButtonModule,
+    MatToolbarModule,
+    MatIconModule,
+    MatCardModule,
+    MatTooltipModule,
+    MatSnackBarModule,
+    ToastrModule.forRoot(
+      {
+        timeOut: 3000,
+        positionClass: 'toast-top-right',
+        preventDuplicates: true,
+      }
+    ),
+    NgMultiSelectDropDownModule.forRoot()
   ],
   providers: [
     provideClientHydration(),
@@ -55,6 +96,7 @@ import { ReactiveFormsModule } from '@angular/forms';
       useClass: AuthInterceptor,
       multi: true
     },
+    provideAnimationsAsync(),
   ],
   bootstrap: [AppComponent]
 })

@@ -1,14 +1,14 @@
 <div class="root-container">
     <!-- sideBar -->
     <div class="sidebar">
-        <app-side-bar (sectionName)="importedSectionName($event)" (formName)="receiveTicketFormName($event)"  (formHeading)="receiveTicketHeading($event)"/>
+        <app-side-bar (sectionName)="importedSectionName($event)" (formName)="receiveTicketFormName($event)" (isCancelLogOut)="cancelLogout($event)"  (formHeading)="receiveTicketHeading($event)"/>
     </div>
 
     <!-- components -->
     <div class="components">
         <!-- header -->
         <div class="header">
-            <app-header-section />
+            <app-header-section (notificationBar)="activateNoticationBar($event)" />
         </div>
 
         <!-- section name -->
@@ -28,7 +28,7 @@
             </div>
 
             <div class="sections" *ngIf="activateSettings === true">
-                <app-settings-layout />
+                <app-settings-layout (isCancelLogOut)="cancelLogout($event)" />
             </div>
 
             <div class="sections" *ngIf="activateSingleTicket === true">
@@ -37,4 +37,12 @@
         </div>
             
     </div>
+</div>
+
+<div class="logoutPopUp" [ngClass]="{'hide' : isCancelLogout}" >
+    <app-logout-popup (isCancelLogOut)="cancelLogout($event)" />
+</div>
+
+<div class="notification" *ngIf="notificationBar">
+    <app-notification (openTicket)="receiveTicketData($event)"/>
 </div>

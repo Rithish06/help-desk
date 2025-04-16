@@ -46,6 +46,12 @@
     align-items: center;
     flex-shrink: 0;
     margin-top: 8px;
+    color: #757575;
+    font-family: Montserrat;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
 }
 
 .client_name{
@@ -78,7 +84,21 @@
 .inputFile{
     display: flex;
     flex-direction: column;
-    margin-top: 8px;
+    margin-top: 25px;
+    width: 100%;
+}
+
+.errorStyle{
+    color: red;
+    font-size: 12px;
+    margin-top: 10px;
+    margin-left: 3px;
+    font-family: Montserrat;
+}
+
+.ticketBodyStyle{
+    display: flex;
+    justify-content: end;
     width: 100%;
 }
 
@@ -119,15 +139,6 @@
     height: 180px;
 }
 
-.textarea{
-    margin-top: 8px;
-    border-radius: 4px;
-    border: 1px solid #E7E7E7;
-    padding: 0 20px;
-    flex-shrink: 0;
-    height: 180px;
-}
-
 .input_wrapper{
     width: 80%;
     height: 50px;
@@ -144,6 +155,27 @@
 .input_wrapper input{
     width: 96%;
     padding: 0 20px;
+    color: #2E2A40;
+    font-family: Montserrat;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+}
+
+.textarea{
+    margin-top: 8px;
+    border-radius: 4px;
+    border: 1px solid #E7E7E7;
+    padding: 10px 20px;
+    flex-shrink: 0;
+    height: 180px;
+    color: #757575;
+    font-family: Montserrat;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
 }
 
 .clear_button{
@@ -190,11 +222,11 @@
     border: 2px solid #2C63BA;
 }
 
-.send:hover{
+/* .send:hover{
     color: #2C63BA;
     background-color: transparent;
     border: 2px solid #2C63BA;
-}
+} */
 
 .cancel{
     color: #2C63BA;
@@ -202,8 +234,15 @@
     border: 2px solid #2C63BA;
 }
 
-.cancel:hover{
+/* .cancel:hover{
     color: #FFF;
     background-color: #2C63BA;
     border: 2px solid #2C63BA;
+} */
+
+.send:disabled{
+    background-color: gray;
+    opacity: 0.5;
+    border: none;
+    cursor: none;
 }
