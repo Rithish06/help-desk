@@ -1,6 +1,6 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { TicketService } from '../../services/ticket/ticket.service'
-import {formatTime, formatDate} from '../../utils.fun'
+import {convertUTCtoIST, formatDate} from '../../utils.fun'
 
 @Component({
   selector: 'app-single-ticket',
@@ -44,8 +44,9 @@ export class SingleTicketComponent implements OnChanges {
           return{
             comment : entry.comment,
             commentBy : entry.commentedBy,
-            commentTime : formatTime(entry.commentedAt),
-            commentDate : formatDate(entry.commentedAt)
+            commentTime : convertUTCtoIST(entry.commentedAt),
+            commentDate : formatDate(entry.commentedAt),
+            attachment : entry.commentAttachment
           }
         })
 

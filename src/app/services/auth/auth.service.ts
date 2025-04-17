@@ -15,7 +15,7 @@ export class AuthService {
     this.checkAutoLogout(); // Check logout when service is loaded
   }
 
-  login(credentials: { email: string; password: string }): Observable<any> {
+  login(credentials: { id: string; password: string }): Observable<any> {
     return this.http.post(`${apiUrl}/login`, credentials, {
       withCredentials: false,
     });

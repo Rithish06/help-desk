@@ -1,16 +1,13 @@
-import { Component, ViewChild, ElementRef, AfterViewInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, ViewChild, ElementRef, AfterViewInit, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { TicketService } from '../../services/ticket/ticket.service';
-import { formatTime, formatDate, capitalizeFirstLetter, sortTicketsByDate } from '../../utils.fun'
-import { PLATFORM_ID, Inject } from '@angular/core'
-import { HttpHeaders } from '@angular/common/http'
-import { error } from 'console';
+import { convertUTCtoIST, formatDate, capitalizeFirstLetter, sortTicketsByDate } from '../../utils.fun';
 
 @Component({
   selector: 'app-dashboard-layout',
   templateUrl: './dashboard-layout.component.html',
   styleUrls: ['./dashboard-layout.component.css'] // Note: styleUrl -> styleUrls (array)
 })
-export class DashboardLayoutComponent implements AfterViewInit {
+export class DashboardLayoutComponent implements AfterViewInit, OnChanges {
   @ViewChild('navigatorRef') navigatorMargin!: ElementRef<HTMLElement>;
   @ViewChild('dateInput') dateInput!: ElementRef;
 
@@ -23,7 +20,10 @@ export class DashboardLayoutComponent implements AfterViewInit {
 
   searchText: String = ''
   selectedDate: any = ''
-  selectedProductType : any = 'all'
+  selectedProductType: any = 'all'
+
+  inputType: string = 'text';
+  dateValue: string = '';
 
   @Output() singleTicket: any = new EventEmitter<any>()
 
@@ -34,7 +34,7 @@ export class DashboardLayoutComponent implements AfterViewInit {
   paginatedTickets: any[] = [];
   totalPages: number = 1;
 
-  constructor(private ticketService: TicketService, @Inject(PLATFORM_ID) private platformId: object) { }
+  constructor(private ticketService: TicketService) { }
 
   allTickets: any
   tickets: any
@@ -42,28 +42,94 @@ export class DashboardLayoutComponent implements AfterViewInit {
 
   isLoading: boolean = false
 
+  private currentFilters = {
+    searchTerm: '',
+    productType: 'all',
+    date: '',
+    status: 'all'
+  };
+
   @Input() headers: any
 
   ticketFilterImages = {
-    all : '../../../assets/all-tickets.svg',
-    new : '../../../assets/new-ticket.svg',
-    ongoing : '../../../assets/going-on-ticket.svg',
-    resolved : '../../../assets/resolved-ticket.svg'
+    all: '../../../assets/all-tickets.svg',
+    new: '../../../assets/new-ticket.svg',
+    ongoing: '../../../assets/going-on-ticket.svg',
+    resolved: '../../../assets/resolved-ticket.svg'
   }
 
   activateTicketFilterImages = {
-    all : '../../../assets/activate-all-tickets.svg',
-    new : '../../../assets/activate-new-ticket.svg',
-    ongoing : '../../../assets/activate-on-going-ticket.svg',
-    resolved : '../../../assets/activate-resolved-ticket.svg'
+    all: '../../../assets/activate-all-tickets.svg',
+    new: '../../../assets/activate-new-ticket.svg',
+    ongoing: '../../../assets/activate-on-going-ticket.svg',
+    resolved: '../../../assets/activate-resolved-ticket.svg'
   }
 
   ngOnInit() {
-    this.role = localStorage.getItem('role')
-    this.clientId = localStorage.getItem('clientId')
-    console.log(localStorage.getItem('clientId'))
-    this.initFunction()
+    this.role = localStorage.getItem('role');
+    this.clientId = localStorage.getItem('clientId');
+    this.initFunction();
   }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['selectedProductType']) {
+      this.currentFilters.productType = this.selectedProductType;
+      this.applyFilters();
+    }
+  }
+
+  openDatePicker() {
+    this.dateInput.nativeElement.showPicker();
+  }
+
+  // Unified filter application
+  private applyFilters(): void {
+    if (!this.allTickets) return;
+
+    let filtered = [...this.allTickets];
+
+    // Apply status filter
+    if (this.currentFilters.status !== 'all') {
+      filtered = filtered.filter(entry => entry.status === this.currentFilters.status);
+    }
+
+    // Apply search filter
+    if (this.currentFilters.searchTerm) {
+      const searchTerm = this.currentFilters.searchTerm.toLowerCase();
+      filtered = filtered.filter(entry =>
+        entry.ticketId?.toLowerCase().includes(searchTerm) ||
+        entry.title?.toLowerCase().includes(searchTerm) ||
+        entry.clientName?.toLowerCase().includes(searchTerm)
+      );
+    }
+
+    // Apply product type filter
+    if (this.currentFilters.productType !== 'all') {
+      filtered = filtered.filter(entry => entry.ticketFor === this.currentFilters.productType);
+    }
+
+    // Apply date filter
+    if (this.currentFilters.date) {
+      filtered = filtered.filter(entry => entry.createdDate === this.currentFilters.date);
+    }
+
+    this.tickets = sortTicketsByDate(filtered);
+    this.currentPage = 1;
+    this.paginateTickets();
+  }
+  
+onDateSelect(event: any) {
+  if (this.selectedDate) {
+    this.currentFilters.date = this.selectedDate.split('T')[0];
+    this.applyFilters();
+  }
+}
+
+clearDate() {
+  this.selectedDate = null;
+  this.currentFilters.date = '';
+  this.applyFilters();
+}
 
   initFunction(): void {
     const role = localStorage.getItem("role")
@@ -80,12 +146,12 @@ export class DashboardLayoutComponent implements AfterViewInit {
               ticketId: entry.ticketNumber,
               title: entry.title,
               description: entry.description,
-              createdAt: formatTime(entry.createdAt),
+              createdAt: convertUTCtoIST(entry.createdAt),
               createdDate: formatDate(entry.createdAt),
               menupath: entry.menuPath,
               module: entry.module,
               status: entry.status,
-              updatedAt: formatTime(entry.createdAt),
+              updatedAt: convertUTCtoIST(entry.createdAt),
               updatedDate: formatDate(entry.createdAt),
               id: entry._id,
               profileImage: entry.userDetails?.profilePic,
@@ -110,7 +176,7 @@ export class DashboardLayoutComponent implements AfterViewInit {
               user.statusColor = "#F8A53499"
               user.textColor = "#FAC885"
               user.bgColor = "#FAC8851A"
-              user.clientStatus = "On-Going Tickets"
+              user.clientStatus = "On-Going Ticket"
             }
 
             if (user.status === "resolved") {
@@ -142,12 +208,12 @@ export class DashboardLayoutComponent implements AfterViewInit {
             ticketId: entry.ticketNumber,
             title: entry.title,
             description: entry.description,
-            createdAt: formatTime(entry.createdAt),
+            createdAt: convertUTCtoIST(entry.createdAt),
             createdDate: formatDate(entry.createdAt),
             menupath: entry.menuPath,
             module: entry.module,
             status: entry.status,
-            updatedAt: formatTime(entry.createdAt),
+            updatedAt: convertUTCtoIST(entry.createdAt),
             updatedDate: formatDate(entry.createdAt),
             id: entry._id,
             profileImage: entry.userDetails?.profilePic,
@@ -175,7 +241,7 @@ export class DashboardLayoutComponent implements AfterViewInit {
             user.statusColor = "#F8A53499"
             user.textColor = "#FAC885"
             user.bgColor = "#FAC8851A"
-            user.clientStatus = "On-Going Tickets"
+            user.clientStatus = "On-Going Ticket"
           }
 
           if (user.status === "resolved") {
@@ -245,6 +311,37 @@ export class DashboardLayoutComponent implements AfterViewInit {
     }
   }
 
+  onRefresh(): void {
+    // Reset all filters
+    this.currentFilters = {
+      searchTerm: '',
+      productType: 'all',
+      date: '',
+      status: 'all'
+    };
+
+    // Reset UI
+    this.isAllTicket = true;
+    this.isNewTicket = false;
+    this.isOnGoingTicket = false;
+    this.isResolved = false;
+
+    if (this.navigatorMargin) {
+      this.navigatorMargin.nativeElement.style.marginLeft = '0px';
+    }
+
+    // Reset form controls
+    if (this.dateInput) {
+      this.dateInput.nativeElement.value = '';
+    }
+    this.searchText = '';
+    this.selectedProductType = 'all';
+
+    // Reload data
+    this.initFunction();
+  }
+
+
   ngAfterViewInit() {
     if (this.navigatorMargin) {
       this.navigatorMargin.nativeElement.style.transition = '0.5s'; // Add transition
@@ -252,73 +349,31 @@ export class DashboardLayoutComponent implements AfterViewInit {
   }
 
   activateByTab(tab: string): void {
-    if (tab === "all") {
-      this.isAllTicket = true;
-      this.isNewTicket = false;
-      this.isOnGoingTicket = false;
-      this.isResolved = false;
-      // animation
-      if (this.navigatorMargin) {
-        this.navigatorMargin.nativeElement.style.marginLeft = '0px';
-        this.navigatorMargin.nativeElement.style.transition = '0.5s';
-      }
+    // Update UI state
+    this.isAllTicket = tab === "all";
+    this.isNewTicket = tab === "raised";
+    this.isOnGoingTicket = tab === "on-going";
+    this.isResolved = tab === "resolved";
 
-      // data
-      if (this.allTickets) {
-        this.tickets = sortTicketsByDate(this.allTickets)
-      }
-    }
-    else if (tab === "new") {
-      this.isAllTicket = false;
-      this.isNewTicket = true;
-      this.isOnGoingTicket = false;
-      this.isResolved = false;
-      if (this.navigatorMargin) {
-        this.navigatorMargin.nativeElement.style.marginLeft = '200px';
-        this.navigatorMargin.nativeElement.style.transition = '0.5s';
-      }
-
-      // data
-      if (this.allTickets) {
-        sortTicketsByDate(this.tickets = this.allTickets.filter((entry: any) => entry.status === 'raised'))
-      }
-    }
-    else if (tab === "on-going") {
-      this.isAllTicket = false;
-      this.isNewTicket = false;
-      this.isOnGoingTicket = true;
-      this.isResolved = false;
-      if (this.navigatorMargin) {
-        this.navigatorMargin.nativeElement.style.marginLeft = '400px';
-        this.navigatorMargin.nativeElement.style.transition = '0.5s';
-      }
-
-      // data
-      if (this.allTickets) {
-        sortTicketsByDate(this.tickets = this.allTickets.filter((entry: any) => entry.status === 'on-going'))
-      }
-    }
-    else if (tab === "resolved") {
-      this.isAllTicket = false;
-      this.isNewTicket = false;
-      this.isOnGoingTicket = false;
-      this.isResolved = true;
-      if (this.navigatorMargin) {
-        this.navigatorMargin.nativeElement.style.marginLeft = '600px';
-        this.navigatorMargin.nativeElement.style.transition = '0.5s';
-      }
-
-      // data
-      if (this.allTickets) {
-        sortTicketsByDate(this.tickets = this.allTickets.filter((entry: any) => entry.status === 'resolved'))
-      }
-    }
-    else {
-      console.log("invalid tab")
+    // Update navigator position
+    if (this.navigatorMargin) {
+      const positions: { [key: string]: string } = {
+        'all': '0px',
+        'raised': '200px',
+        'on-going': '400px',
+        'resolved': '600px'
+      };
+      this.navigatorMargin.nativeElement.style.marginLeft = positions[tab] || '0px';
+      this.navigatorMargin.nativeElement.style.transition = '0.5s';
     }
 
-    this.paginateTickets()
+    // Update status filter
+    this.currentFilters.status = tab === 'all' ? 'all' : tab;``
+    this.applyFilters();
   }
+
+
+
 
   // tickets: any = [
   //   {
@@ -365,34 +420,13 @@ export class DashboardLayoutComponent implements AfterViewInit {
   // ]
 
   searchTickets(event: any): void {
-    const searchValue = event?.target?.value?.toLowerCase().trim();
-
-    // Reset to all tickets if search is empty
-    if (!searchValue) {
-      this.tickets = [...this.allTickets];
-      this.currentPage = 1; // Reset to first page
-      this.paginateTickets();
-      return;
-    }
-
-    this.activateByTab("all"); // Optional: force "all" tab when searching
-
-    this.tickets = this.allTickets.filter((entry: any) =>
-      entry.ticketId?.toLowerCase().includes(searchValue) ||
-      entry.title?.toLowerCase().includes(searchValue) ||
-      entry.clientName?.toLowerCase().includes(searchValue)
-    );
-
-    this.currentPage = 1; // Reset to first page after search
-    this.paginateTickets();
+    this.currentFilters.searchTerm = event?.target?.value?.toLowerCase().trim();
+    this.applyFilters();
   }
 
   dateOnchange(event: any): void {
-    this.selectedDate = event.target.value;
-    this.tickets = this.allTickets.filter(
-      (entry: any) => entry.createdDate === this.selectedDate && this.selectedProductType === 'all' ? true : this.selectedProductType === entry.ticketFor
-    );
-    this.paginateTickets();
+    this.currentFilters.date = event.target.value;
+    this.applyFilters();
   }
 
   displayQuickForm(): void {
@@ -449,11 +483,8 @@ export class DashboardLayoutComponent implements AfterViewInit {
   }
 
   onSelectingTicketType(e: any): void {
-    console.log(e.target.value)
-    this.selectedProductType = e.target.value
-    this.tickets = this.allTickets.filter((entry:any) => e.target.value === 'all' ? true : entry.ticketFor === e.target.value)
-    console.log(this.tickets, "tickets")
-    this.paginateTickets()
+    this.currentFilters.productType = e.target.value;
+    this.applyFilters();
   }
 
 }

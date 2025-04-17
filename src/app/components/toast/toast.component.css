@@ -1,0 +1,31 @@
+/* toast.component.css */
+:host {
+    position: fixed;
+    top: 0;
+    right: 0;
+    margin: 0.5em;
+    z-index: 1200;
+  }
+  
+  .ngb-toasts {
+    width: 300px;
+    opacity: 0.9;
+  }
+  
+  /* Custom toast types */
+  .bg-success {
+    background-color: #28a745 !important;
+  }
+  
+  .bg-danger {
+    background-color: #dc3545 !important;
+  }
+  
+  .bg-warning {
+    background-color: #ffc107 !important;
+    color: #212529 !important;
+  }
+  
+  .bg-info {
+    background-color: #17a2b8 !important;
+  }

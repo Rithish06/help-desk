@@ -39,6 +39,9 @@ import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { SeoFormComponent } from './components/seo-form/seo-form.component';
 import { SmmFormComponent } from './components/smm-form/smm-form.component';
 import { PpcFormComponent } from './components/ppc-form/ppc-form.component';
+import { CalendarModule } from 'primeng/calendar';
+import { ToastComponent } from './components/toast/toast.component';
+import { CapitalizeFirstLetterPipe } from './utils.fun'
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 
@@ -68,6 +71,8 @@ import { MessageService } from 'primeng/api';
     SeoFormComponent,
     SmmFormComponent,
     PpcFormComponent,
+    ToastComponent,
+    CapitalizeFirstLetterPipe
   ],
   imports: [
     BrowserModule,
@@ -76,6 +81,7 @@ import { MessageService } from 'primeng/api';
     FormsModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
+    CalendarModule,
     MatButtonModule,
     MatToolbarModule,
     MatIconModule,
@@ -90,7 +96,8 @@ import { MessageService } from 'primeng/api';
         preventDuplicates: true,
       }
     ),
-    NgMultiSelectDropDownModule.forRoot()
+    NgMultiSelectDropDownModule.forRoot(),
+    // MatFormFieldModule
   ],
   providers: [
     provideClientHydration(),

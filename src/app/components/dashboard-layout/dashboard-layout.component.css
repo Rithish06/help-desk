@@ -1,10 +1,10 @@
-.root-container{
+.root-container {
     height: 100%;
     display: flex;
     flex-direction: column;
     border: 2px solid #E7E7E7;
-    width : 100%;
-    padding : 1%;
+    width: 100%;
+    padding: 1%;
     background-color: #ffffff;
 }
 
@@ -15,20 +15,20 @@
     align-items: center;
 }
 
-.filters{
+.filters {
     display: flex;
     align-items: center;
     gap: 20px;
 }
 
-.flex{
+.flex {
     display: flex;
     align-items: center;
     gap: 10px;
     justify-content: start;
 }
 
-.input{
+.input {
     height: 44px;
     width: 254px;
     border-radius: 4px;
@@ -43,12 +43,12 @@
     line-height: normal;
 }
 
-.input img{
+.input img {
     width: 18px;
     height: 18px;
 }
 
-.input input{
+.input input {
     width: 100%;
     height: 38px;
     outline: none;
@@ -67,7 +67,7 @@
     line-height: normal;
 }
 
-.input input::placeholder{
+.input input::placeholder {
     color: #B6B6B6;
     font-family: Montserrat;
     font-size: 12px;
@@ -76,14 +76,25 @@
     line-height: normal;
 }
 
-.right_side{
+.right_side {
     display: flex;
     gap: 10px;
+    align-items: center;
 }
 
-.right_side .dateInput, .right_side select{
+.right_side .dateInput,
+.right_side select {
     height: 44px;
     /* width: 254px; */
+    border-radius: 4px;
+    border: 1px solid #E7E7E7;
+    padding: 0 10px;
+    outline: none;
+    width: 200px;
+}
+
+.clearButton {
+    height: 44px;
     border-radius: 4px;
     border: 1px solid #E7E7E7;
     padding: 0 10px;
@@ -102,7 +113,7 @@
     color: #FFD722;
 }
 
-.quick-form-button{
+.quick-form-button {
     border-radius: 4px;
     background: var(--blue-color);
     border: 2px solid var(--blue-color);
@@ -122,7 +133,7 @@
     line-height: normal;
 }
 
-.priority-selector option{
+.priority-selector option {
     padding: 0 5px;
     height: 20px;
 }
@@ -138,14 +149,14 @@
     margin-top: 20px;
 }
 
-.filter-option{
+.filter-option {
     display: flex;
     align-items: center;
     gap: 8px;
     width: 200px;
 }
 
-.filterName{
+.filterName {
     font-family: Montserrat;
     font-size: 14px;
     font-style: normal;
@@ -153,11 +164,11 @@
     line-height: 14px;
 }
 
-.navigator-section{
+.navigator-section {
     width: 100%;
 }
 
-.navigator{
+.navigator {
     background-color: #2C63BA;
     height: 4px;
     width: 110px;
@@ -166,7 +177,7 @@
     margin-left: 0;
 }
 
-.color{
+.color {
     width: 20px;
     height: 20px;
     border-radius: 50%;
@@ -184,7 +195,7 @@
     align-items: center;
 }
 
-.common_box{
+.common_box {
     display: flex;
     gap: 10px;
     overflow-x: hidden;
@@ -204,29 +215,31 @@
     align-items: center;
 }
 
-.ticket-left-side{
+.ticket-left-side {
     display: flex;
     align-items: center;
     justify-content: start;
     gap: 10px;
 }
 
-.ticket-number{
+.ticket-number {
     color: var(--dark);
     font-family: Montserrat;
     font-size: 16px;
     font-style: normal;
     font-weight: 600;
-    line-height: 14px; /* 87.5% */
+    line-height: 14px;
+    /* 87.5% */
 }
 
-.ticket-time{
+.ticket-time {
     color: var(--gray, #84818A);
     font-family: Montserrat;
     font-size: 12px;
     font-style: normal;
     font-weight: 500;
-    line-height: 14px; /* 116.667% */
+    line-height: 14px;
+    /* 116.667% */
 }
 
 .ticket-query {
@@ -239,7 +252,7 @@
     margin-top: 25px;
 }
 
-.ticket-priority{
+.ticket-priority {
     text-align: center;
     font-family: Montserrat;
     font-size: 12px;
@@ -248,55 +261,57 @@
     line-height: normal;
     border-radius: 4px;
     background: #FEF1F3;
-    padding: 2px 10px;
+    padding: 6px 10px;
     margin-left: 10px;
 }
 
-.ticketFor{
+.ticketFor {
     color: #3B8AFF;
     background-color: #2C63BA1A;
 }
 
-.ticket-description{
+.ticket-description {
     color: var(--gray-color);
     font-family: Montserrat;
     font-size: 12px;
     font-style: normal;
     font-weight: 500;
-    line-height: 14px; 
+    line-height: 14px;
     margin: 15px 0;
 }
 
-.ticket-footer{
+.ticket-footer {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-top: 20px;
 }
 
-.ticket-footer img{
+.ticket-footer img {
     width: 30px;
     height: 30px;
     object-fit: cover;
     border-radius: 50%;
 }
 
-.profile_name{
+.profile_name {
     color: var(--gray, #84818A);
     font-family: Montserrat;
     font-size: 14px;
     font-style: normal;
     font-weight: 500;
-    line-height: 14px; /* 100% */
+    line-height: 14px;
+    /* 100% */
 }
 
-.open-ticket{
+.open-ticket {
     color: #2C63BA;
     font-family: Montserrat;
     font-size: 14px;
     font-style: normal;
     font-weight: 500;
-    line-height: 14px; /* 100% */
+    line-height: 14px;
+    /* 100% */
     text-decoration-line: underline;
     text-decoration-style: solid;
     text-decoration-skip-ink: none;
@@ -305,29 +320,29 @@
     text-underline-position: from-font;
 }
 
-.profile{
+.profile {
     display: flex;
     align-items: center;
     gap: 15px;
 }
 
-.form_container{
+.form_container {
     border: 2px solid #E7E7E7;
 }
 
-.inputWidth{
+.inputWidth {
     width: 130px;
 }
 
-.falseWidth{
+.falseWidth {
     width: 240px;
 }
 
-.rootWidth{
+.rootWidth {
     width: 60%;
 }
 
-.formWidth{
+.formWidth {
     width: 40%;
 }
 
@@ -338,11 +353,11 @@
     align-items: center;
 }
 
-.page_change{
+.page_change {
     margin-top: 20px;
 }
 
-.prev_next{
+.prev_next {
     color: #B4B4B4;
     text-align: center;
     font-family: Montserrat;
@@ -353,7 +368,7 @@
     letter-spacing: -0.24px;
 }
 
-.counts{
+.counts {
     border-radius: 4px;
     background: transparent;
     border: 1px solid #E7E7E7;
@@ -362,18 +377,19 @@
     font-size: 12px;
 }
 
-.active{
+.active {
     background: #2C63BA;
-    color : #fff
+    color: #fff
 }
 
-.notFound{
+.notFound {
     color: #bcbcc0;
     font-family: Montserrat;
     font-size: 40px;
     font-style: normal;
     font-weight: 500;
-    line-height: 14px; /* 100% */
+    line-height: 14px;
+    /* 100% */
     height: 61vh;
     width: 100%;
     display: flex;
@@ -381,15 +397,61 @@
     align-items: center;
 }
 
-.prior-wrapper{
+.prior-wrapper {
     display: flex;
     gap: 10px;
 }
 
-.loading{
+.loading {
     height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
     height: 59vh;
 }
+
+/* Form field styling */
+.form-field {
+    position: relative;
+    width: 100%;
+  }
+  
+  .date-trigger {
+    padding: 8px 12px;
+    width: 250px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    height: 44px;
+    width: 254px;
+    color: #757575;
+    font-family: Montserrat;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+  }
+  
+  .calendar-icon {
+    margin-left: 8px;
+  }
+  
+  .clearButton {
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #757575;
+    font-family: Montserrat;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+  }
+
+  .blue{
+    color: #2C63BA;
+  }

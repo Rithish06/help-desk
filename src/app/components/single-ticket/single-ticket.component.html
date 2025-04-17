@@ -1,28 +1,6 @@
 <div class="root-container">
     <div class="heading">Ticket Details</div>
 
-    <!-- <div class="ticketContent" *ngFor="let ticket of ticket">
-
-        <div class="tickerHeader">
-            <div class="lft-side">
-                <div class="color" [style.backgroundColor]="ticket.statusColor"></div>
-                <div class="ticketNo">{{ticket?.ticketId}}</div>
-            </div>
-            <div class="postedTime">{{ticket?.createdAt}} | {{ticket.createdDate}}</div>
-        </div>
-
-        <div class="ticketBody">
-            <div class="ticketTitle">{{ticket?.title}}</div>
-            <div class="ticketNo"><span><b>Menu Path</b></span> : <span>{{ticket?.menupath}} </span></div>
-            <div class="ticketNo" *ngIf="ticket?.module"><span><b>Menu Path</b></span> : <span>{{ticket?.module}} </span></div>
-            <div class="ticketDescriptionUser">{{ticket?.description}}</div>
-        </div>
-
-        <div class="attatchments" *ngIf="ticket?.attachment">
-            <img [src]="ticket?.attachment" alt="image"/>
-        </div>
-    </div> -->
-
     <div class="ticketContent" *ngFor="let ticket of ticket">
         <div class="tickerHeader">
             <div class="lft-side">
@@ -30,7 +8,7 @@
                 <div class="ticketNo">{{ticket?.ticketId}}</div>
                 <div class="ticketFor">{{ticket?.ticketFor}}</div>
             </div>
-            <div class="postedTime">{{ticket?.createdAt}} | {{ticket.createdDate | date: 'dd-MM-yyyy'}}</div>
+            <div class="postedTime">Create at {{ticket.createdAt}} on {{ticket.createdDate | date:'dd-MM-yyyy' }}</div>
         </div>
 
         <div class="tkt-details">
@@ -38,7 +16,7 @@
             <div class="row-1">
                 <div class="inputField name">
                     <label for="">Client Name</label>
-                    <input type="text" [(ngModel)] = "userName" [disabled]="!isActive">
+                    <input type="text" [(ngModel)]="userName" [disabled]="!isActive">
                 </div>
                 <div class="inputField productName">
                     <label for="">Ticket For</label>
@@ -59,7 +37,7 @@
                     <label for="" *ngIf="ticket?.ticketFor === 'Product'">Menu path</label>
                     <label for="" *ngIf="ticket?.ticketFor === 'SMM'">Platform</label>
                     <label for="" *ngIf="ticket?.ticketFor === 'PPC'">Request Type</label>
-                    <input type="text" [(ngModel)]="ticket?.menupath[0].name"   [disabled]="!isActive">
+                    <input type="text" [(ngModel)]="ticket?.menupath[0].name" [disabled]="!isActive">
                 </div>
             </div>
 
@@ -78,76 +56,33 @@
             <div class="ticketDescriptionUser">{{ticket?.description}}</div>
         </div>
 
-        <div class="attachments" *ngIf="ticket.attachment">
+        <div class="attachments">
             <div class="attachmentTitle">Attachments</div>
-            <div class="images">
+            <div class="images"  *ngIf="ticket.attachment">
                 <img [src]="ticket.attachment" alt="">
             </div>
+            <div class="noAttachment" *ngIf="!ticket.attachment">No Attachments</div>
         </div>
-    </div>    
-
+    </div>
 
     <div class="commentSection" *ngIf="comments.length > 0">
         <div class="commentsHeading">Response from Support Team</div>
         <div class="comments-wrapper">
-          <div class="comments" *ngFor="let c of comments">
-            <!-- comment -->
-            <div class="comment">{{c.comment}}</div>
-            <!-- comment time -->
-            <div class="commentTimeAndBy">
-              <div class="text">{{c.commentTime}} | {{c.commentDate}} By &#64;{{c.commentBy}}</div>
-            </div>
-  
-          </div>
-        </div>
-      </div>
+            <div class="comments" *ngFor="let c of comments">
+                <!-- comment -->
+                <div class="comment">{{c.comment}}</div>
 
-    <!-- <div class="user" *ngIf="userType === 'user' && newComment">
-        <div class="commentSection" *ngFor="let ticket of ticket">
-            <div class="flexComment">
-                <span class="commentFrom">From Invention Minds Supporting Team :</span> -->
-
-                <!-- <div class="buttonStyle editButton pointer scale trans" *ngIf="!isInputDisabled" (click) = "postComment()">
-                    <img src="../../../assets/edit_button.svg" alt="">
-                    <span>Edit Comment</span>
-                </div> -->
-            <!-- </div>
-
-            <div class="Commenttitle">{{ticket?.title}}</div>
-
-            <div class="ticketDescriptionUser">{{ticket?.comment}}</div>
-
-            <div class="save buttons"></div>
-
-            <div class="postedTime updatedTime">Edited at {{ticket?.updatedAt}} | {{ticket.createdDate}}</div>
-        </div>
-    </div> -->
-
-    <!-- <div class="admin" *ngIf="userType === 'admin'">
-        <div class="commentSection" *ngFor="let ticket of ticket">
-            <div class="flexComment">
-                <span class="commentFrom">From Invention Minds Supporting Team :</span>
-
-                <div class="buttonStyle editButton pointer scale trans" *ngIf="!isInputDisabled" (click) = "onclickEditComment()">
-                    <img src="../../../assets/edit_button.svg" alt="">
-                    <span>Edit Comment</span>
+                <div class="c_heading">Attachment</div>
+                <div class="c_attachment">
+                    <img [src]="c.attachment" alt="">
+                </div>
+                <!-- comment time -->
+                <div class="commentTimeAndBy">
+                    <div class="text">replied at {{c.commentTime}} | {{c.commentDate | date:'dd-MM-yyyy'}} By &#64;{{c.commentBy}}</div>
                 </div>
 
-                <button class="buttonStyle editButton saveButton pointer scale trans" *ngIf="isSaveButton" (click) = "postComment(ticket.id)">
-                    <img src="../../../assets/edit_button.svg" alt="">
-                    <span>Save Comment</span>
-                </button>
             </div>
-
-            <div class="Commenttitle">{{ticket?.title}}</div> -->
-
-            <!-- <div class="ticketDescription">{{ticket?.comment}}</div> -->
-            <!-- <textarea class="ticketDescription" [(ngModel)]="this.newComment" id="" [disabled]="!isInputDisabled" (input)="commentTextOnchange($event)"></textarea>
-
-            <div class="save buttons"></div>
-
-            <div class="postedTime updatedTime">Edited at {{ticket?.updatedAt}} | {{ticket.createdDate}}  by  &#64;{{ticket.commentBy}}</div>
         </div>
-    </div> -->
-
+    </div>  
+    
 </div>

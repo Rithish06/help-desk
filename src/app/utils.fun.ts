@@ -1,24 +1,29 @@
 import { DatePipe } from '@angular/common';
+import { Pipe, PipeTransform } from '@angular/core';
+
 
 export const formatTime = (utcDate: string): string => {
-  const localDateStr = new Date(utcDate).toLocaleString("en-US", { timeZone: "Asia/Kolkata" });
-  const parts = localDateStr.split(", ");
+  const date = new Date(utcDate);
   
-  if (parts.length < 2) return ''; // avoid crashing
-
-  const timePart = parts[1]; // eg: "14:32:00"
-  let [hour, min] = timePart.split(":");
-
-  let hh = parseInt(hour, 10);
+  // Convert UTC to IST (UTC+5:30)
+  const istOffset = 5.5 * 60 * 60 * 1000; // 5.5 hours in milliseconds
+  const istDate = new Date(date.getTime() + istOffset);
+  
+  // Extract components
+  const dd = istDate.getDate().toString().padStart(2, '0');
+  const mm = (istDate.getMonth() + 1).toString().padStart(2, '0'); // Months are 0-based
+  const yyyy = istDate.getFullYear();
+  let hh = istDate.getHours();
+  const min = istDate.getMinutes().toString().padStart(2, '0');
   let suffix = "AM";
 
   if (hh >= 12) {
     suffix = "PM";
     if (hh > 12) hh -= 12;
-  } else if (hh === 0) {
-    hh = 12;
   }
+  if (hh === 0) hh = 12; // Midnight case
 
+  // Return formatted string: DD-MM-YYYY HH:MM AM/PM
   return `${hh}:${min} ${suffix}`;
 };
 
@@ -35,10 +40,20 @@ export const formatDate = (e: any) => {
 
 
 export const convertUTCtoIST = (utcDate: string): string => {
-    const date = new Date(utcDate);
-    return date.toLocaleString('en-US', { timeZone: 'Asia/Kolkata' });}
+  const options: Intl.DateTimeFormatOptions = {
+    timeZone: 'Asia/Kolkata',
+    hour: 'numeric',
+    minute: '2-digit',
+    hour12: true  // 12-hour format with AM/PM
+  };
+  
+  return new Date(utcDate).toLocaleTimeString('en-US', options);
+};
 
-// `${date}-${month}${year}`
+// Example usage:
+console.log(convertUTCtoIST("2025-04-16T19:27:41.438+00:00")); 
+// Output: "12:57 AM" (UTC 19:27 = IST 00:57 next day)
+
 
 export const capitalizeFirstLetter = (sentence: string): string => {
   if (!sentence || sentence.length === 0) {
@@ -54,3 +69,11 @@ export const sortTicketsByDate = (tickets: any[]): any[] => {
     return dateB - dateA;
   });
 };
+
+@Pipe({ name: 'capitalizeFirst' })
+export class CapitalizeFirstLetterPipe implements PipeTransform {
+  transform(value: string): string {
+    if (!value) return value;
+    return value.charAt(0).toUpperCase() + value.slice(1);
+  }
+}

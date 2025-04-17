@@ -34,6 +34,8 @@ export class UserLayoutComponent {
       this.router.navigate(['/admin']); 
     }
 
+    this.notificationBar = false
+
   }
 
   sectionName : any

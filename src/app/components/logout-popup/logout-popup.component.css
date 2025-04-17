@@ -1,5 +1,5 @@
 .root-container{
-    width: 60vw;
+    width: 50vw;
     height: 50vh;
     display: flex;
     align-items: center;
@@ -29,7 +29,7 @@
     font-style: normal;
     font-weight: 700;
     line-height: 35px; /* 145.833% */
-    margin-left: 17%
+    margin-left: 12%
 }
 
 .right-side{
@@ -51,7 +51,7 @@
     font-style: normal;
     font-weight: 400;
     line-height: 30px; /* 187.5% */
-    margin-left: 17%;
+    margin-left: 12%;
     margin-top: 5px;
 }
 
@@ -59,7 +59,7 @@
     display: flex;
     gap: 20px;
     width: 100%;
-    margin-left: 17%;
+    margin-left: 12%;
     margin-top: 10%;
 }
 

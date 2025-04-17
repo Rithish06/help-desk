@@ -4,6 +4,7 @@ import { ProductsService } from '../../services/products/products.service';
 import { TicketService } from '../../services/ticket/ticket.service';
 import { isPlatformBrowser } from '@angular/common';
 import { PLATFORM_ID } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-ppc-form',
@@ -32,17 +33,18 @@ export class PpcFormComponent {
   choosenModule: any;
   menupaths: any;
 
-  isLoading : boolean = false
+  isLoading: boolean = false;
 
   constructor(
     private fb: FormBuilder,
     private product: ProductsService,
     private ticket: TicketService,
-    @Inject(PLATFORM_ID) private platformId: Object
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private snackBar: MatSnackBar
   ) {
     this.ticketForm = this.fb.group({
       title: ['', Validators.required],
-      websiteName: ['', Validators.required],
+      // websiteName: ['', Validators.required],
       menuPath: ['', Validators.required],
       module: ['', Validators.required],
       ticketBody: ['', [Validators.required, Validators.minLength(10)]],
@@ -91,7 +93,7 @@ export class PpcFormComponent {
         id: p._id
       }));
     });
-    this.ticketForm.get('menuPath')?.reset();
+    this.ticketForm.get('menuPath')?.setValue('');
   }
 
   onchoosingMenuPath(event: any): void {
@@ -125,8 +127,13 @@ export class PpcFormComponent {
     if (!isPlatformBrowser(this.platformId)) return;
 
     this.isSubmitted = true;
-    this.isLoading = true
-    const formData = new FormData();
+    console.log('Form validity:', this.ticketForm.valid);
+
+    if(this.ticketForm.valid){
+      console.log("valid")
+      this.isLoading = true;
+      const formData = new FormData();
+    
     formData.append('clientName', this.clientName);
     formData.append('ticketFor', this.ticketFor);
     formData.append('clientId', localStorage.getItem('clientId') || '');
@@ -136,31 +143,47 @@ export class PpcFormComponent {
     formData.append('menuPath', JSON.stringify(this.choosenModule)); // Stringify the array
     formData.append('productName', this.productname);
     formData.append('prefix', localStorage.getItem('ticketPrefix') || '');
+    
     if (this.ticketForm.get('attachment')?.value) {
       formData.append('file', this.ticketForm.get('attachment')?.value);
     }
-
-    console.log('Form data:');
-    // for (const [key, value] of formData.entries()) {
-    //   console.log(`${key}: ${value instanceof File ? value.name : value}`);
-    // }
 
     this.ticket.createTicket(formData).subscribe({
       next: (response) => {
         console.log('Ticket sent successfully:', response);
         this.ticketForm.reset();
         this.isSubmitted = false; // Reset submission state
-        this.isLoading = false
+        this.isLoading = false;
+        this.choosenModule = []
+        this.showSnackbar('Your ticket for PPC is raised successfully!', 'success');
       },
+    
       error: (error) => {
         console.error('Error sending ticket:', error);
-        this.isLoading = false
+        this.isLoading = false;
+        this.isSubmitted = false
+        this.showSnackbar('Failed to raise ticket. Please try again.', 'error');
       }
+
     });
+  }
+  else{
+    this.showSnackbar('Please fill all required fields correctly', 'error');
+  }
   }
 
   onClear(): void {
     this.ticketForm.reset();
     this.isSubmitted = false; // Reset submission state
+    this.showSnackbar('Form cleared.', 'info');
+  }
+
+  private showSnackbar(message: string, type: 'success' | 'error' | 'info' = 'info'): void {
+    this.snackBar.open(message, 'Close', {
+      duration: 5000,
+      verticalPosition: 'top',
+      horizontalPosition: 'right',
+      panelClass: [`${type}-snackbar`]
+    });
   }
 }

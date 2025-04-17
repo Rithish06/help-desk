@@ -12,11 +12,11 @@
     border-bottom: 2px solid #000;
     padding: 10px;
     /* padding: 5px; */
+    margin-bottom: 5px;
 }
 
 .notifications:hover{
-    background-color: rgba(148, 147, 147, 0.327);
-    border-radius: 20px;
+    background-color: rgba(148, 147, 147, 0.227);
 }
 
 .noti-head{

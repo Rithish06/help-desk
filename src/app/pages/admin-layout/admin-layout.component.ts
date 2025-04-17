@@ -32,8 +32,13 @@ export class AdminLayoutComponent {
       this.router.navigate(['/home']);
     }
 
+    this.notificationBar = false
     // console.log(this.notificationBar)
 
+  }
+
+  closenotificationBar():void{
+    this.notificationBar = false
   }
 
   sectionName: any
@@ -101,5 +106,7 @@ export class AdminLayoutComponent {
   activateNoticationBar(e: any) {
     this.notificationBar = e
   }
+
+
 
 }

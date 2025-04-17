@@ -1,6 +1,6 @@
 import { Component, ViewChild, ElementRef, AfterViewInit, Input, Output, EventEmitter } from '@angular/core';
 import { TicketService } from '../../services/ticket/ticket.service';
-import { formatTime, formatDate, capitalizeFirstLetter, sortTicketsByDate } from '../../utils.fun'
+import { convertUTCtoIST, formatDate, capitalizeFirstLetter, sortTicketsByDate } from '../../utils.fun'
 import { PLATFORM_ID, Inject } from '@angular/core'
 import { HttpHeaders } from '@angular/common/http'
 import { error } from 'console';
@@ -29,6 +29,7 @@ export class NotificationComponent {
   notificationTickets : any
 
   @Output() openTicket = new EventEmitter<any>() 
+  @Output() closeNotification = new EventEmitter<boolean>() 
 
   initFunction(): void {
     const role = localStorage.getItem("role")
@@ -43,12 +44,12 @@ export class NotificationComponent {
             ticketId: entry.ticketNumber,
             title: entry.title,
             description: entry.description,
-            createdAt: formatTime(entry.createdAt),
+            createdAt: convertUTCtoIST(entry.createdAt),
             createdDate: formatDate(entry.createdAt),
             menupath: entry.menuPath,
             module: entry.module,
             status: entry.status,
-            updatedAt: formatTime(entry.createdAt),
+            updatedAt: convertUTCtoIST(entry.createdAt),
             updatedDate: formatDate(entry.createdAt),
             id: entry._id,
             profileImage: entry.userDetails?.profilePic,
@@ -98,12 +99,12 @@ export class NotificationComponent {
             ticketId: entry.ticketNumber,
             title: entry.title,
             description: entry.description,
-            createdAt: formatTime(entry.createdAt),
+            createdAt: convertUTCtoIST(entry.createdAt),
             createdDate: formatDate(entry.createdAt),
             menupath: entry.menuPath,
             module: entry.module,
             status: entry.status,
-            updatedAt: formatTime(entry.createdAt),
+            updatedAt: convertUTCtoIST(entry.createdAt),
             updatedDate: formatDate(entry.createdAt),
             id: entry._id,
             profileImage: entry.userDetails?.profilePic,
@@ -241,11 +242,12 @@ export class NotificationComponent {
   openTickets(ticketNumber:any):void{
       const filtredTicket = this.allTickets.filter((entry:any) => entry.ticketId === ticketNumber)
       this.openTicket.emit(filtredTicket)
+      this.closeNotification.emit(false)
 
       if(this.openTicket){
         if(this.role === 'admin'){
           this.ticketService.updateAdminNotification(ticketNumber).subscribe(
-            res => console.log(res),
+            res => console.log('sent'),
             error => console.log(error)
           )
         }

@@ -345,3 +345,42 @@
     background-color: rgba(156, 156, 156, 0.064);
     border-radius: 8px;
 }
+
+.c_heading{
+    margin-top: 15px;
+    color: #000;
+    font-family: Montserrat;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 14px;
+    margin-top: 30px;
+    margin-bottom: 20px;
+}
+
+.c_attachment{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    width: 100%;
+    margin-top: 20px;
+    justify-content: center;
+    align-items: center;
+}
+
+.c_attachment img{
+    width: 300px;
+    height: auto;
+}
+
+.noAttachment{
+    margin-top: 15px;
+    color: #3f3f3f56;
+    font-family: Montserrat;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 14px;
+    margin-top: 30px;
+    margin-bottom: 20px;
+}

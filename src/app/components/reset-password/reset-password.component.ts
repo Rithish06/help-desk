@@ -63,37 +63,59 @@ export class ResetPasswordComponent {
       email: this.emailId
     };
 
-    this.user.updateUserEmail(id, email).subscribe(
-      res => {
-        console.log('Success:', res);
-
-        // this.snackBar.open('Email updated successfully!', 'Close', {
-        //   duration: 3000,
-        //   verticalPosition: 'top',    // 'bottom' also possible
-        //   horizontalPosition: 'right', // 'center', 'left' also valid
-        //   panelClass: ['success-snackbar']
-        // });
-
-        this.toastr.success('Email updated successfully!', 'Success', {timeOut : 2000});
-
-        localStorage.clear()
-        this.router.navigate(['/login'])
-      },
-      err => {
-        console.error('Error:', err);
-        // Show error toast
-        this.snackBar.open('Failed to update email', 'Close', {
-          duration: 3000,
-          verticalPosition: 'top',    // 'bottom' also possible
-          horizontalPosition: 'right', // 'center', 'left' also valid
-          panelClass: ['error-snackbar']
-        });
-      }
-    );
-
-
-    localStorage.setItem('email', email.email);
-    this.isInputDisabled = false;
+    const existingEmail = localStorage.getItem('email')
+  
+    // Email validation pattern (RFC 5322 compliant)
+    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  
+    // Validate email format before API call
+    if (!emailPattern.test(this.emailId)) {
+      this.snackBar.open('Please enter a valid email (e.g., user@domain.com)', 'Close', {
+        duration: 3000,
+        verticalPosition: 'top',
+        horizontalPosition: 'right',
+        panelClass: ['error-snackbar']
+      });
+      return; // Stop execution if invalid
+    }
+  
+    if(existingEmail !== email.email){
+      this.user.updateUserEmail(id, email).subscribe(
+        res => {
+          console.log('Success:', res);
+          this.snackBar.open('Email updated successfully!', 'Close', {
+            duration: 3000,
+            verticalPosition: 'top',
+            horizontalPosition: 'right',
+            panelClass: ['success-snackbar']
+          });
+    
+          localStorage.clear();
+          this.router.navigate(['/login']);
+        },
+        err => {
+          console.error('Error:', err);
+          this.snackBar.open('Failed to update email', 'Close', {
+            duration: 3000,
+            verticalPosition: 'top',
+            horizontalPosition: 'right',
+            panelClass: ['error-snackbar']
+          });
+        }
+      );
+    
+      localStorage.setItem('email', email.email);
+      this.isInputDisabled = false;
+    }
+    else{
+      this.snackBar.open('Please enter a new email ID', 'Close', {
+        duration: 3000,
+        verticalPosition: 'top',
+        horizontalPosition: 'right',
+        panelClass: ['error-snackbar']
+      });
+    }
+   
   }
 
   editEmail():void{

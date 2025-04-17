@@ -63,7 +63,7 @@ export class LoginComponent {
   login(event: Event) {
     event.preventDefault(); // Prevent form reload
 
-    this.authService.login({ email: this.email, password: this.password }).subscribe({
+    this.authService.login({ id: this.email, password: this.password }).subscribe({
       next: (response:any) => {
 
         const currDate = new Date().getTime()

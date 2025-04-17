@@ -27,7 +27,7 @@
                      alt="Dashboard"></div>
                <div class="nav_name" [ngClass]="tickets === false ? 'black' : 'nav_active_color'">Tickets</div>
             </div>
-            <div class="ticketTypes trans" [ngClass]="tickets === false ? 'ticketTypes' : 'activeTicket'">
+            <div class="ticketTypes" [ngClass]="tickets === false ? 'ticketTypes' : 'activeTicket'">
                <div class="pathNames pointer" *ngFor="let path of pathNames"
                   (click)="changeTicketForm(path.formName, path.name)">
                   <img src="../../../assets/ticketMenu.svg" alt=">">

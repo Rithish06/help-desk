@@ -1,25 +1,43 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter, HostListener, ElementRef, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-header-section',
   templateUrl: './header-section.component.html',
-  styleUrl: './header-section.component.css'
+  styleUrls: ['./header-section.component.css']
 })
 export class HeaderSectionComponent {
+  profilePic: any;
+  userName: any;
+  notificationBarController: boolean = false;
 
-  profilePic : any
-  userName : any
+  @ViewChild('notificationBar') notificationBar!: ElementRef;
+  @ViewChild('notificationIcon') notificationIcon!: ElementRef;
 
-  notificationBarController : boolean = false
-  @Output() notificationBar = new EventEmitter<boolean>()
+  @Output() sendTicketData = new EventEmitter<any>();
 
-  ngOnInit(){
-    this.profilePic = localStorage.getItem("profilePic")
-    this.userName = localStorage.getItem("name")
+  ngOnInit() {
+    this.profilePic = localStorage.getItem("profilePic");
+    this.userName = localStorage.getItem("name");
   }
 
-  activateNamebar():void{
-    this.notificationBarController = !this.notificationBarController
-    this.notificationBar.emit(this.notificationBarController)
+  notificationBarToggle(): void {
+    this.notificationBarController = !this.notificationBarController;
+  }
+
+  openTicket(e: any): void {
+    this.sendTicketData.emit(e);
+  }
+
+  closeNotification(e: any): void {
+    this.notificationBarController = e;
+  }
+
+  @HostListener('document:click', ['$event'])
+  onClick(event: MouseEvent): void {
+    if (this.notificationBarController && 
+        !this.notificationBar?.nativeElement?.contains(event.target) && 
+        !this.notificationIcon?.nativeElement?.contains(event.target)) {
+      this.notificationBarController = false;
+    }
   }
 }
