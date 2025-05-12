@@ -1,15 +1,21 @@
 <div class="root-container">
     <!-- welcome text -->
-    <div class="welcome">
+    <!-- <div class="welcome">
         <img src="../../../assets/wavingHandEmoji.svg" alt="">
         <span>Welcome! <b>{{userName}}</b></span>
-    </div>
+    </div> -->
     
     <div class="right_side">
+         <!-- profile -->
+         <div class="profile pointer">
+            <img class="scale trans" [src]="profilePic" alt="">
+            <div class="client_name">{{userName}}</div>
+        </div>
+
         <!-- notification container -->
         <div class="notification-container">
             <div #notificationIcon class="notification pointer scale" (click)="notificationBarToggle()">
-                <img src="../../../assets/notification.svg" alt="">
+                <img class="notification-img" src="../../../assets/notification.svg" alt="">
                 <div class="indicator"></div>
             </div>
             <div #notificationBar class="notificationBar" *ngIf="notificationBarController">
@@ -19,10 +25,6 @@
             </div>
         </div>
 
-        <!-- profile -->
-        <div class="profile pointer">
-            <img class="scale trans" [src]="profilePic" alt="">
-            <div class="client_name">{{userName}}</div>
-        </div>
+       
     </div>
 </div>

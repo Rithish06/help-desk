@@ -58,10 +58,12 @@
 
         <div class="attachments">
             <div class="attachmentTitle">Attachments</div>
-            <div class="images"  *ngIf="ticket.attachment">
-                <img [src]="ticket.attachment" alt="">
+            <div class="attachment-box"> 
+                <div class="images" *ngIf="ticket.attachment">
+                    <img [src]="ticket.attachment" alt="">
+                </div>
+                <div class="noAttachment" *ngIf="!ticket.attachment">No Attachments</div>
             </div>
-            <div class="noAttachment" *ngIf="!ticket.attachment">No Attachments</div>
         </div>
     </div>
 
@@ -78,11 +80,12 @@
                 </div>
                 <!-- comment time -->
                 <div class="commentTimeAndBy">
-                    <div class="text">replied at {{c.commentTime}} | {{c.commentDate | date:'dd-MM-yyyy'}} By &#64;{{c.commentBy}}</div>
+                    <div class="text">replied at {{c.commentTime}} | {{c.commentDate | date:'dd-MM-yyyy'}} By
+                        &#64;{{c.commentBy}}</div>
                 </div>
 
             </div>
         </div>
-    </div>  
-    
+    </div>
+
 </div>

@@ -6,6 +6,12 @@
     font-weight: 600;
     line-height: normal;
 }
+.ticketContent{
+    margin-top: 20px;
+    border-radius: 10px;
+    background: #FFF;
+    padding: 20px;
+}
 
 .tickerHeader {
     display: flex;
@@ -100,6 +106,7 @@
     border-radius: 4px;
     border: 1px solid #E7E7E7;
     padding: 0 10px;
+    background: #FFF;
 }
 
 .name {
@@ -191,7 +198,11 @@
     object-fit: cover;
     border-radius: 10px;
 }
-
+.attachment-box{
+    border-radius: 4px;
+    border: 1px solid var(--Secondary-200, #E7E7E7);
+    padding: 20px;
+}
 .editButton {
     border: 1px solid #2C63BA;
     color: #2C63BA;
@@ -236,7 +247,7 @@
 /* commet wrapper */
 
 .commentSection {
-    width: 97%;
+    width: 100%;
     height: auto;
     border: 1px solid #e7e7e7;
     padding: 15px;
@@ -374,13 +385,13 @@
 }
 
 .noAttachment{
-    margin-top: 15px;
+    /* margin-top: 15px; */
     color: #3f3f3f56;
     font-family: Montserrat;
     font-size: 16px;
     font-style: normal;
     font-weight: 600;
     line-height: 14px;
-    margin-top: 30px;
-    margin-bottom: 20px;
+    /* margin-top: 30px;
+    margin-bottom: 20px; */
 }

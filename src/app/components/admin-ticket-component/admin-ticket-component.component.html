@@ -1,169 +1,176 @@
 <div class="root-container">
-	<div class="heading">Ticket Details</div>
-  
+	<div class="heading">Ticket Reply Section</div>
+
 	<div class="ticketContent" *ngFor="let ticket of ticket">
-        <div class="tickerHeader">
-            <div class="lft-side">
-                <div class="color" [style.backgroundColor]="ticket.statusColor"></div>
-                <div class="ticketNo">{{ticket?.ticketId}}</div>
-                <div class="ticketFor">{{ticket?.ticketFor}}</div>
-            </div>
-            <div class="postedTime">Create at {{ticket.createdAt}} on {{ticket.createdDate | date:'dd-MM-yyyy' }}</div>
-        </div>
+		<div class="tickerHeader">
+			<div class="lft-side">
+				<div class="color" [style.backgroundColor]="ticket.statusColor"></div>
+				<div class="ticketNo">{{ticket?.ticketId}}</div>
+				<div class="ticketFor">{{ticket?.ticketFor}}</div>
+			</div>
+			<div class="postedTime">Create at {{ticket.createdAt}} on {{ticket.createdDate | date:'dd-MM-yyyy' }}</div>
+		</div>
 
-        <div class="tkt-details">
-            <!-- row-1 -->
-            <div class="row-1">
-                <div class="inputField name">
-                    <label for="">Client Name</label>
-                    <input type="text" [(ngModel)]="userName" [disabled]="!isActive">
-                </div>
-                <div class="inputField productName">
-                    <label for="">Ticket For</label>
-                    <input type="text" *ngIf="ticket" [(ngModel)]="ticket.productName" [disabled]="!isActive">
-                </div>
-            </div>
+		<div class="tkt-details">
+			<!-- row-1 -->
+			<div class="row-1">
+				<div class="inputField name">
+					<label for="">Client Name</label>
+					<input class="input-box" type="text" [(ngModel)]="userName" [disabled]="!isActive">
+				</div>
+				<div class="inputField productName">
+					<label for="">Ticket For</label>
+					<input class="input-box" type="text" *ngIf="ticket" [(ngModel)]="ticket.productName"
+						[disabled]="!isActive">
+				</div>
+			</div>
 
-            <!-- row-2 -->
-            <div class="row-2" *ngIf="ticket?.ticketFor !== 'SEO'">
-                <div class="inputField module" *ngIf="ticket?.module">
-                    <label for="" *ngIf="ticket?.ticketFor === 'Product'">Menu path</label>
-                    <label for="" *ngIf="ticket?.ticketFor === 'SMM'">Concern Type</label>
-                    <label for="" *ngIf="ticket?.ticketFor === 'PPC'">Request Type</label>
-                    <input type="text" [(ngModel)]="ticket.module" [disabled]="!isActive">
-                </div>
-                <div class="inputField menupath">
-                    <label for="" *ngIf="ticket?.ticketFor === 'Website'">Page</label>
-                    <label for="" *ngIf="ticket?.ticketFor === 'Product'">Menu path</label>
-                    <label for="" *ngIf="ticket?.ticketFor === 'SMM'">Platform</label>
-                    <label for="" *ngIf="ticket?.ticketFor === 'PPC'">Request Type</label>
-                    <input type="text" [(ngModel)]="ticket?.menupath[0].name" [disabled]="!isActive">
-                </div>
-            </div>
+			<!-- row-2 -->
+			<div class="row-2" *ngIf="ticket?.ticketFor !== 'SEO'">
+				<div class="inputField module" *ngIf="ticket?.module">
+					<label for="" *ngIf="ticket?.ticketFor === 'Product'">Menu path</label>
+					<label for="" *ngIf="ticket?.ticketFor === 'SMM'">Concern Type</label>
+					<label for="" *ngIf="ticket?.ticketFor === 'PPC'">Request Type</label>
+					<input class="input-box" type="text" [(ngModel)]="ticket.module" [disabled]="!isActive">
+				</div>
+				<div class="inputField menupath">
+					<label for="" *ngIf="ticket?.ticketFor === 'Website'">Page</label>
+					<label for="" *ngIf="ticket?.ticketFor === 'Product'">Menu path</label>
+					<label for="" *ngIf="ticket?.ticketFor === 'SMM'">Platform</label>
+					<label for="" *ngIf="ticket?.ticketFor === 'PPC'">Request Type</label>
+					<input class="input-box" type="text" [(ngModel)]="ticket?.menupath[0].name" [disabled]="!isActive">
+				</div>
+			</div>
 
-            <div class="row-2" *ngIf="ticket?.ticketFor === 'SEO'">
-                <div class="inputField menupath">
-                    <label for="">Pages</label>
-                    <ul class="lists" style="margin-top: 10px;">
-                        <li class="listItems" *ngFor="let paths of ticket?.menupath">{{paths.name}}</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
+			<div class="row-2" *ngIf="ticket?.ticketFor === 'SEO'">
+				<div class="inputField menupath">
+					<label for="">Pages</label>
+					<ul class="lists" style="margin-top: 10px;">
+						<li class="listItems" *ngFor="let paths of ticket?.menupath">{{paths.name}}</li>
+					</ul>
+				</div>
+			</div>
+		</div>
 
-        <div class="tkt-titleDes">
-            <div class="ticketTitle">{{ticket?.title}}</div>
-            <div class="ticketDescriptionUser">{{ticket?.description}}</div>
-        </div>
+		<div class="tkt-titleDes">
+			<div class="ticketTitle">{{ticket?.title}}</div>
+			<div class="ticketDescriptionUser">{{ticket?.description}}</div>
+		</div>
 
-        <div class="attachments">
-            <div class="attachmentTitle">Attachments</div>
-            <div class="images" *ngIf="ticket.attachment">
-                <img [src]="ticket.attachment" alt="">
-            </div>
-			<div class="noAttachment" *ngIf="!ticket.attachment">No Attachments</div>
-        </div>
-    </div>
-  
+		<div class="attachments">
+			<div class="attachmentTitle">Attachments</div>
+			<div class="attachment-box">
+				<div class="images" *ngIf="ticket.attachment">
+					<img [src]="ticket.attachment" alt="">
+				</div>
+				<div class="noAttachment" *ngIf="!ticket.attachment">No Attachments</div>
+			</div>
+		</div>
+	</div>
+
 	<div class="commentSection" *ngIf="comments.length > 0">
-	  <div class="commentsHeading">Response from Support Team</div>
-	  <div class="comments-wrapper">
-		<div class="comments" *ngFor="let c of comments">
-		  <div class="comment">{{c.comment}}</div>
-		  <div class="attachments" *ngIf="c.commentAttachment">
-			<div class="commentAttachmentHeading">Attachments</div>
-			<div class="cmtImages">
-			  <img [src]="c.commentAttachment" alt="">
+		<div class="commentsHeading">Response from Support Team</div>
+		<div class="comments-wrapper">
+			<div class="comments" *ngFor="let c of comments">
+				<div class="comment">{{c.comment}}</div>
+				<div class="attachments" *ngIf="c.commentAttachment">
+					<div class="commentAttachmentHeading">Attachments</div>
+					<div class="cmtImages">
+						<img [src]="c.commentAttachment" alt="">
+					</div>
+				</div>
+				<div class="commentTimeAndBy">
+					<div class="text">replied at {{c.commentTime}} | {{c.commentDate | date:'dd-MM-yyyy'}} By
+						&#64;{{c.commentBy}}</div>
+				</div>
 			</div>
-		  </div>
-		  <div class="commentTimeAndBy">
-			<div class="text">replied at {{c.commentTime}} | {{c.commentDate | date:'dd-MM-yyyy'}} By &#64;{{c.commentBy}}</div>
-		  </div>
 		</div>
-	  </div>
 	</div>
-  
+
 	<div class="statusInput">
-	  <div class="replySection">Reply to Ticket</div>
-  
-	  <div class="inputFields">
-		<!-- Status -->
-		<div class="row-1">
-		  <div class="dropdown-wrapper" (click)="toggleDropdown('status')" tabindex="0"
-			(blur)="closeDropdown('status')">
-			<label>Status</label>
-			<div class="selected-item">
-			  <div class="lft-side-reply">
-				<span class="color-dot" [ngStyle]="{ 'background-color': getColor(selectedStatus) }"></span>
-				{{ (selectedStatus | capitalizeFirst) || 'Select status' }}
-			  </div>
-			  <span class="arrow"><i class="fa-solid fa-angle-down"></i></span>
+		<div class="replySection">Reply to Ticket</div>
+
+		<div class="inputFields">
+			<!-- Status -->
+			<div class="row-1">
+				<div class="dropdown-wrapper" (click)="toggleDropdown('status')" tabindex="0"
+					(blur)="closeDropdown('status')">
+					<label>Status</label>
+					<div class="selected-item">
+						<div class="lft-side-reply">
+							<span class="color-dot" [ngStyle]="{ 'background-color': getColor(selectedStatus) }"></span>
+							{{ (selectedStatus | capitalizeFirst) || 'Select status' }}
+						</div>
+						<span class="arrow"><i class="fa-solid fa-angle-down"></i></span>
+					</div>
+					<ul *ngIf="statusDropDown" class="dropdown-list">
+						<li *ngFor="let option of statusOptions" (click)="selectStatus(option)">
+							<span class="color-dot" [ngStyle]="{ 'background-color': option.color }"></span>
+							{{ option.label }}
+						</li>
+					</ul>
+				</div>
 			</div>
-			<ul *ngIf="statusDropDown" class="dropdown-list">
-			  <li *ngFor="let option of statusOptions" (click)="selectStatus(option)">
-				<span class="color-dot" [ngStyle]="{ 'background-color': option.color }"></span>
-				{{ option.label }}
-			  </li>
-			</ul>
-		  </div>
-		</div>
-  
-		<!-- Priority (Client) -->
-		<div class="row-1">
-		  <div class="dropdown-wrapper" [class.disabled]="!isActive" (click)="isActive && toggleDropdown('priorClient')"
-			[attr.tabindex]="isActive ? '0' : '-1'" (blur)="closeDropdown('priorClient')">
-			<label>Priority (Client)</label>
-			<div class="selected-item">
-			  <div class="lft-side-reply">
-				{{ (selectedPriority | capitalizeFirst) || 'Select Priority' }}
-			  </div>
-			  <span class="arrow"><i class="fa-solid fa-angle-down"></i></span>
+
+			<!-- Priority (Client) -->
+			<div class="row-1">
+				<div class="dropdown-wrapper" [class.disabled]="!isActive"
+					(click)="isActive && toggleDropdown('priorClient')" [attr.tabindex]="isActive ? '0' : '-1'"
+					(blur)="closeDropdown('priorClient')">
+					<label>Priority (Client)</label>
+					<div class="selected-item">
+						<div class="lft-side-reply">
+							{{ (selectedPriority | capitalizeFirst) || 'Select Priority' }}
+						</div>
+						<span class="arrow"><i class="fa-solid fa-angle-down"></i></span>
+					</div>
+					<ul *ngIf="priorClientDropDown" class="dropdown-list">
+						<li *ngFor="let option of priority" (click)="getPriority(option.value)">
+							{{ option.label }}
+						</li>
+					</ul>
+				</div>
 			</div>
-			<ul *ngIf="priorClientDropDown" class="dropdown-list">
-			  <li *ngFor="let option of priority" (click)="getPriority(option.value)">
-				{{ option.label }}
-			  </li>
-			</ul>
-		  </div>
-		</div>
-  
-		<!-- Status (Admin) -->
-		<div class="row-1">
-		  <div class="dropdown-wrapper" [class.disabled]="!isActive" (click)="isActive && toggleDropdown('priorAdmin')"
-			[attr.tabindex]="isActive ? '0' : '-1'" (blur)="closeDropdown('priorAdmin')">
-			<label>Status (Admin)</label>
-			<div class="selected-item">
-			  <div class="lft-side-reply">
-				{{ selectedAdminStatus || 'Select Admin Status' }}
-			  </div>
-			  <span class="arrow"><i class="fa-solid fa-angle-down"></i></span>
+
+			<!-- Status (Admin) -->
+			<div class="row-1">
+				<div class="dropdown-wrapper" [class.disabled]="!isActive"
+					(click)="isActive && toggleDropdown('priorAdmin')" [attr.tabindex]="isActive ? '0' : '-1'"
+					(blur)="closeDropdown('priorAdmin')">
+					<label>Status (Admin)</label>
+					<div class="selected-item">
+						<div class="lft-side-reply">
+							{{ selectedAdminStatus || 'Select Admin Status' }}
+						</div>
+						<span class="arrow"><i class="fa-solid fa-angle-down"></i></span>
+					</div>
+					<ul *ngIf="priorAdminDropDown" class="dropdown-list">
+						<li *ngFor="let option of adminStatus" (click)="getAdminStatus(option.value)">
+							{{ option.label }}
+						</li>
+					</ul>
+				</div>
 			</div>
-			<ul *ngIf="priorAdminDropDown" class="dropdown-list">
-			  <li *ngFor="let option of adminStatus" (click)="getAdminStatus(option.value)">
-				{{ option.label }}
-			  </li>
-			</ul>
-		  </div>
 		</div>
-	  </div>
-  
-	  <!-- Ticket Body -->
-	  <div class="ticketBody">
-		<label for="">Reply from Support Team</label>
-		<textarea placeholder="Reply here..." [(ngModel)]="newComment" class="ticketCommentSection"
-		  [disabled]="!isActive"></textarea>
-	  </div>
-  
-	  <!-- image upload section -->
-	  <div class="uploadImage">
-		<input type="file" (change)="onChoosingCommentFile($event)" [disabled]="!isActive">
-	  </div>
-  
-	  <!-- Submit Button -->
-	  <div class="btnContainer">
-		<button class="submitButton pointer scale trans" (click)="submitReply()" [disabled]="isDisable || !isActive">
-		  Submit Reply
-		</button>
-	  </div>
+
+		<!-- Ticket Body -->
+		<div class="ticketBody">
+			<label for="">Reply from Support Team</label>
+			<textarea placeholder="Reply here..." [(ngModel)]="newComment" class="ticketCommentSection"
+				[disabled]="!isActive"></textarea>
+		</div>
+
+		<!-- image upload section -->
+		<div class="uploadImage">
+			<input type="file" (change)="onChoosingCommentFile($event)" [disabled]="!isActive">
+		</div>
+
+		<!-- Submit Button -->
+		<div class="btnContainer">
+			<button class="submitButton pointer scale trans" (click)="submitReply()"
+				[disabled]="isDisable || !isActive">
+				Submit Reply
+			</button>
+		</div>
 	</div>
-  </div>
+</div>

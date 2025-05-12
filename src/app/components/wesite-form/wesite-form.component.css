@@ -216,10 +216,17 @@
     border-radius: 5px;
 }
 
+.cancel-pointer{
+    color: #F00;
+    border-radius: 4px;
+    border: 1px solid rgba(255, 0, 0, 0.20);
+    cursor: pointer;
+}
+
 .send{
     color: #FFF;
-    background-color: #2C63BA;
-    border: 2px solid #2C63BA;
+    background: linear-gradient(0deg, #001345 0%, #002FAB 100%);
+    border: 2px solid;
 }
 
 /* .send:hover{
