@@ -1,5 +1,5 @@
-//   export const apiUrl = "http://localhost:4000/api/v1"
-//   export const loginInUrl = "http://localhost:4000"
+  export const apiUrl = "http://localhost:4000/api/v1"
+  export const loginInUrl = "http://localhost:4000"
 //   export const socketUrl = 'http://localhost:4000'
 // export const apiUrl = "http://localhost:4000/api/v1"
 // export const loginInUrl = "http://localhost:4000"
@@ -13,5 +13,3 @@
 // export const apiUrl = "http://api.hroproindia.in/api/v1"
 // export const loginInUrl = "http://api.hroproindia.in"
 
-export const apiUrl = "http://api.hrproindia.in/api/v1"
-export const loginInUrl = "http://api.hrproindia.in"

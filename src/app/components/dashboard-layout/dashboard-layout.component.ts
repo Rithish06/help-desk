@@ -15,8 +15,12 @@ export class DashboardLayoutComponent implements AfterViewInit, OnChanges {
   isNewTicket: boolean = false;
   isOnGoingTicket: boolean = false;
   isResolved: boolean = false;
-  isQuickForm: boolean = false
-  clientId: any
+  isQuickForm: boolean = false;
+  Prev : boolean = false;
+  Next : boolean = false;
+
+  
+    clientId: any
 
   searchText: String = ''
   selectedDate: any = ''
@@ -30,7 +34,7 @@ export class DashboardLayoutComponent implements AfterViewInit, OnChanges {
   @Input() sectionName: any
 
   currentPage: number = 1;
-  itemsPerPage: number = 5;
+  itemsPerPage: number = 10;
   paginatedTickets: any[] = [];
   totalPages: number = 1;
 
@@ -168,22 +172,22 @@ clearDate() {
             if (user.status === "raised") {
               user.statusColor = "#3B8AFF"
               user.textColor = '#7F56D8'
-              user.bgColor = '#2C63BA1A'
-              user.clientStatus = "New Ticket"
+              user.bgColor = 'rgba(127, 86, 216, 0.30)'
+              user.clientStatus = "New"
             }
 
             if (user.status === "on-going") {
               user.statusColor = "#F8A53499"
-              user.textColor = "#FAC885"
-              user.bgColor = "#FAC8851A"
-              user.clientStatus = "On-Going Ticket"
+              user.textColor = "#E28406"
+              user.bgColor = "rgba(250, 200, 133, 0.30)"
+              user.clientStatus = "On-Going"
             }
 
             if (user.status === "resolved") {
               user.statusColor = "#54C104"
-              user.textColor = "#54C104"
-              user.bgColor = "#54C1041A"
-              user.clientStatus = "Resolved Tickets"
+              user.textColor = "#56DB5D"
+              user.bgColor = "rgba(145, 250, 133, 0.30)"
+              user.clientStatus = "Resolved"
             }
           })
           console.log(this.allTickets)
@@ -233,39 +237,39 @@ clearDate() {
           if (user.status === "raised") {
             user.statusColor = "#3B8AFF"
             user.textColor = '#7F56D8'
-            user.bgColor = '#2C63BA1A'
-            user.clientStatus = "New Ticket"
+            user.bgColor = 'rgba(127, 86, 216, 0.30)'
+            user.clientStatus = "New"
           }
 
           if (user.status === "on-going") {
             user.statusColor = "#F8A53499"
-            user.textColor = "#FAC885"
-            user.bgColor = "#FAC8851A"
-            user.clientStatus = "On-Going Ticket"
+            user.textColor = "#E28406"
+            user.bgColor = "rgba(250, 200, 133, 0.30)"
+            user.clientStatus = "On-Going"
           }
 
           if (user.status === "resolved") {
             user.statusColor = "#54C104"
-            user.textColor = "#54C104"
-            user.bgColor = "#54C1041A"
-            user.clientStatus = "Resolved Tickets"
+            user.textColor = "#56DB5D"
+            user.bgColor = "rgba(145, 250, 133, 0.30)"
+            user.clientStatus = "Resolved"
           }
 
           if (user.adminPriority === "low") {
-            user.priorTextColor = '#FFD722'
-            user.priorBgColor = '#FFFBE9'
+            user.priorTextColor = '#E28400'
+            user.priorBgColor = 'rgba(250, 200, 133, 0.50)'
             user.priorText = 'Low Priority'
           }
 
           if (user.adminPriority === "medium") {
-            user.priorTextColor = '#FB9C2A'
-            user.priorBgColor = '#FFF6EA'
+            user.priorTextColor = '#00A908'
+            user.priorBgColor = 'rgba(84, 193, 4, 0.30)'
             user.priorText = 'Mid Priority'
           }
 
           if (user.adminPriority === "high") {
             user.priorTextColor = '#FF0000'
-            user.priorBgColor = '#FEF1F3'
+            user.priorBgColor = 'rgba(255, 0, 0, 0.30)'
             user.priorText = 'High Priority'
           }
 
@@ -354,6 +358,8 @@ clearDate() {
     this.isNewTicket = tab === "raised";
     this.isOnGoingTicket = tab === "on-going";
     this.isResolved = tab === "resolved";
+    this.Prev = tab === "prev";
+    this.Next = tab === "next";
 
     // Update navigator position
     if (this.navigatorMargin) {
@@ -449,6 +455,8 @@ clearDate() {
 
     this.paginatedTickets = this.tickets.slice(startIndex, endIndex);
     this.totalPages = Math.ceil(this.tickets.length / this.itemsPerPage);
+
+    console.log(this.paginatedTickets, "paginateds")
   }
 
   changePage(page: number): void {
@@ -467,21 +475,22 @@ clearDate() {
     const pages: number[] = [];
 
     // Previous page
-    if (this.currentPage > 1) {
-      pages.push(this.currentPage - 1);
-    }
+    // if (this.currentPage > 1) {
+    //   pages.push(this.currentPage - 1);
+    // }
 
     // Current page
-    pages.push(this.currentPage);
+    if( pages.push(this.currentPage)){
+      pages.push(this.totalPages);
+    }
+   
 
     // Next page
-    if (this.currentPage < this.totalPages) {
-      pages.push(this.currentPage + 1);
-    }
+     
 
     return pages;
   }
-
+  
   onSelectingTicketType(e: any): void {
     this.currentFilters.productType = e.target.value;
     this.applyFilters();

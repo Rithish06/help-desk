@@ -12,7 +12,8 @@
 
       <!-- navigations -->
       <div class="menu">
-         <div class="navs navMargin" [ngClass]="dashboard === false ? 'black' : 'nav_active'" (click)="onClickDashboard()">
+         <div class="navs navMargin" [ngClass]="dashboard === false ? 'black' : 'nav_active'"
+            (click)="onClickDashboard()">
             <div class="icon"><img
                   [src]="dashboard === false ? '../../../assets/Category.svg' : '../../../assets/activeCategory.svg'"
                   alt="Dashboard"></div>
@@ -36,6 +37,14 @@
             </div>
          </div>
 
+         <div class="navs " [ngClass]="report === false ? 'black' : 'nav_active'" (click)="onClickreport()">
+            <div class="icon"><img
+                  [src]="report === false ? '../../../assets/report-icon.svg' : '../../../assets/report-iconactive.svg'"
+                  alt=""></div>
+            <div class="nav_name" [ngClass]="report === false ? 'black' : 'nav_active_color'">Report</div>
+         </div>
+
+
          <div class="navs navMargin" [ngClass]="settings === false ? 'black' : 'nav_active'" (click)="onClickSettings()">
             <div class="icon"><img
                   [src]="settings === false ? '../../../assets/setting.svg' : '../../../assets/activateSettings.svg'"
@@ -50,7 +59,7 @@
       <div class="loginButton buttonStyle pointer" (click)="logout()">
          <img src="../../../assets/logout_icon.svg" alt="">
          <span>Log Out</span>
-     </div>
+      </div>
    </div>
 
 

@@ -6,6 +6,15 @@
   font-weight: 600;
   line-height: normal;
 }
+.ticketContent{
+  width: 100%;
+  height: auto;
+  flex-shrink: 0;
+  border-radius: 10px;
+  background: #FFF;
+  padding: 20px;
+  margin-top: 20px;
+}
 
 .tickerHeader {
   display: flex;
@@ -50,7 +59,11 @@
   /* 77.778% */
   margin-bottom: 20px;
 }
-
+.input-box{
+  border-radius: 4px;
+  border: 1px solid #CDCDCD;  
+  background: #FFF;
+}
 .postedTime {
   color: #84818A;
   font-family: Montserrat;
@@ -168,6 +181,7 @@
   align-items: center;
   margin-top: 20px;
   justify-content: center;
+
 }
 
 .attatchments img {
@@ -178,10 +192,10 @@
 }
 
 .statusInput {
-  border-radius: 4px;
+  border-radius: 10px;
   border: 1px solid #E7E7E7;
-  background: #FCFCFC;
-  padding: 10px;
+  background: #FFFFFF;
+  padding: 20px;
   margin: 40px 0 60px 0;
 }
 
@@ -366,7 +380,7 @@ label {
 }
 
 .ticketCommentSection {
-  width: 96%;
+  width: 100%;
   height: 110px;
   padding: 15px;
   border: 1px solid #e7e7e7;
@@ -388,7 +402,7 @@ label {
 
 .submitButton {
   border-radius: 4px;
-  background: #2C63BA;
+  background: linear-gradient(0deg, #001345 0%, #002FAB 100%);
   width: 150px;
   height: 43.945px;
   padding: 10px;
@@ -411,10 +425,10 @@ label {
 /* commet wrapper */
 
 .commentSection {
-  width: 97%;
+  width: 100%;
   height: auto;
   border: 1px solid #e7e7e7;
-  padding: 15px;
+  padding: 20px;
   border-radius: 10px;
   height: auto;
   margin-top: 40px;
@@ -428,7 +442,9 @@ label {
 }
 
 .comments {
-  background-color: #F9F9FB;
+  /* background-color: #F9F9FB; */
+  border: 1px solid #e7e7e7;
+  border-radius: 10px;
   padding: 10px;
 }
 
@@ -495,7 +511,7 @@ label {
 }
 
 .uploadImage input {
-  width: 97%;
+  width: 100%;
   color: #757575;
   font-family: Montserrat;
   font-size: 14px;
@@ -537,6 +553,13 @@ label {
 .attachments{
   margin-top: 40px;
   margin-bottom: 20px;
+  
+}
+.attachment-box{
+  border: 1px solid #e7e7e7;
+  border-radius: 10px;
+  padding: 20px;
+  margin-top: 20px;
 }
 
 .attachmentTitle{
@@ -564,13 +587,13 @@ label {
 }
 
 .noAttachment{
-  margin-top: 15px;
+  /* margin-top: 15px; */
   color: #3f3f3f56;
   font-family: Montserrat;
   font-size: 16px;
   font-style: normal;
   font-weight: 600;
   line-height: 14px;
-  margin-top: 30px;
-  margin-bottom: 20px;
+  /* margin-top: 30px; */
+  /* margin-bottom: 20px; */
 }

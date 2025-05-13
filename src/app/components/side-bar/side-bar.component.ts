@@ -12,6 +12,7 @@ export class SideBarComponent {
   dashboard : boolean = false
   tickets : boolean = false
   settings : boolean = false
+  report : boolean = false
 
   // output
   @Output() sectionName : any = new EventEmitter<any>()
@@ -24,6 +25,7 @@ export class SideBarComponent {
   dashboardIcon :string = '../../../assets/Category.svg'
   ticketsIcon : string = '../../../assets/ticketstar.svg'
   settingsIcon : string = '../../../assets/setting.svg'
+  reportIcon : string = '../../../assets/report-icon.svg'
 
   // usertype
   userType : string | null = '' 
@@ -68,6 +70,7 @@ export class SideBarComponent {
     this.dashboard = true
     this.tickets = false
     this.settings = false
+    this.report = false
     this.sectionName.emit("Dashboard")
   }
 
@@ -75,6 +78,7 @@ export class SideBarComponent {
     this.tickets = true
     this.dashboard = false
     this.settings = false
+    this.report = false
     this.sectionName.emit("Tickets")
   }
 
@@ -82,7 +86,16 @@ export class SideBarComponent {
     this.tickets = false
     this.dashboard = false
     this.settings = true
+    this.report = false
     this.sectionName.emit("Settings")
+  }
+
+  onClickreport():void{
+    this.tickets = false
+    this.dashboard = false
+    this.settings = false
+    this.report = true
+    this.sectionName.emit("report")
   }
 
   // activateSingleTicket(e:any):void{
