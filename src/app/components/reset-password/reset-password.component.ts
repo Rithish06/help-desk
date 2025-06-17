@@ -4,7 +4,7 @@ import { UserService } from '../../services/user/user.service';
 import { PasswordService } from '../../services/password/password.service';
 import { ToastrService } from 'ngx-toastr';
 import { MatSnackBar } from '@angular/material/snack-bar';
-
+import { LocalstorageService } from '../../services/localstorage/localstorage.service';
 
 @Component({
   selector: 'app-reset-password',
@@ -32,13 +32,14 @@ export class ResetPasswordComponent {
   newPassword : any
   confirmPassword : any
 
-  constructor(private router:Router, private user : UserService, private password : PasswordService, private toastr : ToastrService, private snackBar: MatSnackBar){}
+  constructor(private router:Router, private user : UserService, private password : PasswordService, private toastr : ToastrService, private snackBar: MatSnackBar, private storage : LocalstorageService
+){}
 
   ngOnInit(){
     this.setActiveSection('account')
-    this.emailId = localStorage.getItem("email")
-    this.clientName = localStorage.getItem("name")
-    this.place = localStorage.getItem("place")
+    this.emailId = this.storage.getItem("email")
+    this.clientName = this.storage.getItem("name")
+    this.place = this.storage.getItem("place")
   }
 
   setActiveSection(sectionName:any):void{
@@ -58,12 +59,12 @@ export class ResetPasswordComponent {
   }
 
   updateEmail(): void {
-    const id = localStorage.getItem('id');
+    const id = this.storage.getItem('id');
     const email = {
       email: this.emailId
     };
 
-    const existingEmail = localStorage.getItem('email')
+    const existingEmail = this.storage.getItem('email')
   
     // Email validation pattern (RFC 5322 compliant)
     const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -104,7 +105,7 @@ export class ResetPasswordComponent {
         }
       );
     
-      localStorage.setItem('email', email.email);
+      this.storage.setItem('email', email.email);
       this.isInputDisabled = false;
     }
     else{
@@ -124,7 +125,7 @@ export class ResetPasswordComponent {
   }
 
   cancelEmail():void{
-    this.emailId = localStorage.getItem("email")
+    this.emailId = this.storage.getItem("email")
     this.isInputDisabled = false
  
     this.snackBar.open('Cancelled', 'Close', {

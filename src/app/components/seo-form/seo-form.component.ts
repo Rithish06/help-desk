@@ -5,6 +5,7 @@ import { TicketService } from '../../services/ticket/ticket.service';
 import { isPlatformBrowser } from '@angular/common';
 import { PLATFORM_ID } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar'; // Added import
+import { LocalstorageService } from '../../services/localstorage/localstorage.service';
 
 
 @Component({
@@ -28,7 +29,7 @@ export class SeoFormComponent {
   selectedOptions: { name: string }[] = []; // Store selected menu path options as objects
   isOpen: boolean = false; // Control dropdown visibility
 
-  isLoading : boolean = false
+  isLoading: boolean = false
 
   @Input() placeholder: string = 'Select Menu Path';
   @Output() selectionChange = new EventEmitter<{ name: string }[]>();
@@ -38,10 +39,11 @@ export class SeoFormComponent {
     private product: ProductsService,
     private ticket: TicketService,
     @Inject(PLATFORM_ID) private platformId: Object,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private storage: LocalstorageService
   ) {
     this.ticketForm = this.fb.group({
-      title: ['', Validators.required],
+      title: ['', [Validators.required, Validators.maxLength(30)]],
       websiteName: ['', Validators.required],
       menuPath: ['', Validators.required], // Updated to reflect custom dropdown
       ticketBody: ['', [Validators.required, Validators.minLength(10)]],
@@ -51,7 +53,7 @@ export class SeoFormComponent {
 
   ngOnInit() {
     if (isPlatformBrowser(this.platformId)) {
-      this.clientName = localStorage.getItem('name') || '';
+      this.clientName = this.storage.getItem('name') || '';
       this.inputDisable = true;
       this.getAllProducts();
     }
@@ -81,7 +83,7 @@ export class SeoFormComponent {
 
   loadProductName(): void {
     try {
-      const products = localStorage.getItem('products');
+      const products = this.storage.getItem('products');
       if (this.allProducts) {
         this.filteredProducts = this.allProducts.filter(
           (entry: any) => products?.includes(entry.productId) && entry.productType === 'website'
@@ -99,22 +101,22 @@ export class SeoFormComponent {
 
 
   loadMenuPath(e: any): void {
-    try{
+    try {
       this.productname = this.formProductName
-      .filter((entry: any) => entry.id === e.target.value)
-      .map((entry: any) => entry.name)[0];
+        .filter((entry: any) => entry.id === e.target.value)
+        .map((entry: any) => entry.name)[0];
 
-    this.pathName = this.filteredProducts.flatMap((entry: any) => {
-      const paths = entry.models?.[0]?.modules?.[0]?.path || [];
-      return paths.map((p: any) => ({
-        name: p.pathName,
-        id: p._id
-      }));
-    });
-    this.ticketForm.get('menuPath')?.setValue('');
-    this.selectedOptions = []; // Reset selected options
+      this.pathName = this.filteredProducts.flatMap((entry: any) => {
+        const paths = entry.models?.[0]?.modules?.[0]?.path || [];
+        return paths.map((p: any) => ({
+          name: p.pathName,
+          id: p._id
+        }));
+      });
+      this.ticketForm.get('menuPath')?.setValue('');
+      this.selectedOptions = []; // Reset selected options
     }
-    catch(error){
+    catch (error) {
       this.showSnackbar('Error loading website pages', 'error');
     }
   }
@@ -127,58 +129,64 @@ export class SeoFormComponent {
   }
 
   onSubmit(): void {
-    // Condition 1: Check if platform is browser
+    // Early return if not in browser
     if (!isPlatformBrowser(this.platformId)) return;
 
     this.isSubmitted = true;
-    console.log('Form validity:', this.ticketForm.valid);
-    
-    // Condition 2: Check if form is valid
-    if (!this.ticketForm.valid) {
-        this.isLoading = true;
-        const formData = new FormData();
-        
-        // Append data with fallback empty strings
-        formData.append('clientName', this.clientName || '');
-        formData.append('ticketFor', this.ticketFor);
-        formData.append('clientId', localStorage.getItem('clientId') || '');
-        formData.append('title', this.ticketForm.get('title')?.value || '');
-        formData.append('description', this.ticketForm.get('ticketBody')?.value || '');
-        formData.append('menuPath', JSON.stringify(this.selectedOptions));
-        formData.append('productName', this.productname || '');
-        formData.append('prefix', localStorage.getItem('ticketPrefix') || '');
 
-        // Condition 3: Check if attachment exists
-        const attachment = this.ticketForm.get('attachment')?.value;
-        if (attachment) {
-            formData.append('file', attachment, attachment.name);
+    // Check form validity
+    if (this.ticketForm.valid) {
+      this.isLoading = true;
+      const formData = new FormData();
+
+      // Append all required data
+      formData.append('clientName', this.clientName || '');
+      formData.append('ticketFor', this.ticketFor);
+      formData.append('clientId', this.storage.getItem('clientId') || '');
+      formData.append('title', this.ticketForm.get('title')?.value || '');
+      formData.append('description', this.ticketForm.get('ticketBody')?.value || '');
+      formData.append('menuPath', JSON.stringify(this.selectedOptions));
+      formData.append('productName', this.productname || '');
+      formData.append('prefix', this.storage.getItem('ticketPrefix') || '');
+
+      // Handle attachment if present
+      const attachment = this.ticketForm.get('attachment')?.value;
+      if (attachment) {
+        formData.append('file', attachment, attachment.name);
+      }
+
+      this.ticket.createTicket(formData).subscribe({
+        next: (response) => {
+          console.log('Ticket sent successfully:', response);
+          this.ticketForm.reset();
+          this.isSubmitted = false;
+          this.selectedOptions = [];
+          this.isLoading = false;
+          this.showSnackbar('SEO ticket created successfully!', 'success');
+        },
+        error: (error) => {
+          console.error('Error sending ticket:', error);
+          this.isLoading = false;
+          this.showSnackbar('Failed to create SEO ticket. Please try again.', 'error');
         }
-
-        console.log('Form data:');
-        
-        this.ticket.createTicket(formData).subscribe({
-            next: (response) => {
-                console.log('Ticket sent successfully:', response);
-                this.ticketForm.reset();
-                this.isSubmitted = false;
-                this.selectedOptions = [];
-                this.isLoading = false;
-                this.showSnackbar('SEO ticket created successfully!', 'success');
-            },
-            error: (error) => {
-                console.error('Error sending ticket:', error);
-                this.isLoading = false;
-                this.showSnackbar('Failed to create SEO ticket. Please try again.', 'error');
-            }
-        });
-        this.isLoading = false;
-    } 
-    // Condition 4: Form is invalid case
-    else {
-        console.log('Form is invalid');
-        this.showSnackbar('Please fill all required fields correctly', 'error');
+      });
+    } else {
+      console.log('Form is invalid');
+      this.showSnackbar('Please fill all required fields correctly', 'error');
+      // Optionally mark all fields as touched to show errors
+      this.markFormGroupTouched(this.ticketForm);
     }
-}
+  }
+
+  // Helper method to mark all fields as touched
+  private markFormGroupTouched(formGroup: FormGroup) {
+    Object.values(formGroup.controls).forEach(control => {
+      control.markAsTouched();
+      if (control instanceof FormGroup) {
+        this.markFormGroupTouched(control);
+      }
+    });
+  }
   onClear(): void {
     this.ticketForm.reset();
     this.selectedOptions = [];

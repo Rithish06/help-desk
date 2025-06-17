@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import {AuthService} from '../../services/auth/auth.service'
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { LocalstorageService } from '../../services/localstorage/localstorage.service';
 
 @Component({
   selector: 'app-login',
@@ -9,7 +10,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrl: './login.component.css'
 })
 export class LoginComponent {
-  constructor(private authService : AuthService, private router: Router, private snackBar: MatSnackBar){}
+  constructor(private authService : AuthService, private router: Router, private snackBar: MatSnackBar, private storage : LocalstorageService){}
 
   email : string = ''
   password : string = ''
@@ -30,8 +31,8 @@ export class LoginComponent {
     //   console.log(this.authService.getUserRole())
     // }, 1000)
 
-    const token = localStorage.getItem('token')
-    const role = localStorage.getItem('role')
+    const token = this.storage.getItem('token')
+    const role = this.storage.getItem('role')
     if(token){
       if (role === 'admin') {
         this.router.navigate(['/admin']); // Redirect to Adm in Dashboard
@@ -69,18 +70,18 @@ export class LoginComponent {
         const currDate = new Date().getTime()
         // Redirect based on role
         // document.cookie = `token=${response.token}; path=/;`; // Store token in cookie
-        localStorage.setItem('role', response.user.role); // Store role in localStorage
-        localStorage.setItem('token', response.token); // Store role in localStorage
-        localStorage.setItem('clientId', response.user.clientId); // Store role in localStorage
-        localStorage.setItem('products', response.user.products);
-        localStorage.setItem('profilePic', response.user.profilePic);
-        localStorage.setItem('phoneNo', response.user.phoneNo);
-        localStorage.setItem('email', response.user.email);
-        localStorage.setItem('name', response.user.name);
-        localStorage.setItem('id', response.user._id)
-        localStorage.setItem('place', response.user.place)
-        localStorage.setItem('ticketPrefix', response.user.ticketPrifix)
-        localStorage.setItem('loginTime', currDate.toString())
+        this.storage.setItem('role', response.user.role); // Store role in localStorage
+        this.storage.setItem('token', response.token); // Store role in localStorage
+        this.storage.setItem('clientId', response.user.clientId); // Store role in localStorage
+        this.storage.setItem('products', response.user.products);
+        this.storage.setItem('profilePic', response.user.profilePic);
+        this.storage.setItem('phoneNo', response.user.phoneNo);
+        this.storage.setItem('email', response.user.email);
+        this.storage.setItem('name', response.user.name);
+        this.storage.setItem('id', response.user._id)
+        this.storage.setItem('place', response.user.place)
+        this.storage.setItem('ticketPrefix', response.user.ticketPrifix)
+        this.storage.setItem('loginTime', currDate.toString())
         // console.log('Login successful:', response);
         console.log(response.user.role)
 

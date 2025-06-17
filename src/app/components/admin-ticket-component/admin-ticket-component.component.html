@@ -16,7 +16,7 @@
 			<div class="row-1">
 				<div class="inputField name">
 					<label for="">Client Name</label>
-					<input class="input-box" type="text" [(ngModel)]="userName" [disabled]="!isActive">
+					<input class="input-box" type="text" [(ngModel)]="ticket.clientName" disabled>
 				</div>
 				<div class="inputField productName">
 					<label for="">Ticket For</label>
@@ -91,26 +91,68 @@
 		<div class="replySection">Reply to Ticket</div>
 
 		<div class="inputFields">
+			<!-- Ticket Type Dropdown -->
+			<div class="dropdown-wrapper" tabindex="0" [class.disabled]="isTicketTypeLocked"
+				(click)="!isTicketTypeLocked ? toggleDropdown('ticketType') : null"
+				(blur)="closeDropdown('ticketType')">
+				<label>Ticket Type</label>
+				<div class="selected-item">
+					<div class="lft-side-reply">
+						{{ selectedTicketType?.label || 'Select ticket type' }}
+					</div>
+					<span class="arrow"><i class="fa-solid fa-angle-down"></i></span>
+				</div>
+
+				<ul *ngIf="ticketTypeDropdown" class="dropdown-list">
+					<li *ngFor="let type of ticketTypes" (click)="selectTicketType(type)">
+						{{ type.label }}
+					</li>
+				</ul>
+			</div>
+
+
+			<!-- Sub Ticket Type Dropdown -->
+			<div class="dropdown-wrapper" tabindex="0"
+				[class.disabled]="isTicketTypeLocked || !selectedTicketType?.subtypes?.length"
+				(click)="(!isTicketTypeLocked && selectedTicketType?.subtypes?.length) ? toggleDropdown('subTicketType') : null"
+				(blur)="closeDropdown('subTicketType')">
+				<label>Sub Ticket Type</label>
+				<div class="selected-item">
+					<div class="lft-side-reply">
+						{{ selectedSubTicketType?.label || 'Select sub ticket type' }}
+					</div>
+					<span class="arrow"><i class="fa-solid fa-angle-down"></i></span>
+				</div>
+
+				<ul *ngIf="subTypeDropdown" class="dropdown-list">
+					<li *ngFor="let sub of selectedTicketType?.subtypes" (click)="selectSubTicketType(sub)">
+						{{ sub.label }}
+					</li>
+				</ul>
+			</div>
+
+
+
 			<!-- Status -->
 			<div class="row-1">
-				<div class="dropdown-wrapper" (click)="toggleDropdown('status')" tabindex="0"
-					(blur)="closeDropdown('status')">
+				<div class="dropdown-wrapper" (click)="selectedTicketType ? toggleDropdown('status') : null"
+					[class.disabled]="!selectedTicketType" [attr.aria-disabled]="!selectedTicketType"
+					[attr.tabindex]="!selectedTicketType ? -1 : 0" (blur)="closeDropdown('status')">
 					<label>Status</label>
 					<div class="selected-item">
 						<div class="lft-side-reply">
-							<span class="color-dot" [ngStyle]="{ 'background-color': getColor(selectedStatus) }"></span>
 							{{ (selectedStatus | capitalizeFirst) || 'Select status' }}
 						</div>
 						<span class="arrow"><i class="fa-solid fa-angle-down"></i></span>
 					</div>
-					<ul *ngIf="statusDropDown" class="dropdown-list">
+					<ul *ngIf="statusDropDown && selectedTicketType" class="dropdown-list">
 						<li *ngFor="let option of statusOptions" (click)="selectStatus(option)">
-							<span class="color-dot" [ngStyle]="{ 'background-color': option.color }"></span>
 							{{ option.label }}
 						</li>
 					</ul>
 				</div>
 			</div>
+
 
 			<!-- Priority (Client) -->
 			<div class="row-1">
@@ -133,7 +175,7 @@
 			</div>
 
 			<!-- Status (Admin) -->
-			<div class="row-1">
+			<!-- <div class="row-1">
 				<div class="dropdown-wrapper" [class.disabled]="!isActive"
 					(click)="isActive && toggleDropdown('priorAdmin')" [attr.tabindex]="isActive ? '0' : '-1'"
 					(blur)="closeDropdown('priorAdmin')">
@@ -150,7 +192,7 @@
 						</li>
 					</ul>
 				</div>
-			</div>
+			</div> -->
 		</div>
 
 		<!-- Ticket Body -->

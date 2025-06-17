@@ -1,5 +1,5 @@
 import { Component, Output, EventEmitter, HostListener, ElementRef, ViewChild } from '@angular/core';
-
+import { LocalstorageService } from '../../services/localstorage/localstorage.service';
 @Component({
   selector: 'app-header-section',
   templateUrl: './header-section.component.html',
@@ -16,9 +16,11 @@ export class HeaderSectionComponent {
   @Output() sendTicketData = new EventEmitter<any>();
 
   ngOnInit() {
-    this.profilePic = localStorage.getItem("profilePic");
-    this.userName = localStorage.getItem("name");
+    this.profilePic = this.storage.getItem("profilePic");
+    this.userName = this.storage.getItem("name");
   }
+
+  constructor( private storage : LocalstorageService ){}
 
   notificationBarToggle(): void {
     this.notificationBarController = !this.notificationBarController;

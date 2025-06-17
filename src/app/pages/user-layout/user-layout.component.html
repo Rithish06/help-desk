@@ -44,5 +44,6 @@
 </div>
 
 <div class="notification" *ngIf="notificationBar">
-    <app-notification (openTicket)="receiveTicketData($event)"/>
+    <!-- <app-notification (openTicket)="receiveTicketData($event)"/> -->
 </div>
+<app-notification-popup />

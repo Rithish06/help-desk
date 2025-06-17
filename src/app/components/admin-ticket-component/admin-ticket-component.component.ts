@@ -1,9 +1,10 @@
 import { Component, Inject, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { TicketService } from '../../services/ticket/ticket.service';
-import { formatTime,convertUTCtoIST, formatDate } from '../../utils.fun';
+import { formatTime, convertUTCtoIST, formatDate } from '../../utils.fun';
 import { isPlatformBrowser } from '@angular/common';
 import { PLATFORM_ID } from '@angular/core';
 import { forkJoin } from 'rxjs';
+import { LocalstorageService } from '../../services/localstorage/localstorage.service';
 
 @Component({
   selector: 'app-admin-ticket-component',
@@ -12,34 +13,55 @@ import { forkJoin } from 'rxjs';
 })
 export class AdminTicketComponentComponent implements OnChanges {
   @Input() ticket: any;
-  isInputDisabled: boolean = false;
-  isSaveButton: boolean = false;
+  isInputDisabled = false;
+  isSaveButton = false;
   newComment: any;
   comments: any = [];
 
   userType: any;
   userName: any;
 
-  selectedStatus: string = '';
-  selectedAdminStatus: string = '';
-  selectedPriority: string = '';
+  selectedStatus = '';
+  selectedAdminStatus = '';
+  selectedPriority = '';
+  selectedTicketType: any = null;
+  selectedSubTicketType: any = null;
 
-  statusDropDown: boolean = false;
-  priorClientDropDown: boolean = false;
-  priorAdminDropDown: boolean = false;
+  statusDropDown = false;
+  priorClientDropDown = false;
+  priorAdminDropDown = false;
+  ticketTypeDropdown = false;
+  subTypeDropdown = false;
+
 
   originalStatus: any;
   originalAdminStatus: any;
   originalPriority: any;
+  originalTicketType: any;
+  originalSubTicketType: any;
 
-  isActive: boolean = false;
+  isActive = false;
   selectedFile: File | null = null;
-  isDisable: boolean = false;
+  isDisable = false;
+
+  activeSubMenu: string | null = null;
+  selectedMainTicketType: any = null;
+
+  isTicketTypeLocked: boolean = false;
+
+  @Input() assignedTo : any 
 
   statusOptions = [
-    { label: 'Raised', color: '#3B8AFF', value: 'raised' },
-    { label: 'On-Going', color: '#fbc531', value: 'on-going' },
-    { label: 'Resolved', color: '#4cd137', value: 'resolved' }
+    { label: 'Open', color: '#3B8AFF', value: 'Open' },
+    { label: 'Hold', color: '#fbc531', value: 'Hold' },
+    { label: 'In Process', color: '#fbc531', value: 'In Process' },
+    { label: 'Requirement Not Finalized', color: '#fbc531', value: 'Requirement Not Finalized' },
+    { label: 'Specification Approved', color: '#fbc531', value: 'Specification Approved' },
+    { label: 'Commercial Approved', color: '#fbc531', value: 'Commercial Approved' },
+    { label: 'Ready', color: '#fbc531', value: 'Ready' },
+    { label: 'Deployed', color: '#fbc531', value: 'Deployed' },
+    { label: 'Specification Sent', color: '#fbc531', value: 'Specification Sent' },
+    { label: 'Commercial Sent', color: '#4cd137', value: 'Commercial Sent' }
   ];
 
   adminStatus = [
@@ -52,42 +74,132 @@ export class AdminTicketComponentComponent implements OnChanges {
   ];
 
   priority = [
-    { label: 'Low', value: 'low' },
-    { label: 'Midium', value: 'medium' },
-    { label: 'High', value: 'high' },
+    { label: 'Level 1', value: 'Level 1' },
+    { label: 'Level 2', value: 'Level 2' },
+    { label: 'Level 3', value: 'Level 3' },
   ];
 
-  constructor(private ticketService: TicketService, @Inject(PLATFORM_ID) private platformId: Object) { }
+  ticketTypes = [
+    {
+      label: 'Incident',
+      subtypes: [
+        { label: 'Limited Impact' },
+        { label: 'Business Critical' },
+        { label: 'Function Critical' },
+        { label: 'Cosmetic Impact' }
+      ]
+    },
+    {
+      label: 'Change Request',
+      subtypes: [
+        { label: 'Chargeable' },
+        { label: 'Non-Chargeable' }
+      ]
+    },
+    { label: 'Understanding the Issue' },
+    { label: 'Training / Guidance' }
+  ];
+
+  statusMap: { [key: string]: any[] } = {
+    'Incident': [
+      { label: 'New', color: '#3498db', value: 'New' },
+      { label: 'Open', color: '#3B8AFF', value: 'Open' },
+      { label: 'In Progress', color: '#fbc531', value: 'In Progress' },
+      { label: 'Ready', color: '#2ecc71', value: 'Ready' },
+      { label: 'Hold', color: '#2ecc71', value: 'Hold' },
+      { label: 'Deployed', color: '#1abc9c', value: 'Deployed' },
+      { label: 'Closed', color: '#e74c3c', value: 'Closed' }
+    ],
+    'Change Request': [
+      { label: 'New', color: '#3498db', value: 'New' },
+      { label: 'Open', color: '#3B8AFF', value: 'Open' },
+      { label: 'Requirement Not Finalized', color: '#3B8AFF', value: 'Requirement Not Finalized' },
+      { label: 'Specification Sent', color: '#3B8AFF', value: 'Specification Sent' },
+      { label: 'Specification Approved', color: '#3B8AFF', value: 'Specification Approved' },
+      { label: 'Commercial Sent', color: '#3B8AFF', value: 'Commercial Sent' },
+      { label: 'Commercial Approved', color: '#3B8AFF', value: 'Commercial Approved' },
+      { label: 'In Process', color: '#3B8AFF', value: 'In Process' },
+      { label: 'Ready', color: '#3B8AFF', value: 'Ready' },
+      { label: 'Deployed', color: '#2ecc71', value: 'Deployed' },
+      { label: 'Hold', color: '#2ecc71', value: 'Hold' },
+      { label: 'Closed', color: '#e74c3c', value: 'Closed' }
+    ],
+    'Understanding the Issue': [
+      { label: 'New', color: '#3498db', value: 'New' },
+      { label: 'Open', color: '#3B8AFF', value: 'Open' },
+      { label: 'Hold', color: '#2ecc71', value: 'Hold' },
+      { label: 'Complete', color: '#2ecc71', value: 'Complete' },
+      { label: 'Closed', color: '#e74c3c', value: 'Closed' }
+    ],
+    'Training / Guidance': [
+      { label: 'New', color: '#3498db', value: 'New' },
+      { label: 'Open', color: '#3B8AFF', value: 'Open' },
+      { label: 'Hold', color: '#2ecc71', value: 'Hold' },
+      { label: 'Complete', color: '#2ecc71', value: 'Complete' },
+      { label: 'Closed', color: '#e74c3c', value: 'Closed' }
+    ]
+  };
+
+  updateStatusOptions(ticketTypeLabel: string): void {
+    if (!ticketTypeLabel) {
+      this.statusOptions = [];
+      return;
+    }
+
+    const originalStatus = this.originalStatus?.toLowerCase();
+
+    if (originalStatus === 'closed') {
+      this.statusOptions = [{ label: 'Reopen', color: '#27ae60', value: 'Reopen' }];
+    } else {
+      this.statusOptions = this.statusMap[ticketTypeLabel] || [];
+    }
+  }
+
+  constructor(private ticketService: TicketService, @Inject(PLATFORM_ID) private platformId: Object, private storage: LocalstorageService) { }
 
   ngOnInit() {
-    this.userType = localStorage.getItem('role');
-    this.userName = localStorage.getItem('name') || 'Unknown User';
-    
-    // Initialize from database values
+    this.userType = this.storage.getItem('role');
+    this.userName = this.storage.getItem('name') || 'Unknown User';
+
     this.originalStatus = this.ticket?.[0]?.status;
     this.originalAdminStatus = this.ticket?.[0]?.adminStatus;
-    this.originalPriority = this.ticket?.[0]?.priority;
-    
-    // Set initial values
-    this.selectedStatus = this.originalStatus || 'raised';
+    this.originalPriority = this.ticket?.[0]?.priorText;
+    this.originalTicketType = this.ticket?.[0]?.ticketType;
+    this.originalSubTicketType = this.ticket?.[0]?.ticketSubType;
+
+    this.selectedStatus = this.originalStatus || 'Select Status';
     this.selectedAdminStatus = this.originalAdminStatus || 'In dev';
-    this.selectedPriority = this.originalPriority || 'low';
-    
-    // Enable/disable fields based on initial status
+    this.selectedPriority = this.originalPriority || 'Select Priority';
+    this.selectedTicketType = this.originalTicketType
+    this.selectedSubTicketType = this.originalSubTicketType
+
+    console.log(this.originalPriority, "priority")
+
     this.updateFieldAccess();
 
-    if (this.ticket) {
-      if (this.ticket?.menupath?.length > 0 && typeof this.ticket.menupath[0] === 'string') {
-        try {
-          this.ticket.module = JSON.parse(this.ticket.menupath[0]);
-        } catch (error) {
-          console.error('Failed to parse menupath:', error);
-          this.ticket.module = [];
-        }
-      } else if (this.ticket?.menupath?.length > 0) {
-        this.ticket.module = this.ticket.menupath[0];
+    this.selectedTicketType = this.ticketTypes.find(type => type.label === this.originalTicketType) || null;
+    if (this.selectedTicketType?.subtypes?.length > 0) {
+      this.selectedSubTicketType = this.selectedTicketType.subtypes.find(
+        (sub: any) => sub.label === this.originalSubTicketType
+      ) || null;
+    }
+
+    if (this.originalTicketType && this.originalSubTicketType) {
+      this.isTicketTypeLocked = true;
+    }
+
+    if (this.ticket?.menupath?.length > 0) {
+      try {
+        this.ticket.module = typeof this.ticket.menupath[0] === 'string'
+          ? JSON.parse(this.ticket.menupath[0])
+          : this.ticket.menupath[0];
+      } catch (error) {
+        console.error('Failed to parse menupath:', error);
+        this.ticket.module = [];
       }
     }
+
+    this.updateStatusOptions(this.originalTicketType);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -97,64 +209,161 @@ export class AdminTicketComponentComponent implements OnChanges {
   }
 
   loadComments(): void {
-    if (this.ticket && this.ticket[0]?.comment) {
-      this.comments = this.ticket[0].comment.map((entry: any) => ({
-        comment: entry.comment,
-        commentBy: entry.commentedBy,
-        commentAttachment: entry?.commentAttachment,
-        commentTime: convertUTCtoIST(entry.commentedAt),
-        commentDate: formatDate(entry.commentedAt)
-      }));
-    } else {
-      this.comments = [];
+    this.comments = this.ticket?.[0]?.comment?.map((entry: any) => ({
+      comment: entry.comment,
+      commentBy: entry.commentedBy,
+      commentAttachment: entry?.commentAttachment,
+      commentTime: convertUTCtoIST(entry.commentedAt),
+      commentDate: formatDate(entry.commentedAt)
+    })) || [];
+  }
+
+  updateFieldAccess(): void {
+    this.isActive = !(this.selectedStatus === 'New' || this.selectedStatus === 'raised');
+  }
+
+  onChoosingCommentFile(event: any): void {
+    if (this.isActive) {
+      this.selectedFile = event.target.files[0] as File;
+
+      // Image preview
+      if (this.selectedFile && this.selectedFile.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onload = () => {
+          this.imagePreview = reader.result;
+        };
+        reader.readAsDataURL(this.selectedFile);
+      } else {
+        this.imagePreview = null;
+      }
     }
+  }
+
+  submitReply(): void {
+    this.isDisable = true;
+    const ticketId = this.ticket[0].ticketId;
+    const updates: any[] = [];
+    const hasComment = this.newComment?.trim();
+
+    let commentPromise = Promise.resolve(null);
+
+    if (hasComment) {
+      const formData = new FormData();
+      formData.append('comment', this.newComment.trim());
+      formData.append('commentedBy', this.userName);
+      formData.append('lastlyRepliedBy', this.userName)
+
+      if (this.selectedFile) {
+        formData.append('file', this.selectedFile);
+      }
+
+      const previewUrl = this.selectedFile ? URL.createObjectURL(this.selectedFile) : null;
+
+      const newCommentObj = {
+        comment: this.newComment.trim(),
+        commentBy: this.userName,
+        commentAttachment: this.imagePreview,
+        commentPreview: previewUrl,
+        commentTime: convertUTCtoIST(new Date().toString()),
+        commentDate: formatDate(new Date().toString()),
+        isUploading: !!this.selectedFile
+      };
+
+      this.comments = [...this.comments, newCommentObj];
+
+      this.isTicketTypeLocked = true
+      this.isTicketTypeLocked = true
+
+      commentPromise = this.ticketService.addComment(ticketId, formData).toPromise();
+    }
+
+    if (this.selectedStatus !== this.originalStatus) {
+      updates.push(this.ticketService.updateStatus(ticketId, this.selectedStatus));
+    }
+
+    if (this.selectedAdminStatus !== this.originalAdminStatus) {
+      updates.push(this.ticketService.updateAdminStatus(ticketId, this.selectedAdminStatus));
+    }
+
+    if (this.selectedPriority !== this.originalPriority) {
+      updates.push(this.ticketService.updateClientPriority(ticketId, this.selectedPriority));
+    }
+
+    // ✅ Properly update ticket type and sub-type if not locked
+    if (!this.isTicketTypeLocked &&
+      (this.selectedTicketType?.label !== this.originalTicketType ||
+        this.selectedSubTicketType?.label !== this.originalSubTicketType)) {
+
+      const ticketType = this.selectedTicketType?.label || '';
+      const ticketSubType = this.selectedSubTicketType?.label || '';
+
+      updates.push(this.ticketService.updateTicketType(ticketId, { ticketType, ticketSubType }));
+    }
+
+    commentPromise.then(() => {
+      if (updates.length > 0) {
+        forkJoin(updates).subscribe({
+          next: () => this.handleSuccess(),
+          error: (err) => this.handleError(err)
+        });
+      } else {
+        this.handleSuccess();
+      }
+    }).catch(err => this.handleError(err));
+  }
+
+
+  private handleSuccess(): void {
+    this.newComment = '';
+    this.selectedFile = null;
+    this.isDisable = false;
+    this.originalStatus = this.selectedStatus;
+    this.originalAdminStatus = this.selectedAdminStatus;
+    this.originalPriority = this.selectedPriority;
+  }
+
+
+  imagePreview: string | ArrayBuffer | null = null;
+
+  private handleError(err: any): void {
+    console.error('Error:', err);
+    this.isDisable = false;
   }
 
   toggleDropdown(module: string): void {
-    if (module === 'status') {
-      this.statusDropDown = !this.statusDropDown;
-      this.priorClientDropDown = false;
-      this.priorAdminDropDown = false;
-    } else if (module === 'priorClient') {
-      this.priorClientDropDown = !this.priorClientDropDown;
-      this.priorAdminDropDown = false;
-      this.statusDropDown = false;
-    } else if (module === 'priorAdmin') {
-      this.priorAdminDropDown = !this.priorAdminDropDown;
-      this.statusDropDown = false;
-      this.priorClientDropDown = false;
-    }
+    this.statusDropDown = module === 'status' ? !this.statusDropDown : false;
+    this.priorClientDropDown = module === 'priorClient' ? !this.priorClientDropDown : false;
+    this.priorAdminDropDown = module === 'priorAdmin' ? !this.priorAdminDropDown : false;
+    this.ticketTypeDropdown = module === 'ticketType' ? !this.ticketTypeDropdown : false;
+    this.subTypeDropdown = module === 'subTicketType' ? !this.subTypeDropdown : false; // ✅ Add this
+    this.activeSubMenu = null;
   }
 
   closeDropdown(module: string): void {
-    if (module === 'status') {
-      this.statusDropDown = false;
-    } else if (module === 'priorClient') {
-      this.priorClientDropDown = false;
-    } else if (module === 'priorAdmin') {
-      this.priorAdminDropDown = false;
+    if (module === 'status') this.statusDropDown = false;
+    if (module === 'priorClient') this.priorClientDropDown = false;
+    if (module === 'priorAdmin') this.priorAdminDropDown = false;
+    if (module === 'ticketType') {
+      this.ticketTypeDropdown = false;
+      this.activeSubMenu = null;
     }
   }
 
   selectStatus(option: any): void {
     this.selectedStatus = option.value;
     this.statusDropDown = false;
-
-    if (this.ticket && this.ticket.length > 0) {
-      this.ticket[0].statusColor = this.getStatusColor(this.selectedStatus);
+    const selectedOption = this.statusOptions.find(opt => opt.value === this.selectedStatus);
+    if (this.ticket?.length > 0 && selectedOption) {
+      this.ticket[0].statusColor = selectedOption.color;
     }
-    
-    // Auto-update admin status if resolved
-    if (this.selectedStatus === 'resolved') {
+    if (this.selectedStatus.toLowerCase() === 'resolved') {
       this.selectedAdminStatus = 'Resolved';
     }
-    
     this.updateFieldAccess();
   }
 
   getStatusColor(status: string): string {
-    const statusOption = this.statusOptions.find(opt => opt.value === status);
-    return statusOption ? statusOption.color : '#cccccc'; // default color
+    return this.statusOptions.find(opt => opt.value === status)?.color || '#cccccc';
   }
 
   getAdminStatus(label: string): void {
@@ -171,95 +380,32 @@ export class AdminTicketComponentComponent implements OnChanges {
     return this.statusOptions.find(opt => opt.value === label)?.color || '#ccc';
   }
 
-  onChoosingCommentFile(event: any): void {
-    if (this.isActive) {
-      this.selectedFile = event.target.files[0] as File;
+  showSubMenu(type: any) {
+    if (type.subtypes) {
+      this.activeSubMenu = type.label;
     }
   }
 
-  updateFieldAccess(): void {
-    this.isActive = ['on-going', 'resolved'].includes(this.selectedStatus);
+  hideSubMenu() {
+    this.activeSubMenu = null;
+  }
+  selectTicketType(type: any) {
+    this.selectedTicketType = type;
+    this.selectedSubTicketType = null;  // Reset sub ticket type on main change
+    this.ticketTypeDropdown = false;
+
+    this.updateStatusOptions(type.label);
   }
 
-  submitReply(): void {
-    this.isDisable = true;
-    const ticketId = this.ticket[0].ticketId;
-    const updates:any = [];
-    const hasComment = this.newComment?.trim();
+  selectSubTicketType(sub: any) {
+    this.selectedSubTicketType = sub;
+    this.subTypeDropdown = false;
 
-    // Prepare comment data if exists
-    let commentPromise = Promise.resolve(null);
-    if (hasComment) {
-      const formData = new FormData();
-      formData.append('comment', this.newComment.trim());
-      formData.append('commentedBy', this.userName);
-      
-      if (this.selectedFile) {
-        formData.append('file', this.selectedFile);
-      }
-
-      const newCommentObj = {
-      comment: this.newComment.trim(),
-      commentBy: this.userName,
-      commentAttachment: null, // Temporary null
-      commentTime: convertUTCtoIST(new Date().toString()),
-      commentDate: formatDate(new Date().toString()),
-      isUploading: !!this.selectedFile
-    };
-    
-    // Create new array reference with spread operator
-    this.comments = [...this.comments, newCommentObj];
-
-      commentPromise = this.ticketService.addComment(ticketId, formData).toPromise()
-        .then(newComment => {
-          return newComment;
-        });
-    }
-
-    // Check for status updates
-    if (this.selectedStatus !== this.originalStatus) {
-      updates.push(this.ticketService.updateStatus(ticketId, this.selectedStatus));
-    }
-
-    // Check for admin status updates
-    if (this.selectedAdminStatus !== this.originalAdminStatus) {
-      updates.push(this.ticketService.updateAdminStatus(ticketId, this.selectedAdminStatus));
-    }
-
-    // Check for priority updates
-    if (this.selectedPriority !== this.originalPriority) {
-      updates.push(this.ticketService.updateClientPriority(ticketId, this.selectedPriority));
-    }
-
-    // Execute all updates
-    commentPromise.then(() => {
-      if (updates.length > 0) {
-        forkJoin(updates).subscribe({
-          next: () => this.handleSuccess(),
-          error: (err) => this.handleError(err)
-        });
-      } else {
-        this.handleSuccess();
-      }
-    }).catch(err => this.handleError(err));
+    this.updateStatusOptions(this.selectedTicketType?.label);
   }
 
-  private handleSuccess(): void {
-    this.newComment = '';
-    this.selectedFile = null;
-    this.isDisable = false;
-    
-    // Update original values to current selections
-    this.originalStatus = this.selectedStatus;
-    this.originalAdminStatus = this.selectedAdminStatus;
-    this.originalPriority = this.selectedPriority;
 
-    this.ticket.sta
-  }
-
-  private handleError(err: any): void {
-    console.error('Error:', err);
-    this.isDisable = false;
-    // You might want to show an error message here
+  hasSubtypes(type: any): boolean {
+    return Array.isArray(type.subtypes) && type.subtypes.length > 0;
   }
 }

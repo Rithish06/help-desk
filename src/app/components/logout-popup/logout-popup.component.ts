@@ -1,5 +1,6 @@
 import { Component, Output, EventEmitter } from '@angular/core';
 import { Route, Router } from '@angular/router';
+import { LocalstorageService } from '../../services/localstorage/localstorage.service';
 
 @Component({
   selector: 'app-logout-popup',
@@ -8,7 +9,7 @@ import { Route, Router } from '@angular/router';
 })
 export class LogoutPopupComponent {
 
-  constructor(private router : Router){}
+  constructor(private router : Router, private storage : LocalstorageService){}
 
   @Output() isCancelLogOut = new EventEmitter<boolean>()
 

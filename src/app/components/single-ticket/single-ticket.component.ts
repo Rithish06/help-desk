@@ -1,6 +1,7 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { TicketService } from '../../services/ticket/ticket.service'
 import {convertUTCtoIST, formatDate} from '../../utils.fun'
+import { LocalstorageService } from '../../services/localstorage/localstorage.service';
 
 @Component({
   selector: 'app-single-ticket',
@@ -22,11 +23,11 @@ export class SingleTicketComponent implements OnChanges {
 
     isActive : boolean = false
 
-    constructor(private ticketService :TicketService){}
+    constructor(private ticketService :TicketService, private storage : LocalstorageService){}
 
     ngOnInit(){
-      this.userType = localStorage.getItem("role")
-      this.userName = localStorage.getItem('name')
+      this.userType = this.storage.getItem("role")
+      this.userName = this.storage.getItem('name')
       console.log(this.ticket, "from single")
       this.commentInit()
     }

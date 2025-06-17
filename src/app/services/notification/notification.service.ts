@@ -1,61 +1,64 @@
-// notification.service.ts
 import { Injectable } from '@angular/core';
 import { io, Socket } from 'socket.io-client';
-import { Observable } from 'rxjs';
-import { socketUrl } from '../../env/env.service';
-
+import { Observable, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class NotificationService {
-  private socket: Socket;
+export class SocketService {
+  private socket!: Socket;
+  private readonly SOCKET_URL = 'http://localhost:4000'; // Change to your backend URL
+  private ticketNotificationSubject = new Subject<any>();
 
   constructor() {
-    this.socket = io(socketUrl); 
+    this.initializeSocketConnection();
+    // this.setupUnloadHandler(); // Optional: disconnect on tab close
   }
 
-  // Listen for specific notification events
-  public onNotification(): Observable<any> {
-    return new Observable<any>(observer => {
-      this.socket.on('notification', (data: any) => {
-        observer.next(data);
-      });
+  private initializeSocketConnection(): void {
+    if (this.socket && this.socket.connected) {
+      console.log('🔁 Socket already connected. Skipping new connection.');
+      return;
+    }
+
+    this.socket = io(this.SOCKET_URL, {
+      transports: ['websocket'],
+      withCredentials: false,
+      reconnectionAttempts: 5,
+      reconnectionDelay: 2000,
+      timeout: 5000
+    });
+
+    this.socket.on('connect', () => {
+      console.log('✅ Connected to Socket.IO server:', this.socket.id);
+    });
+
+    this.socket.on('disconnect', (reason) => {
+      console.warn(`⚠️ Disconnected: ${reason}`);
+    });
+
+    this.socket.on('connect_error', (err) => {
+      console.error('🚨 Socket connection error:', err.message);
+    });
+
+    this.socket.on('ticketNotification', (data) => {
+      console.log('🔔 ticketNotification received:', data);
+      this.ticketNotificationSubject.next(data);
     });
   }
 
-  // Listen for connection status
-  public onConnect(): Observable<any> {
-    return new Observable<any>(observer => {
-      this.socket.on('connect', () => {
-        observer.next(true);
-      });
-    });
+  // Observable to subscribe from any component
+  public onTicketNotification(): Observable<any> {
+    return this.ticketNotificationSubject.asObservable();
   }
 
-  // Listen for disconnection
-  public onDisconnect(): Observable<any> {
-    return new Observable<any>(observer => {
-      this.socket.on('disconnect', () => {
-        observer.next(true);
-      });
-    });
-  }
-
-  // Join a specific room/channel if needed
-  public joinRoom(roomId: string): void {
-    this.socket.emit('join', roomId);
-  }
-
-  // Leave a room/channel if needed
-  public leaveRoom(roomId: string): void {
-    this.socket.emit('leave', roomId);
-  }
-
-  // Disconnect socket when service is destroyed
+  // Manual disconnect (optional, e.g., on logout)
   public disconnect(): void {
-    if (this.socket) {
+    if (this.socket && this.socket.connected) {
       this.socket.disconnect();
+      console.log('🔌 Socket manually disconnected');
     }
   }
+
+
 }

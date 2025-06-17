@@ -1,7 +1,8 @@
 <div class="root-container" (click)="closenotificationBar()">
     <!-- sideBar -->
     <div class="sidebar">
-        <app-side-bar (sectionName)="importedSectionName($event)" (formName)="receiveTicketFormName($event)" (isCancelLogOut)="cancelLogout($event)"  (formHeading)="receiveTicketHeading($event)"/>
+        <app-side-bar (sectionName)="importedSectionName($event)" (formName)="receiveTicketFormName($event)"
+            (isCancelLogOut)="cancelLogout($event)" (formHeading)="receiveTicketHeading($event)" />
     </div>
 
     <!-- components -->
@@ -20,30 +21,45 @@
 
         <div class="common-section-container">
             <div class="sections" *ngIf="activateDashboard === true">
-                <app-dashboard-layout (singleTicket)="receiveTicketData($event)" />
+                <app-dashboard-layout (singleTicket)="receiveTicketData($event)" (openPopUpAssign)="popUp($event)"
+                    (ticketId)="getTicketId($event)" [assignedToName]="assignedToName" [ticketIdAssign]="ticketId" /> 
             </div>
 
             <div class="sections tickekSection" *ngIf="activateTicket === true">
-                <app-ticket-layout [formName]="ticketFormName" [fromHeading]="ticketHeading"/>
+                <app-ticket-layout [formName]="ticketFormName" [fromHeading]="ticketHeading" />
             </div>
 
             <div class="sections" *ngIf="activateSettings === true">
-                <app-settings-layout (isCancelLogOut)="cancelLogout($event)"/>
+                <app-settings-layout (isCancelLogOut)="cancelLogout($event)" />
             </div>
 
             <div class="sections" *ngIf="activateSingleTicket === true">
                 <!-- <app-single-ticket [ticket]="singleTicketName"/> -->
-                <app-admin-ticket-component [ticket]="singleTicketName"/>
+                <app-admin-ticket-component [ticket]="singleTicketName" />
             </div>
         </div>
-            
+
     </div>
 </div>
 
-<div class="logoutPopUp" [ngClass]="{'hide' : isCancelLogout}" >
+<div class="logoutPopUp" [ngClass]="{'hide' : isCancelLogout}">
     <app-logout-popup (isCancelLogOut)="cancelLogout($event)" />
 </div>
 
 <!-- <div class="notification" *ngIf="notificationBar">
     <app-notification (openTicket)="receiveTicketData($event)"/>
 </div> -->
+
+<div class="assignToContainer" *ngIf="openPopUp" (document:click)="onDocumentClick($event)">
+    <div class="assignPopUp" #popupRef>
+        <input type="text" [(ngModel)]="searchTerm" (input)="onSearchChange()" placeholder="Search by name or client ID"
+            class="assignSearch" />
+
+        <div *ngFor="let user of usersDetails" class="assignFlex" (click)="assignedTo(user.name)">
+            <div class="assignName">{{ user.name }}</div>
+            <div class="assignId">{{ user.clientId }}</div>
+        </div>
+    </div>
+</div>
+ <app-notification-popup />
+<!-- <img src="" alt=""> -->

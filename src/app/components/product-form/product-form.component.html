@@ -56,6 +56,9 @@
         <input type="text" formControlName="title" placeholder="Enter a short title ">
         <div *ngIf="ticketForm.get('title')?.invalid && isSubmitted" class="error errorStyle">
           <span *ngIf="ticketForm.get('title')?.errors?.['required']">title is required</span>
+          <span *ngIf="ticketForm.get('title')?.errors?.['maxlength']">
+            Title cannot exceed 30 characters
+          </span>
         </div>
       </div>
     </div>
@@ -64,7 +67,8 @@
     <div class="row row-3">
       <div class="inputField texy_body">
         <label for="">Ticket Body</label>
-        <textarea class="textarea" formControlName="ticketBody" placeholder="Describe the issue or requirement in detail..."></textarea>
+        <textarea class="textarea" formControlName="ticketBody"
+          placeholder="Describe the issue or requirement in detail..."></textarea>
         <div *ngIf="ticketForm.get('ticketBody')?.invalid && isSubmitted" class="error errorStyle ticketBodyStyle">
           <span *ngIf="ticketForm.get('ticketBody')?.errors?.['required']">Ticket Body is required</span>
           <span *ngIf="ticketForm.get('ticketBody')?.errors?.['minlength']">Must be at least 10 characters</span>

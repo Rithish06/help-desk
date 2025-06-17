@@ -2,15 +2,16 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { apiUrl } from '../../env/env.service';
 import { Observable } from 'rxjs';
+import { LocalstorageService } from '../localstorage/localstorage.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProductsService {
 
-  constructor(private http : HttpClient) { }
+  constructor(private http : HttpClient, private storage : LocalstorageService) { }
 
-  token : any = localStorage.getItem('token')
+  token : any = this.storage.getItem('token')
   headers : any = new HttpHeaders({
     'Authorization': `Bearer ${this.token}`, // Attach token to headers
     'Content-Type': 'application/json'

@@ -44,6 +44,8 @@ import { ToastComponent } from './components/toast/toast.component';
 import { CapitalizeFirstLetterPipe } from './utils.fun'
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
+import { NotificationPopupComponent } from './components/notification-popup/notification-popup.component';
+import { TruncatePipe } from './Pipes/truncate';
 
 
 
@@ -72,7 +74,9 @@ import { MessageService } from 'primeng/api';
     SmmFormComponent,
     PpcFormComponent,
     ToastComponent,
-    CapitalizeFirstLetterPipe
+    CapitalizeFirstLetterPipe,
+    NotificationPopupComponent,
+    TruncatePipe
   ],
   imports: [
     BrowserModule,
@@ -97,6 +101,7 @@ import { MessageService } from 'primeng/api';
       }
     ),
     NgMultiSelectDropDownModule.forRoot(),
+    
     // MatFormFieldModule
   ],
   providers: [

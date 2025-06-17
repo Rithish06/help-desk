@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { apiUrl, loginInUrl } from '../../env/env.service';
 import { Router } from '@angular/router';
 import { isPlatformBrowser } from '@angular/common';
+import { LocalstorageService } from '../localstorage/localstorage.service';
 
 @Injectable({
   providedIn: 'root',
@@ -11,7 +12,7 @@ import { isPlatformBrowser } from '@angular/common';
 export class AuthService {
   private timeoutRef: any; // Holds logout timeout reference
 
-  constructor(private http: HttpClient, private router: Router, @Inject(PLATFORM_ID) private platformId: object) {
+  constructor(private http: HttpClient, private router: Router, @Inject(PLATFORM_ID) private platformId: object,private storage : LocalstorageService) {
     this.checkAutoLogout(); // Check logout when service is loaded
   }
 
@@ -23,20 +24,20 @@ export class AuthService {
 
   saveLoginData(token: string, role: string, clientId: string): void {
     const loginTime = new Date().getTime(); // Store current timestamp
-    localStorage.setItem('token', token);
-    localStorage.setItem('role', role);
-    localStorage.setItem('clientId', clientId);
-    localStorage.setItem('loginTime', JSON.stringify(loginTime));
+    this.storage.setItem('token', token);
+    this.storage.setItem('role', role);
+    this.storage.setItem('clientId', clientId);
+    this.storage.setItem('loginTime', JSON.stringify(loginTime));
 
     this.startAutoLogout(); // Start auto logout timer
   }
 
   getUserRole(): string | null {
-    return localStorage.getItem('role');
+    return this.storage.getItem('role');
   }
 
   getClientId(): string | null {
-    return localStorage.getItem('clientId');
+    return this.storage.getItem('clientId');
   }
 
   startAutoLogout(): void {
@@ -53,7 +54,7 @@ export class AuthService {
 
   checkAutoLogout(): void {
     if (isPlatformBrowser(this.platformId)){
-      const loginTime = localStorage.getItem('loginTime');
+      const loginTime = this.storage.getItem('loginTime');
 
       if (loginTime) {
         const currentTime = new Date().getTime();
@@ -78,6 +79,6 @@ export class AuthService {
   }
 
   isLoggedIn(): boolean {
-    return localStorage.getItem('token') !== null;
+    return this.storage.getItem('token') !== null;
   }
 }

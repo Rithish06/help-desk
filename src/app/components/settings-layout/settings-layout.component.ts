@@ -5,6 +5,7 @@ import { PasswordService } from '../../services/password/password.service';
 import { error } from 'console';
 import { ToastrService } from 'ngx-toastr';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { LocalstorageService } from '../../services/localstorage/localstorage.service';
 
 
 
@@ -31,13 +32,13 @@ export class SettingsLayoutComponent {
   newPassword : any
   confirmPassword : any
 
-  constructor(private router:Router, private user : UserService, private password : PasswordService, private toastr: ToastrService, private snackBar: MatSnackBar){}
+  constructor(private router:Router, private user : UserService, private password : PasswordService, private toastr: ToastrService, private snackBar: MatSnackBar,       private storage : LocalstorageService){}
 
   ngOnInit(){
     this.setActiveSection('account')
-    this.emailId = localStorage.getItem("email")
-    this.clientName = localStorage.getItem("name")
-    this.place = localStorage.getItem("place")
+    this.emailId = this.storage.getItem("email")
+    this.clientName = this.storage.getItem("name")
+    this.place = this.storage.getItem("place")
   }
 
   setActiveSection(sectionName:any):void{
@@ -59,7 +60,7 @@ export class SettingsLayoutComponent {
   }
 
   updateEmail(): void {
-    const id = localStorage.getItem('id');
+    const id = this.storage.getItem('id');
     const email = {
       email: this.emailId
     };
@@ -79,7 +80,7 @@ export class SettingsLayoutComponent {
 
     this.toastr.success('Email updated successfully!', 'Success');
 
-    localStorage.setItem('email', email.email);
+    this.storage.setItem('email', email.email);
     this.isInputDisabled = false;
   }
 
@@ -88,7 +89,7 @@ export class SettingsLayoutComponent {
   }
 
   cancelEmail():void{
-    this.emailId = localStorage.getItem("email")
+    this.emailId = this.storage.getItem("email")
     this.isInputDisabled = false
   }
 
@@ -96,7 +97,7 @@ export class SettingsLayoutComponent {
 
   resetPassword(): void {
     if (this.newPassword === this.confirmPassword) {
-      const id = localStorage.getItem("id");
+      const id = this.storage.getItem("id");
       const password = this.confirmPassword;
   
       this.password.resetPassword(password, id).subscribe({

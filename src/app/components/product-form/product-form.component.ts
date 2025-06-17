@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar'; // Added import
 import { ProductsService } from '../../services/products/products.service';
 import { TicketService } from '../../services/ticket/ticket.service';
+import { LocalstorageService } from '../../services/localstorage/localstorage.service';
 
 @Component({
   selector: 'app-product-form',
@@ -34,21 +35,22 @@ export class ProductFormComponent {
     private fb: FormBuilder,
     private product: ProductsService,
     private ticket: TicketService,
-    private snackBar: MatSnackBar // Injected snackbar
+    private snackBar: MatSnackBar, // Injected snackbar
+    private storage : LocalstorageService
   ) {
     this.ticketForm = this.fb.group({
-      title: ['', Validators.required],
+            title: ['', [Validators.required, Validators.maxLength(30)]],
       websiteName: ['', Validators.required],
       menuPath: ['', Validators.required],
       module: ['', Validators.required],
       ticketBody: ['', [Validators.required, Validators.minLength(10)]],
-      attachment: [null]
+      attachment: [null],
     });
   }
 
   ngOnInit() {
-    this.clientId = localStorage.getItem('clientId');
-    this.clientName = localStorage.getItem('name');
+    this.clientId = this.storage.getItem('clientId');
+    this.clientName = this.storage.getItem('name');
     this.inputDisable = true;
     this.ticketFor = 'product';
     this.getALlProducts();
@@ -77,7 +79,7 @@ export class ProductFormComponent {
   }
 
   loadProductName(): void {
-    const products = localStorage.getItem('products');
+    const products = this.storage.getItem('products');
     if (this.allProducts) {
       this.filteredProducts = this.allProducts.filter(
         (entry: any) => products?.includes(entry.productId) && entry.productType === 'product'
@@ -147,6 +149,9 @@ export class ProductFormComponent {
     this.selectedMenupath = [{ name: e.target.value }];
   }
 
+    private socket!: WebSocket;
+  message: string | null = null;
+
   onSubmit(): void {
     this.isSubmitted = true;
     if (this.ticketForm.valid) {
@@ -154,13 +159,13 @@ export class ProductFormComponent {
       const formData = new FormData();
       formData.append('clientName', this.clientName);
       formData.append('ticketFor', this.ticketFor);
-      formData.append('clientId', localStorage.getItem('clientId') || '');
+      formData.append('clientId', this.storage.getItem('clientId') || '');
       formData.append('title', this.ticketForm.get('title')?.value);
       formData.append('description', this.ticketForm.get('ticketBody')?.value);
       formData.append('module', this.choosenModule);
       formData.append('menuPath', JSON.stringify(this.selectedMenupath));
       formData.append('productName', this.productname);
-      formData.append('prefix', localStorage.getItem('ticketPrefix') || '');
+      formData.append('prefix', this.storage.getItem('ticketPrefix') || '');
 
       if (this.ticketForm.get('attachment')?.value) {
         formData.append('file', this.ticketForm.get('attachment')?.value);
@@ -179,7 +184,10 @@ export class ProductFormComponent {
           this.isLoading = false;
           this.showSnackbar('Failed to create ticket. Please try again.', 'error');
         }
+
+        
       });
+      
     } else {
       this.showSnackbar('Please fill all required fields correctly', 'error');
     }

@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { apiUrl, loginInUrl } from '../../env/env.service';
+import { LocalstorageService } from '../localstorage/localstorage.service';
 
 
 @Injectable({
@@ -9,9 +10,9 @@ import { apiUrl, loginInUrl } from '../../env/env.service';
 })
 export class TicketService {
 
-  constructor(private http : HttpClient) { }
+  constructor(private http : HttpClient, private storage : LocalstorageService) { }
 
-  token = localStorage.getItem('token')
+  token = this.storage.getItem('token')
   headers = new HttpHeaders({
     'Authorization': `Bearer ${this.token}`, // Attach token to headers
     'Content-Type': 'application/json'
@@ -71,4 +72,15 @@ export class TicketService {
   updateAdminNotification(ticketId:any): Observable<any>{
     return this.http.put(`${apiUrl}/update-adminNotification/ticket/${ticketId}`, { withCredentials: true })
   }
+
+  updateTicketType(ticketNumber: String, data: { ticketType: string, ticketSubType: string }){
+    return this.http.put(`${this.apiUrl}/update-ticket-type/${ticketNumber}`, {
+      data,
+    });
+  }
+
+  updateAssignedTo(ticketNumber: String, assignedTo:string){
+    return this.http.put(`${this.apiUrl}/update-assigned-to/${ticketNumber}`, {assignedTo});
+  }
+  
 }

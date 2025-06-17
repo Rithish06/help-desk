@@ -53,7 +53,7 @@
                 <div class="filterName pointer" [ngClass]="{blue : isAllTicket}">All Tickets</div>
             </div>
             <!-- new tickets -->
-            <div class="filter-option pointer" (click)="activateByTab('raised')">
+            <div class="filter-option pointer" (click)="activateByTab('New')">
                 <!-- <img [src]="isNewTicket === false ? ticketFilterImages.new : activateTicketFilterImages.new"
                     alt="All Tickets"> -->
                 <div class="filterName pointer " [ngClass]="{blue : isNewTicket}">New Tickets</div>
@@ -65,11 +65,28 @@
                 <div class="filterName pointer " [ngClass]="{blue : isOnGoingTicket}">On-Going Tickets</div>
             </div>
             <!-- resolved tickets -->
-            <div class="filter-option pointer" (click)="activateByTab('resolved')">
+            <div class="filter-option pointer" (click)="activateByTab('Resolved')">
                 <!-- <img [src]="isResolved === false ? ticketFilterImages.resolved : activateTicketFilterImages.resolved"
                     alt="All Tickets"> -->
                 <div class="filterName pointer " [ngClass]="{blue : isResolved}">Resolved Tickets</div>
             </div>
+        </div>
+
+        <div class="filter3">
+            <select class="input" name="" id="" (change)="onSelectinOngoingStatus($event)">
+                <option value="all">All</option>
+                <option value="Open">Open</option>
+                <option value="Hold">Hold</option>
+                <option value="In Process">In Process</option>
+                <option value="Requirement Not Finalized">Requirement Not Finalized</option>
+                <option value="Specification Approved">Specification Approved</option>
+                <option value="Commercial Approved">Commercial Approved</option>
+                <option value="Ready">Ready</option>
+                <option value="Deployed">Deployed</option>
+                <option value="Specification Sent">Specification Sent</option>
+                <option value="Commercial Sent">Commercial Sent</option>
+                <option value="Complete">Complete</option>
+            </select>
         </div>
 
         <!-- Navigator content -->
@@ -124,7 +141,7 @@
                         <div class="open-ticket pointer scale trans" (click)="sendSingleTicketData(ticket.ticketId)">
                             View Ticket</div>
                     </div> -->
-                <!-- </div> --> 
+                <!-- </div> -->
 
                 <table>
                     <thead class="tickets theader gap">
@@ -136,39 +153,53 @@
                             <th>Ticket Tittle</th>
                             <th>Status</th>
                             <th>Last Replied</th>
-                            <th>Priority</th>
+                            <th *ngIf="role === 'admin'">Priority</th>
+                            <th *ngIf="role === 'admin'">Assigned To</th>
                         </tr>
                     </thead>
-                    <tbody class="tickets tbody " *ngFor="let ticket of paginatedTickets">
-                        <tr class="pointer trans " (click)="sendSingleTicketData(ticket.ticketId)">
+                    <tbody class="tickets tbody">
+                        <tr class="pointer trans" *ngFor="let ticket of paginatedTickets"
+                            (click)="sendSingleTicketData(ticket.ticketId)">
                             <!--Ticket ID  -->
                             <td class="gap">{{ticket.ticketId}}</td>
                             <!-- Raised By -->
-                             <div class="img gap">
-                                <img class="profile" [src]="ticket.profileImage" [alt]="ticket.prifileImage">
-                                <td>
-                                    {{ticket.clientName}}
-                                </td>
-                            </div>
+                            <td class="gap">
+                                <div class="flex-img">
+                                    <img class="profile" [src]="ticket.profileImage" [alt]="ticket.prifileImage">
+                                    <div>
+                                        {{ticket.clientName | truncate:10}}
+                                    </div>
+                                </div>
+                            </td>
                             <!-- Raised Date -->
                             <td>{{ticket.createdDate | date:
                                 'dd/MM/yyyy' }}
                             </td>
                             <!-- Ticket Type -->
-                            <td>{{ticket.ticketFor}}</td>
+                            <td>{{ticket.ticketType || '-'}}</td>
                             <!--Ticket Tittle  -->
-                            <td>{{ticket.title}}</td>
+                            <td>{{ticket.title | truncate:10 }}</td>
                             <!-- Status -->
                             <td class="ticket-priority">
                                 <div class="status" [style.backgroundColor]="ticket.bgColor"
                                     [style.color]="ticket.textColor">{{ticket.clientStatus}}</div>
                             </td>
                             <!-- Last Replied -->
-                           <td></td>
+                            <td>{{ticket.lastlyRepliedBy || '-'}}</td>
                             <!-- Priority -->
-                            <td >
+                            <td *ngIf="role === 'admin'">
                                 <div class="priority" [style.backgroundColor]="ticket.priorBgColor"
                                     [style.color]="ticket.priorTextColor">{{ticket.priorText}}</div>
+                            </td>
+
+                            <td *ngIf="role === 'admin'">
+                                <ng-container *ngIf="ticket.assignedTo; else assignButton">
+                                    {{ ticket.assignedTo | truncate:10  }}
+                                </ng-container>
+                                <ng-template #assignButton>
+                                    <button class="assignBUtton"
+                                        (click)="assignTo(ticket.ticketId); $event.stopPropagation()">Assign To</button>
+                                </ng-template>
                             </td>
                         </tr>
                     </tbody>
@@ -227,26 +258,20 @@
 </div> -->
 
 <div class="page_change">
-
-    <div class="flex">
-        <!-- Page numbers -->
-        <div class="counts pointer scale trans" *ngFor="let page of getVisiblePages()"
-            [class.active]="currentPage === page" (click)="changePage(page)">
-            Page {{ page }} 
-        </div>
-
+    <div class="page-info">
+        Page {{ currentPage }} of {{ totalPages }}
     </div>
+
     <div class="flex">
         <!-- Previous -->
-        <div class="prev_next prev pointer " [ngClass]="{btncolor : Prev}" [class.disabled]="currentPage === 1"
-            (click)="changePage(currentPage - 1)">
+        <div class="prev_next prev pointer" [class.disabled]="currentPage === 1" (click)="changePage(currentPage - 1)">
             Prev
         </div>
+
         <!-- Next -->
-        <div class="prev_next next pointer" [ngClass]="{btncolor : Next}" [class.disabled]="currentPage === totalPages"
+        <div class="prev_next next pointer" [class.disabled]="currentPage === totalPages"
             (click)="changePage(currentPage + 1)">
             Next
         </div>
     </div>
-
 </div>

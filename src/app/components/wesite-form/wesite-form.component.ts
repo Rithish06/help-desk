@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar'; // Added import
 import { ProductsService } from '../../services/products/products.service';
 import { TicketService } from '../../services/ticket/ticket.service';
+import { LocalstorageService } from '../../services/localstorage/localstorage.service';
 
 @Component({
   selector: 'app-wesite-form',
@@ -31,10 +32,11 @@ export class WesiteFormComponent {
     private fb: FormBuilder,
     private product: ProductsService,
     private ticket: TicketService,
-    private snackBar: MatSnackBar // Injected snackbar
+    private snackBar: MatSnackBar, // Injected snackbar
+    private storage : LocalstorageService
   ) {
     this.ticketForm = this.fb.group({
-      title: ['', Validators.required],
+            title: ['', [Validators.required, Validators.maxLength(30)]],
       websiteName: ['', Validators.required],
       menuPath: ['', Validators.required],
       ticketBody: ['', [Validators.required, Validators.minLength(10)]],
@@ -43,8 +45,8 @@ export class WesiteFormComponent {
   }
 
   ngOnInit() {
-    this.clientId = localStorage.getItem('clientId');
-    this.clientName = localStorage.getItem('name');
+    this.clientId = this.storage.getItem('clientId');
+    this.clientName = this.storage.getItem('name');
     this.inputDisable = true;
     this.ticketFor = 'website';
     this.getALlProducts();
@@ -74,7 +76,7 @@ export class WesiteFormComponent {
 
   loadProductName(): void {
     try {
-      const products = localStorage.getItem('products');
+      const products = this.storage.getItem('products');
       if (this.allProducts) {
         this.filteredProducts = this.allProducts.filter(
           (entry: any) => products?.includes(entry.productId) && entry.productType === 'website'
@@ -145,12 +147,12 @@ export class WesiteFormComponent {
       const formData = new FormData();
       formData.append('clientName', this.clientName);
       formData.append('ticketFor', this.ticketFor);
-      formData.append('clientId', localStorage.getItem('clientId') || '');
+      formData.append('clientId', this.storage.getItem('clientId') || '');
       formData.append('title', this.ticketForm.get('title')?.value);
       formData.append('description', this.ticketForm.get('ticketBody')?.value);
       formData.append('menuPath', JSON.stringify(this.choosenPath));
       formData.append('productName', this.productname);
-      formData.append('prefix', localStorage.getItem('ticketPrefix') || '');
+      formData.append('prefix', this.storage.getItem('ticketPrefix') || '');
 
       if (this.ticketForm.get('attachment')?.value) {
         formData.append('file', this.ticketForm.get('attachment')?.value);

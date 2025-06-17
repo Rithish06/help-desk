@@ -3,26 +3,30 @@ import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HttpErrorResponse
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { LocalstorageService } from './services/localstorage/localstorage.service';
 // import { AuthServiceService } from './services/auth/auth-service.service'; // Your AuthService to handle logout logic
 
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-
-  constructor(private router: Router) {}
+  token : any
+  constructor(private router: Router,  private storage : LocalstorageService) {}
   intercept(
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
     // Get the token from localStorage
-    const token = localStorage.getItem('token');
+    if (typeof window !== 'undefined' && localStorage){
+          this.token = this.storage.getItem('token');
+    }
+
 
     // Clone the request to add the authorization header
     let authReq = req;
-    if (token) {
+    if (this.token) {
       authReq = req.clone({
         setHeaders: {
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${this.token}`
         }
       });
     }

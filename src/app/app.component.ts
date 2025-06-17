@@ -1,21 +1,30 @@
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewChild, Inject, PLATFORM_ID } from '@angular/core';
 import { AuthService } from './services/auth/auth.service';
-import { HttpHeaders } from '@angular/common/http';
+import { NotificationPopupComponent } from './components/notification-popup/notification-popup.component';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css',
-  encapsulation: ViewEncapsulation.None  // Disables ViewEncapsulation
+  styleUrls: ['./app.component.css']
 })
-export class AppComponent {
-  title = 'help-desk';
-  headers : any
+export class AppComponent implements OnInit {
+  private socket!: WebSocket;
+  private isBrowser: boolean;
 
-  constructor(private authService : AuthService){}
+  @ViewChild(NotificationPopupComponent) notificationComponent!: NotificationPopupComponent;
 
-
-  ngOnInit(){
-    this.authService.checkAutoLogout();
+  constructor(
+    private authService: AuthService,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {
+    this.isBrowser = isPlatformBrowser(platformId);
   }
+
+  ngOnInit(): void {
+    this.authService.checkAutoLogout();
+
+  }
+
+
 }

@@ -5,6 +5,7 @@ import { TicketService } from '../../services/ticket/ticket.service';
 import { isPlatformBrowser } from '@angular/common';
 import { PLATFORM_ID } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { LocalstorageService } from '../../services/localstorage/localstorage.service';
 
 @Component({
   selector: 'app-ppc-form',
@@ -40,10 +41,11 @@ export class PpcFormComponent {
     private product: ProductsService,
     private ticket: TicketService,
     @Inject(PLATFORM_ID) private platformId: Object,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private storage : LocalstorageService
   ) {
     this.ticketForm = this.fb.group({
-      title: ['', Validators.required],
+            title: ['', [Validators.required, Validators.maxLength(30)]],
       // websiteName: ['', Validators.required],
       menuPath: ['', Validators.required],
       module: ['', Validators.required],
@@ -53,8 +55,8 @@ export class PpcFormComponent {
   }
 
   ngOnInit() {
-    this.clientId = localStorage.getItem('clientId');
-    this.clientName = localStorage.getItem('name');
+    this.clientId = this.storage.getItem('clientId');
+    this.clientName = this.storage.getItem('name');
     this.inputDisable = true;
     this.ticketFor = 'PPC';
     this.getALlProducts();
@@ -69,7 +71,7 @@ export class PpcFormComponent {
   }
 
   loadProductName(): void {
-    const products = localStorage.getItem('products');
+    const products = this.storage.getItem('products');
     if (this.allProducts) {
       this.filteredProducts = this.allProducts.filter(
         (entry: any) => products?.includes(entry.productId) && entry.productType === 'ppc'
@@ -136,13 +138,13 @@ export class PpcFormComponent {
     
     formData.append('clientName', this.clientName);
     formData.append('ticketFor', this.ticketFor);
-    formData.append('clientId', localStorage.getItem('clientId') || '');
+    formData.append('clientId', this.storage.getItem('clientId') || '');
     formData.append('title', this.ticketForm.get('title')?.value);
     formData.append('description', this.ticketForm.get('ticketBody')?.value);
     formData.append('module', this.ticketForm.get('menuPath')?.value);
     formData.append('menuPath', JSON.stringify(this.choosenModule)); // Stringify the array
     formData.append('productName', this.productname);
-    formData.append('prefix', localStorage.getItem('ticketPrefix') || '');
+    formData.append('prefix', this.storage.getItem('ticketPrefix') || '');
     
     if (this.ticketForm.get('attachment')?.value) {
       formData.append('file', this.ticketForm.get('attachment')?.value);

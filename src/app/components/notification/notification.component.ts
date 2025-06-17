@@ -4,6 +4,8 @@ import { convertUTCtoIST, formatDate, capitalizeFirstLetter, sortTicketsByDate }
 import { PLATFORM_ID, Inject } from '@angular/core'
 import { HttpHeaders } from '@angular/common/http'
 import { error } from 'console';
+import { SocketService } from '../../services/notification/notification.service';
+import { LocalstorageService } from '../../services/localstorage/localstorage.service';
 
 @Component({
   selector: 'app-notification',
@@ -12,27 +14,53 @@ import { error } from 'console';
 })
 export class NotificationComponent {
 
-  constructor(private ticketService: TicketService, @Inject(PLATFORM_ID) private platformId: object) { }
+  constructor(private ticketService: TicketService, @Inject(PLATFORM_ID) private platformId: object, private storage : LocalstorageService) { }
 
-  role : any
+  role: any
 
   ngOnInit() {
-    this.role = localStorage.getItem('role')
-    this.clientId = localStorage.getItem('clientId')
+    this.role = this.storage.getItem('role')
+    this.clientId = this.storage.getItem('clientId')
     this.initFunction()
+
+    // Real-time socket notification
+    // this.socket.onTicketNotification().subscribe((data: any) => {
+    //   const isUser = this.role === 'user' && data.role === 'user';
+    //   const isAdmin = this.role === 'admin' && data.role === 'admin';
+
+    //   console.log("socket")
+
+    //   if (isUser || isAdmin) {
+    //     this.notificationTickets.unshift({
+    //       title: data.type,
+    //       description: data.message,
+    //       time: new Date(data.time).toLocaleString(),
+    //       id: data.ticketNumber
+    //     });
+    //   }
+    // });
+
+    // this.playNotificationSound()
   }
+
+  // playNotificationSound(): void {
+  //   const audio = new Audio();
+  //   audio.src = '../../../assets/audio/notification.mp3';
+  //   audio.load();
+  //   audio.play().catch(err => console.error('Audio playback failed:', err));
+  // }
 
   clientId: any
   headers: any
   allTickets: any
 
-  notificationTickets : any
+  notificationTickets: any
 
-  @Output() openTicket = new EventEmitter<any>() 
-  @Output() closeNotification = new EventEmitter<boolean>() 
+  @Output() openTicket = new EventEmitter<any>()
+  @Output() closeNotification = new EventEmitter<boolean>()
 
   initFunction(): void {
-    const role = localStorage.getItem("role")
+    const role = this.storage.getItem("role")
 
     if (role === 'user') {
       console.log(this.headers, "from tikets")
@@ -57,7 +85,7 @@ export class NotificationComponent {
             attachment: entry?.attatchment,
             comment: entry?.comments,
             ticketCreatedTime: entry.createdAt,
-            notification : entry.clientNotification
+            notification: entry.clientNotification
           }
         })
 
@@ -116,7 +144,7 @@ export class NotificationComponent {
             adminStatus: entry?.adminStatus,
             ticketFor: capitalizeFirstLetter(entry?.ticketFor),
             ticketCreatedTime: entry.createdAt,
-            notification : entry.adminNotification
+            notification: entry.adminNotification
           }
         })
 
@@ -208,56 +236,51 @@ export class NotificationComponent {
     // }
   }
 
-  loadNotifications():void{
-    const role = localStorage.getItem('role')
+loadNotifications(): void {
+  const role = this.storage.getItem('role');
 
-    if(role === 'user'){
-      const nt = this.allTickets.filter((entry:any) => entry.notification === true)
+  let nt = this.allTickets.filter((entry: any) => entry.notification === true);
 
-      this.notificationTickets = nt.map((entry:any) => {
-        return{
-          title : "Ticket Status Updated",
-          description : `Dear ${entry.clientName} your ticket <b>${entry.ticketId}</b> status has been updated to <b>${entry.status}</b>.`,
-          time : `${entry.createdDate} | ${entry.createdAt}`,
-          id : entry.ticketId
-        }
-      })
-    }
-    else if(role === 'admin'){
-      const nt = this.allTickets.filter((entry:any) => entry.notification === true)
+  this.notificationTickets = nt.map((entry: any) => {
+    const fullTimestamp = new Date(`${entry.createdDate} ${entry.createdAt}`); // Combine date and time
+    return {
+      title: role === 'user'
+        ? "Ticket Status Updated"
+        : "New Ticket Raised",
+      description: role === 'user'
+        ? `Dear ${entry.clientName} your ticket <b>${entry.ticketId}</b> status has been updated to <b>${entry.status}</b>.`
+        : `${entry.clientName} has raised a new ticket – <b>${entry.ticketId}</b>. Please review the details.`,
+      time: `${entry.createdDate} | ${entry.createdAt}`,
+      id: entry.ticketId,
+      timestamp: fullTimestamp // Add timestamp field for sorting
+    };
+  });
 
-      this.notificationTickets = nt.map((entry:any) => {
-        return{
-          title : "New Ticket Raised",
-          description : `${entry.clientName} has raised a new ticket – <b>${entry.ticketId}</b>. Please review the details.`,
-          time : `${entry.createdDate} | ${entry.createdAt}`,
-          id : entry.ticketId
-        }
-      })
-    } 
+  // Sort from latest to oldest using timestamp
+  this.notificationTickets.sort((a:any, b:any) => b.timestamp.getTime() - a.timestamp.getTime());
 
-    console.log(this.notificationTickets, "notification tickets")
-  }
+  console.log(this.notificationTickets, "notification tickets");
+}
 
-  openTickets(ticketNumber:any):void{
-      const filtredTicket = this.allTickets.filter((entry:any) => entry.ticketId === ticketNumber)
-      this.openTicket.emit(filtredTicket)
-      this.closeNotification.emit(false)
+  openTickets(ticketNumber: any): void {
+    const filtredTicket = this.allTickets.filter((entry: any) => entry.ticketId === ticketNumber)
+    this.openTicket.emit(filtredTicket)
+    this.closeNotification.emit(false)
 
-      if(this.openTicket){
-        if(this.role === 'admin'){
-          this.ticketService.updateAdminNotification(ticketNumber).subscribe(
-            res => console.log('sent'),
-            error => console.log(error)
-          )
-        }
-        else{
-          this.ticketService.updateClientNotification(ticketNumber).subscribe(
-            res => console.log(res),
-            error => console.log(error)
-          )
-        }
+    if (this.openTicket) {
+      if (this.role === 'admin') {
+        this.ticketService.updateAdminNotification(ticketNumber).subscribe(
+          res => console.log('sent'),
+          error => console.log(error)
+        )
       }
-  }  
+      else {
+        this.ticketService.updateClientNotification(ticketNumber).subscribe(
+          res => console.log(res),
+          error => console.log(error)
+        )
+      }
+    }
+  }
 
 }

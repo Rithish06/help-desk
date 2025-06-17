@@ -1,6 +1,7 @@
 import { Component, Output, EventEmitter } from '@angular/core';
 import { SidebarService } from '../../services/sidebar/sidebar.service';
 import { Router } from '@angular/router';
+import { LocalstorageService } from '../../services/localstorage/localstorage.service';
 
 @Component({
   selector: 'app-side-bar',
@@ -31,12 +32,12 @@ export class SideBarComponent {
   userType : string | null = '' 
 
   ngOnInit(){
-    this.userType = localStorage.getItem('role')
+    this.userType = this.storage.getItem('role')
     this.onClickDashboard()
     this.changeTicketForm('product', 'Product')
   }
 
-  constructor(private sidebar : SidebarService, private router:Router){}
+  constructor(private sidebar : SidebarService, private router:Router, private storage : LocalstorageService){}
 
   // pathNames : any[] = ['Product','Website','SEO','SMM','PPC']
   pathNames : any[] = [
